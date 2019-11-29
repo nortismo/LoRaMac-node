@@ -31,7 +31,7 @@
 #include "board-config.h"
 #include "lpm-board.h"
 #include "rtc-board.h"
-#include "rfm96w-board.h"
+#include "multiRfm96w-board.h"
 #include "board.h"
 
 /*!
@@ -168,13 +168,22 @@ void BoardInitMcu(void)
         SystemClockReConfig();
     }
 
-    SpiInit(&RFM96W.Spi, SPI_2, PB_15, PB_14, PB_13, NC);
-    RFM96WIoInit();
+    /* PinNames nss must be NC. This enables software management of the chip
+    *  select and puts the board into master mode. Chip select GPIO must be
+    *  enabled and initialized in another method together with the IO pins */
+    SpiInit(&MULTIRFM96W[0].Spi, SPI_2, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, NC);
+    //SpiInit(&MULTIRFM96W[1].Spi, SPI_2, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, NC);
+    MULTIRFM96W[1].Spi.Miso = MULTIRFM96W[0].Spi.Miso;
+    MULTIRFM96W[1].Spi.Mosi = MULTIRFM96W[0].Spi.Mosi;
+    MULTIRFM96W[1].Spi.Sclk = MULTIRFM96W[0].Spi.Sclk;
+    MULTIRFM96W[1].Spi.SpiId = MULTIRFM96W[0].Spi.SpiId;
+
+    MULTIRFM96WIoInit();
 
     if (McuInitialized == false)
     {
         McuInitialized = true;
-        RFM96WIoTcxoInit();
+        MULTIRFM96WIoTcxoInit(0);
         if (GetBoardPowerSource() == BATTERY_POWER)
         {
             CalibrateSystemWakeupTime();
@@ -192,8 +201,9 @@ void BoardResetMcu(void)
 
 void BoardDeInitMcu(void)
 {
-    SpiDeInit(&RFM96W.Spi);
-    RFM96WIoDeInit();
+    SpiDeInit(&MULTIRFM96W[0].Spi);
+    SpiDeInit(&MULTIRFM96W[1].Spi);
+    MULTIRFM96WIoDeInit();
 }
 
 uint32_t BoardGetRandomSeed(void)

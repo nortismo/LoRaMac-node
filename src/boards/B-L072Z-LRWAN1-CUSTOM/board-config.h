@@ -51,16 +51,19 @@ extern "C"
     //#define DO_NOT_SEND
 
 #define RADIO_RESET PB_2
+#define RADIO_RESET_2 PA_8
 
-#define RADIO_MOSI PA_7
-#define RADIO_MISO PA_6
-#define RADIO_SCLK PB_3
+#define RADIO_MOSI PB_15
+#define RADIO_MISO PB_14
+#define RADIO_SCLK PB_13
 
 #define RADIO_NSS PB_12
+#define RADIO_NSS_2 PA_10
 
     /* DIOs need to be defined, if they should be used */
 
 #define RADIO_DIO_0 PB_4
+#define RADIO_DIO_0_2 PA_9
 #define RADIO_DIO_1 PB_1
 #define RADIO_DIO_2 PB_0
 #define RADIO_DIO_3 PC_13

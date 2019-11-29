@@ -182,7 +182,7 @@ elseif(BOARD STREQUAL B-L072Z-LRWAN1-CUSTOM)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/boards/B-L072Z-LRWAN1-CUSTOM)
 
     # Configure radio
-    set(RADIO rfm96w CACHE INTERNAL "Radio rfm96w selected")
+    set(RADIO multiRfm96w CACHE INTERNAL "Radio multiRfm96w selected")
     set(REGION REGION_EU433 CACHE INTERNAL "Region EU433 selected")
 endif()
 
