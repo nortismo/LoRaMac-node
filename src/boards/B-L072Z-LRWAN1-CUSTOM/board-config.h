@@ -22,6 +22,8 @@
  *
  * \endcode
  *
+ * \author    Diego Bienz
+ *
  * \author    Miguel Luis ( Semtech )
  *
  * \author    Gregory Cristian ( Semtech )
@@ -47,34 +49,29 @@ extern "C"
  * Board MCU pins definitions
  */
 
-#define USE_EXTERNAL_RADIO 1
-    //#define DO_NOT_SEND
+#define RADIOS_RESET PB_6
 
-#define RADIO_RESET PB_2
-#define RADIO_RESET_2 PA_8
+#define RADIOS_MOSI PB_15
+#define RADIOS_MISO PB_14
+#define RADIOS_SCLK PB_13
 
-#define RADIO_MOSI PB_15
-#define RADIO_MISO PB_14
-#define RADIO_SCLK PB_13
+#define RADIO1_NSS PA_1
+#define RADIO2_NSS PA_5
+#define RADIO3_NSS PB_4
+#define RADIO4_NSS PA_10
+#define RADIO5_NSS PA_9
+#define RADIO6_NSS PA_11
+#define RADIO7_NSS PB_2
+#define RADIO8_NSS PB_8
 
-#define RADIO_NSS PB_12
-#define RADIO_NSS_2 PA_10
-
-    /* DIOs need to be defined, if they should be used */
-
-#define RADIO_DIO_0 PB_4
-#define RADIO_DIO_0_2 PA_9
-#define RADIO_DIO_1 PB_1
-#define RADIO_DIO_2 PB_0
-#define RADIO_DIO_3 PC_13
-#define RADIO_DIO_4 PA_5
-#define RADIO_DIO_5 PA_4
-
-#define RADIO_TCXO_POWER PA_12
-
-    //#define RADIO_ANT_SWITCH_RX PA_1
-    //#define RADIO_ANT_SWITCH_TX_BOOST PC_1
-    //#define RADIO_ANT_SWITCH_TX_RFO PC_2
+#define RADIO1_DIO_0 PC_1
+#define RADIO2_DIO_0 PA_4
+#define RADIO3_DIO_0 PB_0
+#define RADIO4_DIO_0 PA_2
+#define RADIO5_DIO_0 PA_12
+#define RADIO6_DIO_0 PB_12
+#define RADIO7_DIO_0 PA_8
+#define RADIO8_DIO_0 PB_5
 
 #define LED_1 PB_5
 #define LED_2 PA_5

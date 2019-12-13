@@ -30,8 +30,6 @@ extern "C"
 #include "multiRfm96wRegs-Fsk.h"
 #include "multiRfm96wRegs-LoRa.h"
 
-#define NUMBER_OF_RADIOS 8
-
 /*!
  * Radio wake-up time from sleep
  */
@@ -134,14 +132,14 @@ extern "C"
  */
   typedef struct MULTIRFM96W_s
   {
-    Gpio_t Reset;
+    Gpio_t Reset; //Must be the same on each radio
     Gpio_t DIO0;
     Gpio_t DIO1;
     Gpio_t DIO2;
     Gpio_t DIO3;
     Gpio_t DIO4;
     Gpio_t DIO5;
-    Spi_t Spi;
+    Spi_t Spi; //Must be the same on each radio
     RadioSettings_t Settings;
   } MULTIRFM96W_t;
 

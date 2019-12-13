@@ -41,6 +41,8 @@ extern "C"
       RF_CAD,        //!< The radio is doing channel activity detection
    } RadioState_t;
 
+#define MAX_NUMBER_OF_RADIOS 8
+
    typedef enum
    {
       RADIO0 = 0,

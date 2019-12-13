@@ -248,7 +248,7 @@ static RadioEvents_t *RadioEvents;
 /*!
  * Reception buffer
  */
-static uint8_t RxTxBuffer[NUMBER_OF_RADIOS][RX_BUFFER_SIZE];
+static uint8_t RxTxBuffer[MAX_NUMBER_OF_RADIOS][RX_BUFFER_SIZE];
 
 /*
  * Public global variables
@@ -257,8 +257,9 @@ static uint8_t RxTxBuffer[NUMBER_OF_RADIOS][RX_BUFFER_SIZE];
 /*!
  * Radio hardware and global parameters
  */
-MULTIRFM96W_t MULTIRFM96W[NUMBER_OF_RADIOS];
+MULTIRFM96W_t MULTIRFM96W[MAX_NUMBER_OF_RADIOS];
 
+bool DioIrqInitialized = false;
 /*!
  * Hardware DIO IRQ callback initialization
  */
@@ -327,14 +328,15 @@ TimerEvent_t RxTimeoutSyncWords[8];
 
 void MULTIRFM96WInit(RadioIndex_t radio, RadioEvents_t *events)
 {
-    uint8_t i;
+    if (!DioIrqInitialized)
+    {
+        DioIrqInitialized = true;
+        MULTIRFM96WIoIrqInit(DioIrq);
+    }
 
     RadioEvents = events;
-
     // Initialize driver timeout timers
     InitTimers(radio);
-
-    MULTIRFM96WReset(radio);
 
     RxChainCalibration(radio);
 
@@ -343,12 +345,10 @@ void MULTIRFM96WInit(RadioIndex_t radio, RadioEvents_t *events)
 
     MULTIRFM96WSetOpMode(radio, RF_OPMODE_SLEEP);
 
-    MULTIRFM96WIoIrqInit(DioIrq);
-
-    for (i = 0; i < sizeof(RadioRegsInit) / sizeof(RadioRegisters_t); i++)
+    for (int j = 0; j < sizeof(RadioRegsInit) / sizeof(RadioRegisters_t); j++)
     {
-        MULTIRFM96WSetModem(radio, RadioRegsInit[i].Modem);
-        MULTIRFM96WWrite(radio, RadioRegsInit[i].Addr, RadioRegsInit[i].Value);
+        MULTIRFM96WSetModem(radio, RadioRegsInit[j].Modem);
+        MULTIRFM96WWrite(radio, RadioRegsInit[j].Addr, RadioRegsInit[j].Value);
     }
 
     MULTIRFM96WSetModem(radio, MODEM_FSK);
@@ -975,7 +975,7 @@ void MULTIRFM96WSetSleep(RadioIndex_t radio)
     MULTIRFM96WSetOpMode(radio, RF_OPMODE_SLEEP);
 
     // Disable TCXO radio is in SLEEP mode
-    MULTIRFM96WSetBoardTcxo(radio, false);
+    MULTIRFM96WSetBoardTcxo(false);
 
     MULTIRFM96W[radio].Settings.State = RF_IDLE;
 }
@@ -1279,7 +1279,7 @@ void MULTIRFM96WSetOpMode(RadioIndex_t radio, uint8_t opMode)
 
     if (opMode != RF_OPMODE_SLEEP)
     {
-        MULTIRFM96WSetBoardTcxo(radio, true);
+        MULTIRFM96WSetBoardTcxo(true);
     }
     MULTIRFM96WWrite(radio, REG_OPMODE, (MULTIRFM96WRead(radio, REG_OPMODE) & RF_OPMODE_MASK) | opMode);
 }
@@ -1459,7 +1459,7 @@ void MULTIRFM96WOnTimeoutIrq(RadioIndex_t radio, void *context)
         // BEGIN WORKAROUND
 
         // Reset the radio
-        MULTIRFM96WReset(radio);
+        MULTIRFM96WResetAll(radio);
 
         // Calibrate Rx chain
         RxChainCalibration(radio);

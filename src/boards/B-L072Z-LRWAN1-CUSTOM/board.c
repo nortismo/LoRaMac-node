@@ -171,13 +171,15 @@ void BoardInitMcu(void)
     /* PinNames nss must be NC. This enables software management of the chip
     *  select and puts the board into master mode. Chip select GPIO must be
     *  enabled and initialized in another method together with the IO pins */
-    SpiInit(&MULTIRFM96W[0].Spi, SPI_2, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, NC);
-    //SpiInit(&MULTIRFM96W[1].Spi, SPI_2, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, NC);
-    MULTIRFM96W[1].Spi.Miso = MULTIRFM96W[0].Spi.Miso;
-    MULTIRFM96W[1].Spi.Mosi = MULTIRFM96W[0].Spi.Mosi;
-    MULTIRFM96W[1].Spi.Sclk = MULTIRFM96W[0].Spi.Sclk;
-    MULTIRFM96W[1].Spi.SpiId = MULTIRFM96W[0].Spi.SpiId;
-
+    SpiInit(&MULTIRFM96W[0].Spi, SPI_2, RADIOS_MOSI, RADIOS_MISO, RADIOS_SCLK, NC);
+    for (int i = 1; i < MAX_NUMBER_OF_RADIOS; i++)
+    {
+        MULTIRFM96W[i].Spi.Miso = MULTIRFM96W[0].Spi.Miso;
+        MULTIRFM96W[i].Spi.Mosi = MULTIRFM96W[0].Spi.Mosi;
+        MULTIRFM96W[i].Spi.Sclk = MULTIRFM96W[0].Spi.Sclk;
+        MULTIRFM96W[i].Spi.SpiId = MULTIRFM96W[0].Spi.SpiId;
+        MULTIRFM96W[i].Reset = MULTIRFM96W[0].Reset;
+    }
     MULTIRFM96WIoInit();
 
     if (McuInitialized == false)
@@ -202,7 +204,6 @@ void BoardResetMcu(void)
 void BoardDeInitMcu(void)
 {
     SpiDeInit(&MULTIRFM96W[0].Spi);
-    SpiDeInit(&MULTIRFM96W[1].Spi);
     MULTIRFM96WIoDeInit();
 }
 

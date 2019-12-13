@@ -64,19 +64,33 @@ Gpio_t TcxoPower;
 
 void MULTIRFM96WIoInit()
 {
-    GpioInit(&MULTIRFM96W[0].Spi.Nss, RADIO_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
-    GpioInit(&MULTIRFM96W[0].DIO0, RADIO_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
+    GpioInit(&MULTIRFM96W[0].Spi.Nss, RADIO1_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[0].DIO0, RADIO1_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
 
-    GpioInit(&MULTIRFM96W[1].Spi.Nss, RADIO_NSS_2, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
-    GpioInit(&MULTIRFM96W[1].DIO0, RADIO_DIO_0_2, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
+    GpioInit(&MULTIRFM96W[1].Spi.Nss, RADIO2_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[1].DIO0, RADIO2_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
+
+    GpioInit(&MULTIRFM96W[2].Spi.Nss, RADIO3_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[2].DIO0, RADIO3_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
 
     /*
-    GpioInit(&MULTIRFM96W[0].DIO1, RADIO_DIO_1, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
-    GpioInit(&MULTIRFM96W[0].DIO2, RADIO_DIO_2, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
-    GpioInit(&MULTIRFM96W[0].DIO3, RADIO_DIO_3, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
-    GpioInit(&MULTIRFM96W[0].DIO4, RADIO_DIO_4, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
-    GpioInit(&MULTIRFM96W[0].DIO5, RADIO_DIO_5, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
+    SmartSilo Errata 1.0: Radio4 can't be used, since it is on the same pin as UART
+
+    GpioInit(&MULTIRFM96W[3].Spi.Nss, RADIO4_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[3].DIO0, RADIO4_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
     */
+
+    GpioInit(&MULTIRFM96W[4].Spi.Nss, RADIO5_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[4].DIO0, RADIO5_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
+
+    GpioInit(&MULTIRFM96W[5].Spi.Nss, RADIO6_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[5].DIO0, RADIO6_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
+
+    GpioInit(&MULTIRFM96W[6].Spi.Nss, RADIO7_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[6].DIO0, RADIO7_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
+
+    GpioInit(&MULTIRFM96W[7].Spi.Nss, RADIO8_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+    GpioInit(&MULTIRFM96W[7].DIO0, RADIO8_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
 }
 
 void MULTIRFM96WIoIrqInit(DioIrqHandler **irqHandlers)
@@ -85,52 +99,64 @@ void MULTIRFM96WIoIrqInit(DioIrqHandler **irqHandlers)
 
     GpioSetInterrupt(&MULTIRFM96W[1].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[6]);
 
+    GpioSetInterrupt(&MULTIRFM96W[2].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[12]);
+
     /*
-    GpioSetInterrupt(&MULTIRFM96W[radio].DIO1, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[1]);
-    GpioSetInterrupt(&MULTIRFM96W[radio].DIO2, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[2]);
-    GpioSetInterrupt(&MULTIRFM96W[radio].DIO3, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[3]);
-    GpioSetInterrupt(&MULTIRFM96W[radio].DIO4, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[4]);
-    GpioSetInterrupt(&MULTIRFM96W[radio].DIO5, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[5]);
+    SmartSilo Errata 1.0: Radio4 can't be used, since it is on the same pin as UART
+
+    GpioSetInterrupt(&MULTIRFM96W[3].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[18]);
     */
+
+    GpioSetInterrupt(&MULTIRFM96W[4].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[24]);
+
+    GpioSetInterrupt(&MULTIRFM96W[5].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[30]);
+
+    GpioSetInterrupt(&MULTIRFM96W[6].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[36]);
+
+    GpioSetInterrupt(&MULTIRFM96W[7].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[42]);
 }
 
 void MULTIRFM96WIoDeInit()
 {
-    GpioInit(&MULTIRFM96W[0].Spi.Nss, RADIO_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
-    GpioInit(&MULTIRFM96W[0].DIO0, RADIO_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+    GpioInit(&MULTIRFM96W[0].Spi.Nss, RADIO1_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[0].DIO0, RADIO1_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
 
-    GpioInit(&MULTIRFM96W[1].Spi.Nss, RADIO_NSS_2, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
-    GpioInit(&MULTIRFM96W[1].DIO0, RADIO_DIO_0_2, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+    GpioInit(&MULTIRFM96W[1].Spi.Nss, RADIO2_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[1].DIO0, RADIO2_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+
+    GpioInit(&MULTIRFM96W[2].Spi.Nss, RADIO3_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[2].DIO0, RADIO3_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+
     /*
-    GpioInit(&MULTIRFM96W[radio].DIO1, RADIO_DIO_1, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
-    GpioInit(&MULTIRFM96W[radio].DIO2, RADIO_DIO_2, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
-    GpioInit(&MULTIRFM96W[radio].DIO3, RADIO_DIO_3, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
-    GpioInit(&MULTIRFM96W[radio].DIO4, RADIO_DIO_4, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
-    GpioInit(&MULTIRFM96W[radio].DIO5, RADIO_DIO_5, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+    SmartSilo Errata 1.0: Radio4 can't be used, since it is on the same pin as UART
+
+    GpioInit(&MULTIRFM96W[3].Spi.Nss, RADIO4_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[3].DIO0, RADIO4_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
     */
+
+    GpioInit(&MULTIRFM96W[4].Spi.Nss, RADIO5_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[4].DIO0, RADIO5_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+
+    GpioInit(&MULTIRFM96W[5].Spi.Nss, RADIO6_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[5].DIO0, RADIO6_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+
+    GpioInit(&MULTIRFM96W[6].Spi.Nss, RADIO7_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[6].DIO0, RADIO7_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+
+    GpioInit(&MULTIRFM96W[7].Spi.Nss, RADIO8_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[7].DIO0, RADIO8_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
 }
 
-void MULTIRFM96WIoTcxoInit(RadioIndex_t radio)
+void MULTIRFM96WIoTcxoInit(void)
 {
-    GpioInit(&TcxoPower, RADIO_TCXO_POWER, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+    /* Not available on this board */
+    return;
 }
 
-void MULTIRFM96WSetBoardTcxo(RadioIndex_t radio, uint8_t state)
+void MULTIRFM96WSetBoardTcxo(uint8_t state)
 {
-    if (state == true)
-    {
-        if (GpioRead(&TcxoPower) == 0)
-        { // TCXO OFF power it up.
-            // Power ON the TCXO
-            GpioWrite(&TcxoPower, 1);
-            DelayMs(BOARD_TCXO_WAKEUP_TIME);
-        }
-    }
-    else
-    {
-        // Power OFF the TCXO
-        GpioWrite(&TcxoPower, 0);
-    }
+    /* Not available on this board */
+    return;
 }
 
 uint32_t MULTIRFM96WGetBoardTcxoWakeupTime(RadioIndex_t radio)
@@ -138,19 +164,19 @@ uint32_t MULTIRFM96WGetBoardTcxoWakeupTime(RadioIndex_t radio)
     return BOARD_TCXO_WAKEUP_TIME;
 }
 
-void MULTIRFM96WReset(RadioIndex_t radio)
+void MULTIRFM96WResetAll()
 {
     // Enables the TCXO if available on the board design
-    MULTIRFM96WSetBoardTcxo(radio, true);
+    MULTIRFM96WSetBoardTcxo(true);
 
     // Set RESET pin to 0
-    GpioInit(&MULTIRFM96W[radio].Reset, RADIO_RESET, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+    GpioInit(&MULTIRFM96W[0].Reset, RADIOS_RESET, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
 
     // Wait 1 ms
     DelayMs(1);
 
     // Configure RESET as input
-    GpioInit(&MULTIRFM96W[radio].Reset, RADIO_RESET, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+    GpioInit(&MULTIRFM96W[0].Reset, RADIOS_RESET, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
 
     // Wait 6 ms
     DelayMs(6);

@@ -73,12 +73,12 @@ extern "C"
   /*!
  * \brief Initializes the TCXO power pin.
  */
-  void MULTIRFM96WIoTcxoInit(RadioIndex_t radio);
+  void MULTIRFM96WIoTcxoInit();
 
   /*!
  * \brief Resets the radio
  */
-  void MULTIRFM96WReset(RadioIndex_t radio);
+  void MULTIRFM96WResetAll();
 
   /*!
  * \brief Sets the radio output power.
@@ -100,7 +100,7 @@ extern "C"
  *
  * \param [IN] state TCXO enabled when true and disabled when false.
  */
-  void MULTIRFM96WSetBoardTcxo(RadioIndex_t radio, uint8_t state);
+  void MULTIRFM96WSetBoardTcxo(uint8_t state);
 
   /*!
  * \brief Gets the Defines the time required for the TCXO to wakeup [ms].
