@@ -422,6 +422,16 @@ void BoardLowPowerHandler(void)
     __enable_irq();
 }
 
+/*!
+ * \brief Get the board UART
+ *
+ * \retval value  UART
+ */
+Uart_t *BoardGetUart(void)
+{
+    return &Uart2;
+}
+
 #if !defined(__CC_ARM)
 
 /*
