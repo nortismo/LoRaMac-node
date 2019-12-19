@@ -20,15 +20,19 @@
  *
  * \author    Gregory Cristian ( Semtech )
  */
-#include "delay-board.h"
-#include "delay.h"
 
-void Delay( float s )
+/* Unable to use HAL delay in combination with FreeRTOS */
+//#include "delay-board.h"
+#include "delay.h"
+/* Replaced wait method with another implementation, not depending on systick */
+#include "McuWait.h"
+
+void Delay(float s)
 {
-    DelayMs( s * 1000.0f );
+    DelayMs(s * 1000.0f);
 }
 
-void DelayMs( uint32_t ms )
+void DelayMs(uint32_t ms)
 {
-    DelayMsMcu( ms );
+    McuWait_Waitms(ms);
 }
