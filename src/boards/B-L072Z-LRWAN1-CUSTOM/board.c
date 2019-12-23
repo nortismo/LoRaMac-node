@@ -34,6 +34,8 @@
 #include "multiRfm96w-board.h"
 #include "board.h"
 
+#include "cmsis_os.h"
+
 /*!
  * Unique Devices IDs register set ( STM32L0xxx )
  */
@@ -92,8 +94,8 @@ static bool UsbIsConnected = false;
 /*!
  * UART2 FIFO buffers size
  */
-#define UART2_FIFO_TX_SIZE 1024
-#define UART2_FIFO_RX_SIZE 1024
+#define UART2_FIFO_TX_SIZE 512
+#define UART2_FIFO_RX_SIZE 512
 
 uint8_t Uart2TxBuffer[UART2_FIFO_TX_SIZE];
 uint8_t Uart2RxBuffer[UART2_FIFO_RX_SIZE];
@@ -342,6 +344,7 @@ void SysTick_Handler(void)
 {
     HAL_IncTick();
     HAL_SYSTICK_IRQHandler();
+    osSystickHandler();
 }
 
 uint8_t GetBoardPowerSource(void)

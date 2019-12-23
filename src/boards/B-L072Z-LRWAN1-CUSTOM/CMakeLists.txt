@@ -85,3 +85,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
+
+add_dependencies(${PROJECT_NAME} freertos_cube)
+
+target_link_libraries(${PROJECT_NAME} freertos_cube)
