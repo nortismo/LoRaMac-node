@@ -74,7 +74,7 @@ void MULTIRFM96WIoInit()
     GpioInit(&MULTIRFM96W[2].DIO0, RADIO3_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
 
     /*
-    SmartSilo Errata 1.0: Radio4 can't be used, since it is on the same pin as UART
+    SmartSilo Errata 1.0: Radio3 can't be used, since it is on the same pin as UART
 
     GpioInit(&MULTIRFM96W[3].Spi.Nss, RADIO4_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
     GpioInit(&MULTIRFM96W[3].DIO0, RADIO4_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
@@ -102,7 +102,7 @@ void MULTIRFM96WIoIrqInit(DioIrqHandler **irqHandlers)
     GpioSetInterrupt(&MULTIRFM96W[2].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[12]);
 
     /*
-    SmartSilo Errata 1.0: Radio4 can't be used, since it is on the same pin as UART
+    SmartSilo Errata 1.0: Radio3 can't be used, since it is on the same pin as UART
 
     GpioSetInterrupt(&MULTIRFM96W[3].DIO0, IRQ_RISING_EDGE, IRQ_HIGH_PRIORITY, irqHandlers[18]);
     */
@@ -128,7 +128,7 @@ void MULTIRFM96WIoDeInit()
     GpioInit(&MULTIRFM96W[2].DIO0, RADIO3_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
 
     /*
-    SmartSilo Errata 1.0: Radio4 can't be used, since it is on the same pin as UART
+    SmartSilo Errata 1.0: Radio3 can't be used, since it is on the same pin as UART
 
     GpioInit(&MULTIRFM96W[3].Spi.Nss, RADIO4_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
     GpioInit(&MULTIRFM96W[3].DIO0, RADIO4_DIO_0, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
