@@ -252,14 +252,8 @@ void MULTIRFM96WSetRfTxPower(RadioIndex_t radio, int8_t power)
 
 static uint8_t MULTIRFM96WGetPaSelect(RadioIndex_t radio, int8_t power)
 {
-    if (power > 14)
-    {
-        return RF_PACONFIG_PASELECT_PABOOST;
-    }
-    else
-    {
-        return RF_PACONFIG_PASELECT_RFO;
-    }
+    // Only work with PABOOST mode
+    return RF_PACONFIG_PASELECT_PABOOST;
 }
 
 bool MULTIRFM96WCheckRfFrequency(RadioIndex_t radio, uint32_t frequency)
