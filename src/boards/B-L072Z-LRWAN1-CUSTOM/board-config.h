@@ -55,23 +55,34 @@ extern "C"
 #define RADIOS_MISO PB_14
 #define RADIOS_SCLK PB_13
 
-#define RADIO1_NSS PA_1
-#define RADIO2_NSS PA_5
-#define RADIO3_NSS PB_4
-#define RADIO4_NSS PA_10
-#define RADIO5_NSS PA_9
-#define RADIO6_NSS PA_11
-#define RADIO7_NSS PB_2
-#define RADIO8_NSS PB_8
+#define RADIO0_NSS PA_1
+#define RADIO1_NSS PA_5
+/* SmartSilo Errata 1.1: Radio2 can't be used. Reason currently unknown.
+#define RADIO2_NSS PB_4 */
+/* SmartSilo Errata 1.0: Radio3 can't be used, since it is on the same pin as UART
+#define RADIO3_NSS PA_10 */
+#define RADIO4_NSS PA_9
+#define RADIO5_NSS PA_11
+#define RADIO6_NSS PB_2
+#define RADIO7_NSS PB_8
 
-#define RADIO1_DIO_0 PC_1
-#define RADIO2_DIO_0 PA_4
-#define RADIO3_DIO_0 PB_0
-#define RADIO4_DIO_0 PA_2
+#define RADIO0_DIO_0 PC_1
+#define RADIO1_DIO_0 PA_4
+/* SmartSilo Errata 1.1: Radio2 can't be used. Reason currently unknown.
+#define RADIO2_DIO_0 PB_0 */
+/* SmartSilo Errata 1.0: Radio3 can't be used, since it is on the same pin as UART
+#define RADIO3_DIO_0 PA_2 */
+
+/* SmartSilo Errata 1.2: Radio5 uses a different DIO0 pin than originally planned. It uses DIO0 of Radio2
+*  since Radio2 is not usable anyway. PA_12 seems to be blocking the whole application.
+*  CAUTION: This must be adapted in the schematic.
 #define RADIO5_DIO_0 PA_12
-#define RADIO6_DIO_0 PB_12
-#define RADIO7_DIO_0 PA_8
-#define RADIO8_DIO_0 PB_5
+*/
+#define RADIO4_DIO_0 PB_0
+
+#define RADIO5_DIO_0 PB_12
+#define RADIO6_DIO_0 PA_8
+#define RADIO7_DIO_0 PB_5
 
 #define LED_1 PB_5
 #define LED_2 PA_5
