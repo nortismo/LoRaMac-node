@@ -73,10 +73,10 @@ extern "C"
 /* SmartSilo Errata 1.0: Radio3 can't be used, since it is on the same pin as UART
 #define RADIO3_DIO_0 PA_2 */
 
-/* SmartSilo Errata 1.2: Radio5 uses a different DIO0 pin than originally planned. It uses DIO0 of Radio2
+/* SmartSilo Errata 1.2: Radio4 uses a different DIO0 pin than originally planned. It uses DIO0 of Radio2
 *  since Radio2 is not usable anyway. PA_12 seems to be blocking the whole application.
 *  CAUTION: This must be adapted in the schematic.
-#define RADIO5_DIO_0 PA_12
+#define RADIO4_DIO_0 PA_12
 */
 #define RADIO4_DIO_0 PB_0
 
