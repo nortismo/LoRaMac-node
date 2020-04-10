@@ -13,6 +13,8 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/rtc-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/gpio-board.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pin_mux.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmsis/clock_config.c"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/gcc/startup_MK22F51212.S"
@@ -22,6 +24,10 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_rtc.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_clock.c" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_gpio.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_uart.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_dmamux.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_edma.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_uart_edma.c"
 )
 
 add_library(${PROJECT_NAME} OBJECT EXCLUDE_FROM_ALL ${${PROJECT_NAME}_SOURCES})

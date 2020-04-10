@@ -38,6 +38,7 @@ typedef enum
 {
     UART_1,
     UART_2,
+    UART_3,
     UART_USB_CDC = 255,
 }UartId_t;
 

@@ -10,19 +10,19 @@
 #include <string.h>
 #include "board.h"
 
-
 /**
  * Main application entry point.
  */
-int main( void )
+int
+main (void)
 {
-    // Target board initialization
-    BoardInitMcu( );
-    BoardInitPeriph( );
+  // Target board initialization
+  BoardInitMcu ();
+  BoardInitPeriph ();
 
-    printf("Test");
+  printf ("Test");
 
-    while( 1 )
+  while (1)
     {
     }
 }

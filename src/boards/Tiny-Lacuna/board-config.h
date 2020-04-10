@@ -40,7 +40,7 @@ extern "C"
  */
 #define UART_TX                                     PTC_3
 #define UART_RX                                     PTC_4
-#define BOARD_DEBUG_UART_BAUDRATE                   115200
+#define BOARD_DEFAULT_UART_BAUDRATE                 115200
 
 /*!
  * GPIO interrupt configuration
