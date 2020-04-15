@@ -51,9 +51,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis
-    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis/Driver
-    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis/Driver/Include
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/arm
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/cmsis_drivers
