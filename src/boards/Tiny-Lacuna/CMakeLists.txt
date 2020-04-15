@@ -15,6 +15,7 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/gpio-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/pin_mux.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/peripherals.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmsis/clock_config.c"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/gcc/startup_MK22F51212.S"
@@ -28,6 +29,7 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_dmamux.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_edma.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_uart_edma.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_smc.c"
 )
 
 add_library(${PROJECT_NAME} OBJECT EXCLUDE_FROM_ALL ${${PROJECT_NAME}_SOURCES})
@@ -49,6 +51,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis/Driver
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/cmsis/Driver/Include
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/arm
     ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/cmsis_drivers

@@ -7,8 +7,19 @@
  * \author    Diego Bienz
  */
 
+#include <stdio.h>
 #include <string.h>
 #include "board.h"
+#include "rtc-board.h"
+#include "timer.h"
+
+TimerEvent_t timer_event;
+
+void
+test_callback (void)
+{
+  printf ("Test");
+}
 
 /**
  * Main application entry point.
@@ -19,6 +30,9 @@ main (void)
   // Target board initialization
   BoardInitMcu ();
   BoardInitPeriph ();
+
+  TimerInit (&timer_event, test_callback);
+  TimerStart (&timer_event);
 
   printf ("Test");
 

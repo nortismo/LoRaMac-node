@@ -113,13 +113,7 @@ BoardInitMcu (void)
     {
       //TODO: Pin-muxing
       BOARD_InitPins ();
-
-      // LEDs
-      GpioInit (&Led1, LED_1, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
-      GpioInit (&Led2, LED_2, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
-      GpioWrite (&Led1, 0);
-      GpioWrite (&Led2, 0);
-
+      //BOARD_InitBootPeripherals ();
       SystemClockConfig ();
 
       // Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
@@ -127,7 +121,13 @@ BoardInitMcu (void)
       UartConfig (&Uart0, RX_TX, BOARD_DEFAULT_UART_BAUDRATE, UART_8_BIT,
 		  UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL);
 
-      //RtcInit( );
+      // LEDs
+      GpioInit (&Led1, LED_1, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+      GpioInit (&Led2, LED_2, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+      GpioWrite (&Led1, 0);
+      GpioWrite (&Led2, 0);
+
+      RtcInit( );
 
       BoardUnusedIoInit ();
     }

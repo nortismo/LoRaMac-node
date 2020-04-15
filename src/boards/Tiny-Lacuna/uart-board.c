@@ -6,6 +6,8 @@
  * \author    Diego Bienz
  */
 
+#include "board.h"
+#include "uart-board.h"
 #include "board-config.h"
 #include "fsl_uart_edma.h"
 #include "fsl_dmamux.h"
@@ -153,7 +155,7 @@ UartMcuDeInit (Uart_t *obj)
 uint8_t
 UartMcuPutChar (Uart_t *obj, uint8_t data)
 {
-  CRITICAL_SECTION_BEGIN ();
+  CRITICAL_SECTION_BEGIN();
 
   /* If TX is idle and g_txBuffer is full, start to send data. */
   if (!txOnGoing)
@@ -162,12 +164,12 @@ UartMcuPutChar (Uart_t *obj, uint8_t data)
       txOnGoing = true;
       UART_SendEDMA (UartBaseAddresses[obj->UartId], &g_uartEdmaHandle,
 		     &sendXfer);
-      CRITICAL_SECTION_END ();
+      CRITICAL_SECTION_END();
       return 0; // OK
     }
   else
     {
-      CRITICAL_SECTION_END ();
+      CRITICAL_SECTION_END();
       return 1; // Busy
     }
 }
@@ -175,7 +177,7 @@ UartMcuPutChar (Uart_t *obj, uint8_t data)
 uint8_t
 UartMcuGetChar (Uart_t *obj, uint8_t *data)
 {
-  CRITICAL_SECTION_BEGIN ();
+  CRITICAL_SECTION_BEGIN();
   if ((!rxOnGoing) && !rxBufferEmpty)
     {
       memcpy (data, g_rxBuffer, sizeof(data));
@@ -183,12 +185,10 @@ UartMcuGetChar (Uart_t *obj, uint8_t *data)
     }
   else
     {
-      CRITICAL_SECTION_END ();
+      CRITICAL_SECTION_END();
       return 1; // NOT OK
     }
-  CRITICAL_SECTION_END ();
 
-  CRITICAL_SECTION_BEGIN ();
   /* If RX is idle and g_rxBuffer is empty, start to read data to g_rxBuffer. */
   if ((!rxOnGoing) && rxBufferEmpty)
     {
@@ -196,7 +196,7 @@ UartMcuGetChar (Uart_t *obj, uint8_t *data)
       UART_ReceiveEDMA (UartBaseAddresses[obj->UartId], &g_uartEdmaHandle,
 			&receiveXfer);
     }
-  CRITICAL_SECTION_END ();
+  CRITICAL_SECTION_END();
   return 0; //OK
 }
 
@@ -260,23 +260,23 @@ UartConfigureEdma ()
   DMAMUX_Init (UART_DMAMUX_BASEADDR);
   /* Set channel for UART */
   DMAMUX_SetSource (UART_DMAMUX_BASEADDR, UART_TX_DMA_CHANNEL,
-		    UART1_TX_DMA_REQUEST);
+  UART1_TX_DMA_REQUEST);
   DMAMUX_SetSource (UART_DMAMUX_BASEADDR, UART_RX_DMA_CHANNEL,
-		    UART1_RX_DMA_REQUEST);
+  UART1_RX_DMA_REQUEST);
   DMAMUX_EnableChannel (UART_DMAMUX_BASEADDR, UART_TX_DMA_CHANNEL);
   DMAMUX_EnableChannel (UART_DMAMUX_BASEADDR, UART_RX_DMA_CHANNEL);
   /* Init the EDMA module */
   EDMA_GetDefaultConfig (&config);
   EDMA_Init (UART_DMA_BASEADDR, &config);
   EDMA_CreateHandle (&g_uartTxEdmaHandle, UART_DMA_BASEADDR,
-		     UART_TX_DMA_CHANNEL);
+  UART_TX_DMA_CHANNEL);
   EDMA_CreateHandle (&g_uartRxEdmaHandle, UART_DMA_BASEADDR,
-		     UART_RX_DMA_CHANNEL);
+  UART_RX_DMA_CHANNEL);
 
   /* Create UART DMA handle. */
   UART_TransferCreateHandleEDMA (UART, &g_uartEdmaHandle, UartUserCallback,
-				 NULL, &g_uartTxEdmaHandle,
-				 &g_uartRxEdmaHandle);
+  NULL,
+				 &g_uartTxEdmaHandle, &g_uartRxEdmaHandle);
 }
 
 /* UART user callback */
