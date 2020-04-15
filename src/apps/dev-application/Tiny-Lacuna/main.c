@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "board.h"
+#include "delay-board.h"
 #include "rtc-board.h"
 #include "timer.h"
 
@@ -18,7 +19,7 @@ TimerEvent_t timer_event;
 void
 test_callback (void)
 {
-  printf ("Test");
+  printf ("Test callback");
 }
 
 /**
@@ -33,6 +34,8 @@ main (void)
 
   TimerInit (&timer_event, test_callback);
   TimerStart (&timer_event);
+
+  DelayMs (10000);
 
   printf ("Test");
 

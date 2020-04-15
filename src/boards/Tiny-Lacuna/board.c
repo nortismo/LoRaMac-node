@@ -29,6 +29,13 @@ Gpio_t Led2;
  */
 Uart_t Uart0;
 
+/*
+ * Counter to get all systicsk
+ */
+volatile uint32_t sysTickCounter;
+/* Countdown can be used for delays or timers */
+volatile uint32_t sysTickCountDown;
+
 /*!
  * Initializes the unused GPIO to a know status
  */
@@ -127,7 +134,7 @@ BoardInitMcu (void)
       GpioWrite (&Led1, 0);
       GpioWrite (&Led2, 0);
 
-      RtcInit( );
+      RtcInit ();
 
       BoardUnusedIoInit ();
     }
@@ -199,6 +206,10 @@ SystemClockConfig (void)
   // I don't know how to do that right now!
 
   BOARD_InitBootClocks ();
+
+  sysTickCounter = 0;
+  /* Set systick reload value to generate 1ms interrupt */
+  SysTick_Config (SystemCoreClock / 1000U);
 }
 
 void
@@ -226,9 +237,11 @@ SystemClockReConfig (void)
 void
 SysTick_Handler (void)
 {
-  //TODO: HAL of K22 needs to be integrated.
-  //HAL_IncTick( );
-  //HAL_SYSTICK_IRQHandler( );
+  sysTickCounter++;
+  if (sysTickCountDown != 0U)
+    {
+      sysTickCountDown--;
+    }
 }
 
 /*

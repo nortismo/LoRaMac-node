@@ -14,6 +14,7 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/rtc-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/gpio-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/delay-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/pin_mux.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/peripherals.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmsis/clock_config.c"
