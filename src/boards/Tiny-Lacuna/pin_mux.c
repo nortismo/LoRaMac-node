@@ -19,6 +19,7 @@ board: FRDM-K22F
 
 #include "fsl_common.h"
 #include "fsl_port.h"
+#include "fsl_gpio.h"
 #include "pin_mux.h"
 
 /* FUNCTION ************************************************************************************************************
@@ -40,6 +41,10 @@ BOARD_InitPins:
 - pin_list:
   - {pin_num: '46', peripheral: UART1, signal: RX, pin_signal: CMP1_IN1/PTC3/LLWU_P7/SPI0_PCS1/UART1_RX/FTM0_CH2/CLKOUT/I2S0_TX_BCLK/LPUART0_RX}
   - {pin_num: '49', peripheral: UART1, signal: TX, pin_signal: PTC4/LLWU_P8/SPI0_PCS0/UART1_TX/FTM0_CH3/FB_AD11/CMP1_OUT/LPUART0_TX}
+  - {pin_num: '63', peripheral: GPIOD, signal: 'GPIO, 6', pin_signal: ADC0_SE7b/PTD6/LLWU_P15/SPI0_PCS3/UART0_RX/FTM0_CH6/FB_AD0/FTM0_FLT0/SPI1_SOUT}
+  - {pin_num: '64', peripheral: GPIOD, signal: 'GPIO, 7', pin_signal: PTD7/UART0_TX/FTM0_CH7/FTM0_FLT1/SPI1_SIN}
+  - {pin_num: '62', peripheral: GPIOD, signal: 'GPIO, 5', pin_signal: ADC0_SE6b/PTD5/SPI0_PCS2/UART0_CTS_b/FTM0_CH5/FB_AD1/EWM_OUT_b/SPI1_SCK, direction: INPUT, gpio_interrupt: no_init,
+    slew_rate: fast, pull_select: up, pull_enable: enable}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -54,12 +59,42 @@ void BOARD_InitPins(void)
 {
     /* Port C Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortC);
+    /* Port D Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortD);
+
+    gpio_pin_config_t LEDRGB_BLUE_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTD5 (pin 62)  */
+    GPIO_PinInit(BOARD_INITPINS_LEDRGB_BLUE_GPIO, BOARD_INITPINS_LEDRGB_BLUE_PIN, &LEDRGB_BLUE_config);
 
     /* PORTC3 (pin 46) is configured as UART1_RX */
     PORT_SetPinMux(BOARD_INITPINS_CLKOUT_PORT, BOARD_INITPINS_CLKOUT_PIN, kPORT_MuxAlt3);
 
     /* PORTC4 (pin 49) is configured as UART1_TX */
     PORT_SetPinMux(BOARD_INITPINS_SD_CARD_DAT3_PORT, BOARD_INITPINS_SD_CARD_DAT3_PIN, kPORT_MuxAlt3);
+
+    /* PORTD5 (pin 62) is configured as PTD5 */
+    PORT_SetPinMux(BOARD_INITPINS_LEDRGB_BLUE_PORT, BOARD_INITPINS_LEDRGB_BLUE_PIN, kPORT_MuxAsGpio);
+
+    PORTD->PCR[5] = ((PORTD->PCR[5] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | (uint32_t)(kPORT_PullUp)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD6 (pin 63) is configured as PTD6 */
+    PORT_SetPinMux(PORTD, 6U, kPORT_MuxAsGpio);
+
+    /* PORTD7 (pin 64) is configured as PTD7 */
+    PORT_SetPinMux(PORTD, 7U, kPORT_MuxAsGpio);
 
     SIM->SOPT5 = ((SIM->SOPT5 &
                    /* Mask bits to zero which are setting */

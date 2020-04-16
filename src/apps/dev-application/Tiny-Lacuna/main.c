@@ -16,6 +16,13 @@
 TimerEvent_t timer_event;
 
 /*!
+ * Example for a GPIO interrupt
+ * Variable is set as soon as GPIO
+ * interrupt happens on PTD_5
+ */
+extern uint8_t testIrq;
+
+/*!
  * Example timer callback
  */
 void test_callback(void) {
@@ -44,7 +51,13 @@ int main(void) {
 	printf("see: https://github.com/nortismo/LoRaMac-node\r\n\r\n");
 
 	while (1) {
-		DelayMs(1000);
-		printf("heartbeat!\r\n");
+		/* If GPIO interrupt happens, print Juhuu. Else heartbeat. */
+		if (testIrq == 1) {
+			printf("Juhuuu\r\n");
+			testIrq = 0;
+		} else {
+			printf("heartbeat!\r\n");
+		}
+		DelayMs(200);
 	}
 }

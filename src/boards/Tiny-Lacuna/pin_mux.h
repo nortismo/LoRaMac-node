@@ -39,6 +39,13 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_SD_CARD_DAT3_PIN 4U     /*!<@brief PORTC pin index: 4 */
                                                /* @} */
 
+/*! @name PORTD5 (number 62), J2[12]/BLUE_LED
+  @{ */
+#define BOARD_INITPINS_LEDRGB_BLUE_GPIO GPIOD /*!<@brief GPIO device name: GPIOD */
+#define BOARD_INITPINS_LEDRGB_BLUE_PORT PORTD /*!<@brief PORT device name: PORTD */
+#define BOARD_INITPINS_LEDRGB_BLUE_PIN 5U     /*!<@brief PORTD pin index: 5 */
+                                              /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

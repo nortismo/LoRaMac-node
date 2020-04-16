@@ -20,9 +20,16 @@
 /*!
  * LED GPIO pins objects
  */
-//TODO: GPIO
 Gpio_t Led1;
 Gpio_t Led2;
+
+/*!
+ * Example of a GPIO interrupt
+ * testIrq can be used externally to react to interrupts.
+ */
+Gpio_t testGpio;
+uint8_t testIrq = 0;
+void testFunction(void *context);
 
 /*
  * MCU objects
@@ -112,6 +119,13 @@ void BoardInitMcu(void) {
 		GpioInit(&Led2, LED_2, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
 		GpioWrite(&Led1, 0);
 		GpioWrite(&Led2, 0);
+
+		/*!
+		 * Example of a GPIO initialized as interrupt. See also pin_mux.c
+		 */
+		GpioInit(&testGpio, PTD_5, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
+		GpioSetInterrupt(&testGpio, IRQ_FALLING_EDGE, IRQ_HIGH_PRIORITY,
+				&testFunction);
 
 		/*!
 		 * Initialize the GPIOs and LEDs
@@ -220,4 +234,13 @@ int _read(int fd, const void *buf, size_t count) {
 	while (UartPutBuffer(&Uart1, (uint8_t*) buf, (uint16_t) bytesRead) != 0) {
 	};
 	return bytesRead;
+}
+
+/*!
+ * Example of a GPIO interrupt
+ * This is the callback method which sets testIrq to 1 then.
+ * testIrq can be used externally to react to interrupts.
+ */
+void testFunction(void *context) {
+	testIrq = 1;
 }
