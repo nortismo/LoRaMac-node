@@ -14,33 +14,35 @@ extern "C"
 {
 #endif
 
-
-
-/*! The rtc instance used for board. */
+/*!
+ * The rtc instance used for board.
+ */
 #define BOARD_RTC_FUNC_BASEADDR RTC
 
 /*!
  * Definition of the LEDs
  */
-
 #define LED_1                                       PTD_6
 #define LED_2                                       PTD_7
 
 /*!
  * SPI definition
  */
-
 #define RADIO_MOSI                                  PTD_2
 #define RADIO_MISO                                  PTD_3
 #define RADIO_SCLK                                  PTD_1
 #define RADIO_NSS                                   PTD_4
 
 /*!
- * UART configuration
+ * DEBUG UART configuration
  */
-#define UART_TX                                     PTC_3
-#define UART_RX                                     PTC_4
-#define BOARD_DEFAULT_UART_BAUDRATE                 115200
+#define DEBUG_UART_FAKE_PIN							NC
+#define DEBUG_UART_BAUDRATE                 		115200
+#define DEBUG_UART									UART1_BASE
+#define DEBUG_UART_DMAMUX_BASEADDR					DMAMUX0
+#define DEBUG_UART_DMA_BASEADDR 					DMA0
+#define DEBUG_UART_TX_DMA_REQUEST 					kDmaRequestMux0UART1Tx
+#define DEBUG_UART_RX_DMA_REQUEST 					kDmaRequestMux0UART1Rx
 
 /*!
  * GPIO interrupt configuration

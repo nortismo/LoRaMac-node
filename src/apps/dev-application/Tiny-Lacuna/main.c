@@ -10,36 +10,41 @@
 #include <stdio.h>
 #include <string.h>
 #include "board.h"
-#include "delay-board.h"
-#include "rtc-board.h"
+#include "delay.h"
 #include "timer.h"
 
 TimerEvent_t timer_event;
 
-void
-test_callback (void)
-{
-  printf ("Test callback");
+/*!
+ * Example timer callback
+ */
+void test_callback(void) {
+	printf("Test callback");
 }
 
 /**
  * Main application entry point.
  */
-int
-main (void)
-{
-  // Target board initialization
-  BoardInitMcu ();
-  BoardInitPeriph ();
+int main(void) {
+	// Target board initialization
+	BoardInitMcu();
+	BoardInitPeriph();
 
-  TimerInit (&timer_event, test_callback);
-  TimerStart (&timer_event);
+	/*!
+	 * Example of how to init the timer and start it.
+	 * We don't use that here.
+	 */
+	//TimerInit(&timer_event, test_callback);
+	//TimerStart(&timer_event);
+	/* Busy delay */
+	DelayMs(200);
 
-  DelayMs (10000);
+	printf("\r\n### Start of development application ###\r\n");
+	printf("BOARD: Tiny-Lacuna\r\n");
+	printf("see: https://github.com/nortismo/LoRaMac-node\r\n\r\n");
 
-  printf ("Test");
-
-  while (1)
-    {
-    }
+	while (1) {
+		DelayMs(1000);
+		printf("heartbeat!\r\n");
+	}
 }

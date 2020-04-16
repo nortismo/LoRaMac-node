@@ -7,9 +7,9 @@
  * \author    Diego Bienz
  */
 
-#include <string.h>
-#include "board.h"
 #include <stdio.h>
+#include "board.h"
+#include "delay.h"
 
 /**
  * Main application entry point.
@@ -21,9 +21,16 @@ main (void)
   BoardInitMcu ();
   BoardInitPeriph ();
 
-  printf ("Test");
+  DelayMs (2000);
+
+  printf("Test\r\n");
 
   while (1)
     {
+      printf("Test\r\n");
+      DelayMs (1000);
     }
 }
+
+
+
