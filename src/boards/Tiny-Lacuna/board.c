@@ -16,6 +16,7 @@
 #include "clock_config.h"
 #include "gpio.h"
 #include "pin_mux.h"
+#include "spi.h"
 
 /*!
  * LED GPIO pins objects
@@ -30,6 +31,11 @@ Gpio_t Led2;
 Gpio_t testGpio;
 uint8_t testIrq = 0;
 void testFunction(void *context);
+
+/*!
+ * Example of SPI
+ */
+Spi_t TestSpi;
 
 /*
  * MCU objects
@@ -137,8 +143,9 @@ void BoardInitMcu(void) {
 		SystemClockReConfig();
 	}
 
-	//TODO: Integration of SPI
-	//SpiInit( &SX126x.Spi, SPI_1, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, RADIO_NSS );
+	SpiInit(&TestSpi, SPI_1, RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN,
+	RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN);
+	//SpiInit(&SX126x.Spi, SPI_1, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, RADIO_NSS);
 
 	//TODO: Integration of SX1262
 	//SX126xIoInit( );

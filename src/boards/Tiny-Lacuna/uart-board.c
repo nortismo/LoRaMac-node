@@ -18,8 +18,6 @@
 
 #define UART_DEFAULT_CLK_FREQ 						CLOCK_GetFreq(SYS_CLK)
 #define TX_BUFFER_RETRY_COUNT                       10
-#define UART_TX_DMA_DEFAULT_CHANNEL 				0U
-#define UART_RX_DMA_DEFAULT_CHANNEL 				1U
 /* Buffer length of 1 is on purpose, since the transmition only is for one single char */
 #define RXTX_DEFAULT_BUFFER_LENGTH 					1
 
@@ -53,20 +51,20 @@ typedef struct {
  * Configurations for the different Uart of the board
  */
 /* Configuration for Uart0. NOT USED YET */
-const k22UartHandle_t UartHandle0;
+static k22UartHandle_t UartHandle0;
 
 /* Configuration for Uart1 */
-k22UartHandle_t UartHandle1 = { .type = DEBUG_UART, .baudRate =
+static k22UartHandle_t UartHandle1 = { .type = DEBUG_UART, .baudRate =
 DEBUG_UART_BAUDRATE, .dmamuxType = DEBUG_UART_DMAMUX_BASEADDR, .dmaType =
 DEBUG_UART_DMA_BASEADDR, .txDmaRequestSource = DEBUG_UART_TX_DMA_REQUEST,
 		.txDmaRequestChannel =
-		UART_TX_DMA_DEFAULT_CHANNEL, .rxDmaRequestSource =
+		DEBUG_UART_TX_DMA_DEFAULT_CHANNEL, .rxDmaRequestSource =
 		DEBUG_UART_RX_DMA_REQUEST, .rxDmaRequestChannel =
-		UART_RX_DMA_DEFAULT_CHANNEL, .rxBufferEmpty = true, .txOnGoing = false,
-		.rxOnGoing = false };
+		DEBUG_UART_RX_DMA_DEFAULT_CHANNEL, .rxBufferEmpty = true, .txOnGoing =
+		false, .rxOnGoing = false };
 
 /* Configuration for Uart2. NOT USED YET */
-const k22UartHandle_t UartHandle2;
+static k22UartHandle_t UartHandle2;
 
 void UartUserCallback(UART_Type *base, uart_edma_handle_t *handle,
 		status_t status, void *userData);

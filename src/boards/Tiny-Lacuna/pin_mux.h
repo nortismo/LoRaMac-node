@@ -46,6 +46,24 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_LEDRGB_BLUE_PIN 5U     /*!<@brief PORTD pin index: 5 */
                                               /* @} */
 
+/*! @name PORTD2 (number 59), J1[2]/J8[P3]/uSD_SPI_MOSI
+  @{ */
+#define BOARD_INITPINS_SD_CARD_CMD_PORT PORTD /*!<@brief PORT device name: PORTD */
+#define BOARD_INITPINS_SD_CARD_CMD_PIN 2U     /*!<@brief PORTD pin index: 2 */
+                                              /* @} */
+
+/*! @name PORTD3 (number 60), J1[4]/J8[P7]/SPI0_SIN/uSD_SPI_MISO
+  @{ */
+#define BOARD_INITPINS_SD_CARD_DAT0_PORT PORTD /*!<@brief PORT device name: PORTD */
+#define BOARD_INITPINS_SD_CARD_DAT0_PIN 3U     /*!<@brief PORTD pin index: 3 */
+                                               /* @} */
+
+/*! @name PORTD4 (number 61), J2[6]/SPI0_PCS1/LLWU_P14
+  @{ */
+#define BOARD_INITPINS_RF_CS_PORT PORTD /*!<@brief PORT device name: PORTD */
+#define BOARD_INITPINS_RF_CS_PIN 4U     /*!<@brief PORTD pin index: 4 */
+                                        /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

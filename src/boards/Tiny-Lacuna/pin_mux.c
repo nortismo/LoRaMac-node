@@ -45,6 +45,10 @@ BOARD_InitPins:
   - {pin_num: '64', peripheral: GPIOD, signal: 'GPIO, 7', pin_signal: PTD7/UART0_TX/FTM0_CH7/FTM0_FLT1/SPI1_SIN}
   - {pin_num: '62', peripheral: GPIOD, signal: 'GPIO, 5', pin_signal: ADC0_SE6b/PTD5/SPI0_PCS2/UART0_CTS_b/FTM0_CH5/FB_AD1/EWM_OUT_b/SPI1_SCK, direction: INPUT, gpio_interrupt: no_init,
     slew_rate: fast, pull_select: up, pull_enable: enable}
+  - {pin_num: '58', peripheral: SPI0, signal: SCK, pin_signal: ADC0_SE5b/PTD1/SPI0_SCK/UART2_CTS_b/FTM3_CH1/FB_CS0_b/LPUART0_CTS_b}
+  - {pin_num: '59', peripheral: SPI0, signal: SOUT, pin_signal: PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FB_AD4/LPUART0_RX/I2C0_SCL}
+  - {pin_num: '60', peripheral: SPI0, signal: SIN, pin_signal: PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FB_AD3/LPUART0_TX/I2C0_SDA}
+  - {pin_num: '61', peripheral: SPI0, signal: PCS1, pin_signal: PTD4/LLWU_P14/SPI0_PCS1/UART0_RTS_b/FTM0_CH4/FB_AD2/EWM_IN/SPI1_PCS0}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -74,6 +78,18 @@ void BOARD_InitPins(void)
 
     /* PORTC4 (pin 49) is configured as UART1_TX */
     PORT_SetPinMux(BOARD_INITPINS_SD_CARD_DAT3_PORT, BOARD_INITPINS_SD_CARD_DAT3_PIN, kPORT_MuxAlt3);
+
+    /* PORTD1 (pin 58) is configured as SPI0_SCK */
+    PORT_SetPinMux(PORTD, 1U, kPORT_MuxAlt2);
+
+    /* PORTD2 (pin 59) is configured as SPI0_SOUT */
+    PORT_SetPinMux(BOARD_INITPINS_SD_CARD_CMD_PORT, BOARD_INITPINS_SD_CARD_CMD_PIN, kPORT_MuxAlt2);
+
+    /* PORTD3 (pin 60) is configured as SPI0_SIN */
+    PORT_SetPinMux(BOARD_INITPINS_SD_CARD_DAT0_PORT, BOARD_INITPINS_SD_CARD_DAT0_PIN, kPORT_MuxAlt2);
+
+    /* PORTD4 (pin 61) is configured as SPI0_PCS1 */
+    PORT_SetPinMux(BOARD_INITPINS_RF_CS_PORT, BOARD_INITPINS_RF_CS_PIN, kPORT_MuxAlt2);
 
     /* PORTD5 (pin 62) is configured as PTD5 */
     PORT_SetPinMux(BOARD_INITPINS_LEDRGB_BLUE_PORT, BOARD_INITPINS_LEDRGB_BLUE_PIN, kPORT_MuxAsGpio);
