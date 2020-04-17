@@ -49,6 +49,8 @@ BOARD_InitPins:
   - {pin_num: '59', peripheral: SPI0, signal: SOUT, pin_signal: PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FB_AD4/LPUART0_RX/I2C0_SCL}
   - {pin_num: '60', peripheral: SPI0, signal: SIN, pin_signal: PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FB_AD3/LPUART0_TX/I2C0_SDA}
   - {pin_num: '61', peripheral: SPI0, signal: PCS1, pin_signal: PTD4/LLWU_P14/SPI0_PCS1/UART0_RTS_b/FTM0_CH4/FB_AD2/EWM_IN/SPI1_PCS0}
+  - {pin_num: '55', peripheral: I2C1, signal: SCL, pin_signal: ADC1_SE6b/PTC10/I2C1_SCL/FTM3_CH6/I2S0_RX_FS/FB_AD5}
+  - {pin_num: '56', peripheral: I2C1, signal: SDA, pin_signal: ADC1_SE7b/PTC11/LLWU_P11/I2C1_SDA/FTM3_CH7/FB_RW_b}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -72,6 +74,12 @@ void BOARD_InitPins(void)
     };
     /* Initialize GPIO functionality on pin PTD5 (pin 62)  */
     GPIO_PinInit(BOARD_INITPINS_LEDRGB_BLUE_GPIO, BOARD_INITPINS_LEDRGB_BLUE_PIN, &LEDRGB_BLUE_config);
+
+    /* PORTC10 (pin 55) is configured as I2C1_SCL */
+    PORT_SetPinMux(PORTC, 10U, kPORT_MuxAlt2);
+
+    /* PORTC11 (pin 56) is configured as I2C1_SDA */
+    PORT_SetPinMux(BOARD_INITPINS_RF_CE_PORT, BOARD_INITPINS_RF_CE_PIN, kPORT_MuxAlt2);
 
     /* PORTC3 (pin 46) is configured as UART1_RX */
     PORT_SetPinMux(BOARD_INITPINS_CLKOUT_PORT, BOARD_INITPINS_CLKOUT_PIN, kPORT_MuxAlt3);

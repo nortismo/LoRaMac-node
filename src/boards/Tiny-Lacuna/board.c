@@ -17,6 +17,8 @@
 #include "gpio.h"
 #include "pin_mux.h"
 #include "spi.h"
+#include "i2c.h"
+#include "delay.h"
 
 /*!
  * LED GPIO pins objects
@@ -36,6 +38,11 @@ void testFunction(void *context);
  * Example of SPI
  */
 Spi_t TestSpi;
+
+/*!
+ * Example of I2C
+ */
+I2c_t TestI2c;
 
 /*
  * MCU objects
@@ -143,9 +150,17 @@ void BoardInitMcu(void) {
 		SystemClockReConfig();
 	}
 
+	/*!
+	 * Example of SPI
+	 */
 	SpiInit(&TestSpi, SPI_1, RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN,
 	RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN);
 	//SpiInit(&SX126x.Spi, SPI_1, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, RADIO_NSS);
+
+	/*!
+	 * Example of I2C
+	 */
+	I2cInit(&TestI2c, I2C_2, SE_I2C_FAKE_PIN, SE_I2C_FAKE_PIN);
 
 	//TODO: Integration of SX1262
 	//SX126xIoInit( );
@@ -161,25 +176,25 @@ void BoardInitMcu(void) {
 void BoardResetMcu(void) {
 	CRITICAL_SECTION_BEGIN();
 
-	//Restart system
-	//TODO: Integrate the K22 CMSIS and reset the system here.
-	//NVIC_SystemReset( );
+//Restart system
+//TODO: Integrate the K22 CMSIS and reset the system here.
+//NVIC_SystemReset( );
 }
 
 void BoardDeInitMcu(void) {
-	//TODO: Integration of SPI
-	//SpiDeInit( &SX1276.Spi );
-	//TODO: Integration of SX1262
-	//SX126xIoDeInit( );
+//TODO: Integration of SPI
+//SpiDeInit( &SX1276.Spi );
+//TODO: Integration of SX1262
+//SX126xIoDeInit( );
 }
 
 uint32_t BoardGetRandomSeed(void) {
-	//TODO: Integration of random from SE050
+//TODO: Integration of random from SE050
 	return 0;
 }
 
 void BoardGetUniqueId(uint8_t *id) {
-	//TODO: Integration of id from SE050
+//TODO: Integration of id from SE050
 }
 
 static void BoardUnusedIoInit(void) {
@@ -210,7 +225,7 @@ void CalibrateSystemWakeupTime(void) {
 }
 
 void SystemClockReConfig(void) {
-	//TODO: Check what to do here and if needed
+//TODO: Check what to do here and if needed
 }
 
 void SysTick_Handler(void) {
@@ -237,7 +252,7 @@ int _read(int fd, const void *buf, size_t count) {
 	while (UartGetBuffer(&Uart1, (uint8_t*) buf, count, (uint16_t*) &bytesRead)
 			!= 0) {
 	};
-	// Echo back the character
+// Echo back the character
 	while (UartPutBuffer(&Uart1, (uint8_t*) buf, (uint16_t) bytesRead) != 0) {
 	};
 	return bytesRead;

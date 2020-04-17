@@ -72,6 +72,18 @@ extern "C"
 #define DEBUG_UART_RX_DMA_DEFAULT_CHANNEL 			1U
 
 /*!
+ * SE I2C configuration
+ */
+#define SE_I2C_MASTER_BASEADDR 						I2C1
+#define SE_I2C_MASTER_DMAMUX_BASEADDR 				DMAMUX
+#define SE_I2C_MASTER_DMA_BASEADDR					DMA0
+#define SE_I2C_MASTER_DMA_REQUEST_SOURCE 			kDmaRequestMux0I2C1
+#define SE_I2C_MASTER_DMA_CHANNEL 					5U
+#define SE_I2C_INTERNAL_ADDRESS_SIZE				I2C_ADDR_SIZE_8
+#define SE_I2C_BAUDRATE 							100000U
+#define SE_I2C_FAKE_PIN								NC
+
+/*!
  * GPIO interrupt configuration
  */
 #define BOARD_PORTA_IRQ_HANDLER                     PORTA_IRQHandler

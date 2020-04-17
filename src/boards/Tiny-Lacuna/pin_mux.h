@@ -64,6 +64,12 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_RF_CS_PIN 4U     /*!<@brief PORTD pin index: 4 */
                                         /* @} */
 
+/*! @name PORTC11 (number 56), J2[7]/I2C1_SDA
+  @{ */
+#define BOARD_INITPINS_RF_CE_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_INITPINS_RF_CE_PIN 11U    /*!<@brief PORTC pin index: 11 */
+                                        /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

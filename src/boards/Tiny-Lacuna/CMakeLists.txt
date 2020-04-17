@@ -16,6 +16,7 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/delay-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/spi-board.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/i2c-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/pin_mux.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/peripherals.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmsis/clock_config.c"
@@ -34,6 +35,8 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_smc.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_dspi_edma.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_dspi.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_i2c.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_i2c_edma.c"
 )
 
 add_library(${PROJECT_NAME} OBJECT EXCLUDE_FROM_ALL ${${PROJECT_NAME}_SOURCES})
