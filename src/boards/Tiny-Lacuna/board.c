@@ -19,12 +19,25 @@
 #include "spi.h"
 #include "i2c.h"
 #include "delay.h"
+#include "sx126x-board.h"
 
 /*!
  * LED GPIO pins objects
  */
 Gpio_t Led1;
 Gpio_t Led2;
+
+/*!
+ * Uart object
+ */
+Uart_t Uart1;
+
+/*!
+ * Variables for systick
+ */
+volatile uint32_t sysTickCounter;
+/* Countdown can be used for delays or timers */
+volatile uint32_t sysTickCountDown;
 
 /*!
  * Example of a GPIO interrupt
@@ -35,22 +48,9 @@ uint8_t testIrq = 0;
 void testFunction(void *context);
 
 /*!
- * Example of SPI
- */
-Spi_t TestSpi;
-
-/*!
  * Example of I2C
  */
 I2c_t TestI2c;
-
-/*
- * MCU objects
- */
-Uart_t Uart1;
-volatile uint32_t sysTickCounter;
-/* Countdown can be used for delays or timers */
-volatile uint32_t sysTickCountDown;
 
 /*!
  * Initializes the unused GPIO to a know status
@@ -124,7 +124,6 @@ void BoardInitMcu(void) {
 		UartInit(&Uart1, UART_2, DEBUG_UART_FAKE_PIN, DEBUG_UART_FAKE_PIN);
 		UartConfig(&Uart1, RX_TX, DEBUG_UART_BAUDRATE, UART_8_BIT,
 				UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL);
-
 		/*!
 		 * Initialize the GPIOs and LEDs
 		 */
@@ -135,6 +134,7 @@ void BoardInitMcu(void) {
 
 		/*!
 		 * Example of a GPIO initialized as interrupt. See also pin_mux.c
+		 * TEMP: Can be removed as soon as the example is not needed anymore.
 		 */
 		GpioInit(&testGpio, PTD_5, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 1);
 		GpioSetInterrupt(&testGpio, IRQ_FALLING_EDGE, IRQ_HIGH_PRIORITY,
@@ -151,16 +151,15 @@ void BoardInitMcu(void) {
 	}
 
 	/*!
+	 * Example of I2C
+	 * TEMP: Can be removed as soon as the example is not needed anymore.
+	 */
+	//I2cInit(&TestI2c, I2C_2, SE_I2C_FAKE_PIN, SE_I2C_FAKE_PIN);
+	/*!
 	 * Example of SPI
 	 */
-	SpiInit(&TestSpi, SPI_1, RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN,
+	SpiInit(&SX126x.Spi, SPI_1, RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN,
 	RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN);
-	//SpiInit(&SX126x.Spi, SPI_1, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, RADIO_NSS);
-
-	/*!
-	 * Example of I2C
-	 */
-	I2cInit(&TestI2c, I2C_2, SE_I2C_FAKE_PIN, SE_I2C_FAKE_PIN);
 
 	//TODO: Integration of SX1262
 	//SX126xIoInit( );

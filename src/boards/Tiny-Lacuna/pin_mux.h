@@ -27,18 +27,6 @@ void BOARD_InitBootPins(void);
 
 #define SOPT5_UART1TXSRC_UART_TX 0x00u /*!<@brief UART 1 transmit data source select: UART1_TX pin */
 
-/*! @name PORTC3 (number 46), J1[14]
-  @{ */
-#define BOARD_INITPINS_CLKOUT_PORT PORTC /*!<@brief PORT device name: PORTC */
-#define BOARD_INITPINS_CLKOUT_PIN 3U     /*!<@brief PORTC pin index: 3 */
-                                         /* @} */
-
-/*! @name PORTC4 (number 49), J8[P2]/J24[9]/uSD_card_CS
-  @{ */
-#define BOARD_INITPINS_SD_CARD_DAT3_PORT PORTC /*!<@brief PORT device name: PORTC */
-#define BOARD_INITPINS_SD_CARD_DAT3_PIN 4U     /*!<@brief PORTC pin index: 4 */
-                                               /* @} */
-
 /*! @name PORTD5 (number 62), J2[12]/BLUE_LED
   @{ */
 #define BOARD_INITPINS_LEDRGB_BLUE_GPIO GPIOD /*!<@brief GPIO device name: GPIOD */
@@ -58,16 +46,43 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_SD_CARD_DAT0_PIN 3U     /*!<@brief PORTD pin index: 3 */
                                                /* @} */
 
-/*! @name PORTD4 (number 61), J2[6]/SPI0_PCS1/LLWU_P14
-  @{ */
-#define BOARD_INITPINS_RF_CS_PORT PORTD /*!<@brief PORT device name: PORTD */
-#define BOARD_INITPINS_RF_CS_PIN 4U     /*!<@brief PORTD pin index: 4 */
-                                        /* @} */
-
 /*! @name PORTC11 (number 56), J2[7]/I2C1_SDA
   @{ */
 #define BOARD_INITPINS_RF_CE_PORT PORTC /*!<@brief PORT device name: PORTC */
 #define BOARD_INITPINS_RF_CE_PIN 11U    /*!<@brief PORTC pin index: 11 */
+                                        /* @} */
+
+/*! @name PORTA13 (number 29), J1[3]
+  @{ */
+#define BOARD_INITPINS_AC_I2S_LRCLK_GPIO GPIOA /*!<@brief GPIO device name: GPIOA */
+#define BOARD_INITPINS_AC_I2S_LRCLK_PORT PORTA /*!<@brief PORT device name: PORTA */
+#define BOARD_INITPINS_AC_I2S_LRCLK_PIN 13U    /*!<@brief PORTA pin index: 13 */
+                                               /* @} */
+
+/*! @name PORTA12 (number 28), J1[5]/I2S0_TXD0
+  @{ */
+#define BOARD_INITPINS_AC_I2S_DIN_GPIO GPIOA /*!<@brief GPIO device name: GPIOA */
+#define BOARD_INITPINS_AC_I2S_DIN_PORT PORTA /*!<@brief PORT device name: PORTA */
+#define BOARD_INITPINS_AC_I2S_DIN_PIN 12U    /*!<@brief PORTA pin index: 12 */
+                                             /* @} */
+
+/*! @name PORTC4 (number 49), J8[P2]/J24[9]/uSD_card_CS
+  @{ */
+#define BOARD_INITPINS_SD_CARD_DAT3_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_INITPINS_SD_CARD_DAT3_PIN 4U     /*!<@brief PORTC pin index: 4 */
+                                               /* @} */
+
+/*! @name PORTC3 (number 46), J1[14]
+  @{ */
+#define BOARD_INITPINS_CLKOUT_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_INITPINS_CLKOUT_PIN 3U     /*!<@brief PORTC pin index: 3 */
+                                         /* @} */
+
+/*! @name PORTD4 (number 61), J2[6]/SPI0_PCS1/LLWU_P14
+  @{ */
+#define BOARD_INITPINS_RF_CS_GPIO GPIOD /*!<@brief GPIO device name: GPIOD */
+#define BOARD_INITPINS_RF_CS_PORT PORTD /*!<@brief PORT device name: PORTD */
+#define BOARD_INITPINS_RF_CS_PIN 4U     /*!<@brief PORTD pin index: 4 */
                                         /* @} */
 
 /*!

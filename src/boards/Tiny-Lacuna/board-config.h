@@ -15,6 +15,12 @@ extern "C"
 #endif
 
 /*!
+ * TCXO configuration
+ */
+#define TCXO_WAKEUP_TIME                     		5
+#define TCXO_VOLTAGE_IN						 		TCXO_CTRL_1_8V
+
+/*!
  * Pin configuration:
  * The pin configuration is made with the pin_mux.* of the board.
  * You can also use the pin configuration tool of NXP.
@@ -54,6 +60,10 @@ extern "C"
 #define RADIO_SPI_CONF_MOD_TIMING_FORMAT			false
 #define RADIO_SPI_TRANSFER_CONFIG_FLAGS				(kDSPI_MasterCtar0 | kDSPI_MasterPcs0 | kDSPI_MasterPcsContinuous)
 #define RADIO_SPI_FAKE_PIN							NC
+#define RADIO_NSS									PTD_4
+#define RADIO_BUSY									PTA_13
+#define RADIO_DIO_1									PTA_12
+#define RADIO_RESET									PTA_5
 
 /*!
  * DEBUG UART configuration
