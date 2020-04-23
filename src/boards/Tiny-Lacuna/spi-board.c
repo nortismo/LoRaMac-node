@@ -6,6 +6,7 @@
  * \author    Diego Bienz
  */
 
+#include <stdio.h>
 #include "board.h"
 #include "board-config.h"
 #include "spi-board.h"
@@ -14,7 +15,7 @@
 #include "fsl_edma.h"
 #include "fsl_dmamux.h"
 
-#define SPI_DEFAULT_MASTER_CLK_FREQ 			CLOCK_GetFreq(SYS_CLK)
+#define SPI_DEFAULT_MASTER_CLK_FREQ 			CLOCK_GetFreq(DSPI0_CLK_SRC)
 #define TRANSFER_SIZE 							2
 
 /*!
@@ -159,6 +160,10 @@ void SpiDeInit(Spi_t *obj) {
 	DSPI_Deinit(handle->type);
 }
 
+/*!
+ * CAUTION: Make sure interrupts are not disabled, since
+ * this method makes use of EDMA with interrupts.
+ */
 uint16_t SpiInOut(Spi_t *obj, uint16_t outData) {
 	k22SpiHandle_t *handle;
 	MapSpiIdToHandle(obj->SpiId, &handle);
@@ -211,4 +216,3 @@ void SPI_MasterUserCallback(SPI_Type *base, dspi_master_edma_handle_t *handle,
 
 	spiHandle->isTransferCompleted = true;
 }
-
