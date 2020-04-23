@@ -121,6 +121,10 @@ void I2cSetAddrSize(I2c_t *obj, I2cAddrSize addrSize) {
 	handle->i2cInternalAddrSize = addrSize;
 }
 
+/*!
+ * CAUTION: Make sure interrupts are not disabled, since
+ * this method makes use of EDMA with interrupts.
+ */
 uint8_t I2cMcuWriteBuffer(I2c_t *obj, uint8_t deviceAddr, uint16_t addr,
 		uint8_t *buffer, uint16_t size) {
 
@@ -146,6 +150,10 @@ uint8_t I2cMcuWriteBuffer(I2c_t *obj, uint8_t deviceAddr, uint16_t addr,
 	return handle->lastTransferSuccessful;
 }
 
+/*!
+ * CAUTION: Make sure interrupts are not disabled, since
+ * this method makes use of EDMA with interrupts.
+ */
 uint8_t I2cMcuReadBuffer(I2c_t *obj, uint8_t deviceAddr, uint16_t addr,
 		uint8_t *buffer, uint16_t size) {
 
