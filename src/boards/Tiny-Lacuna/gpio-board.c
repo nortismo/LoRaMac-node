@@ -228,7 +228,7 @@ void GpioMcuToggle(Gpio_t *obj) {
 		if (obj->pin == NC) {
 			return;
 		}
-		GPIO_PortToggle(obj->port, obj->pinIndex);
+		GPIO_PortToggle(obj->port, 1u << obj->pinIndex);
 	}
 }
 
