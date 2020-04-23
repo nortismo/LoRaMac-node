@@ -19,7 +19,6 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/sx1262-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/i2c-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/pin_mux.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/peripherals.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmsis/clock_config.c"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/gcc/startup_MK22F51212.S"
