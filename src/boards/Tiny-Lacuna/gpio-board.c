@@ -38,6 +38,68 @@ void GpioMcuInit(Gpio_t *obj, PinNames pin, PinModes mode, PinConfigs config,
 		obj->pinIndex = (obj->pin & 0x1F);
 
 		if ((obj->pin & 0x0E0) == 0x00) {
+			obj->port = GPIOA;
+			/* Port A Clock Gate Control: Clock enabled */
+			CLOCK_EnableClock(kCLOCK_PortA);
+		} else if ((obj->pin & 0x0E0) == 0x20) {
+			obj->port = GPIOB;
+			/* Port B Clock Gate Control: Clock enabled */
+			CLOCK_EnableClock(kCLOCK_PortB);
+		} else if ((obj->pin & 0x0E0) == 0x40) {
+			obj->port = GPIOC;
+			/* Port C Clock Gate Control: Clock enabled */
+			CLOCK_EnableClock(kCLOCK_PortC);
+		} else if ((obj->pin & 0x0E0) == 0x60) {
+			obj->port = GPIOD;
+			/* Port D Clock Gate Control: Clock enabled */
+			CLOCK_EnableClock(kCLOCK_PortD);
+		} else if ((obj->pin & 0x0E0) == 0x80) {
+			obj->port = GPIOE;
+			/* Port E Clock Gate Control: Clock enabled */
+			CLOCK_EnableClock(kCLOCK_PortE);
+		} else {
+			for (;;) {
+				/*!
+				 * You should not reach this state.
+				 */
+			}
+		}
+
+		gpio_config.pinDirection = mode;
+
+		// Sets initial output value
+		if (mode == PIN_OUTPUT) {
+			GpioMcuWrite(obj, value);
+		}
+
+		GPIO_PinInit(obj->port, obj->pinIndex, &gpio_config);
+
+	} else if (pin == NC) {
+		return;
+	}
+}
+
+void GpioMcuSetContext(Gpio_t *obj, void *context) {
+	obj->Context = context;
+}
+
+void GpioMcuSetInterrupt(Gpio_t *obj, IrqModes irqMode,
+		IrqPriorities irqPriority, GpioIrqHandler *irqHandler) {
+	uint32_t irqConfig;
+	gpio_pin_config_t gpio_config;
+
+	gpio_config.pinDirection = 0;
+
+	if (obj->pin >= PTA_0) {
+		obj->IrqHandler = irqHandler;
+
+		if (irqMode == NO_IRQ) {
+			irqConfig = 0;
+		} else {
+			irqConfig = irqMode + 8;
+		}
+
+		if ((obj->pin & 0x0E0) == 0x00) {
 #if (defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
 			obj->port = GPIOA;
 #else
@@ -81,44 +143,10 @@ void GpioMcuInit(Gpio_t *obj, PinNames pin, PinModes mode, PinConfigs config,
 			}
 		}
 
-		gpio_config.pinDirection = mode;
-
-		// Sets initial output value
-		if (mode == PIN_OUTPUT) {
-			GpioMcuWrite(obj, value);
-		}
-
-		GPIO_PinInit(obj->port, obj->pinIndex, &gpio_config);
-
-	} else if (pin == NC) {
-		return;
-	}
-}
-
-void GpioMcuSetContext(Gpio_t *obj, void *context) {
-	obj->Context = context;
-}
-
-void GpioMcuSetInterrupt(Gpio_t *obj, IrqModes irqMode,
-		IrqPriorities irqPriority, GpioIrqHandler *irqHandler) {
-	uint32_t irqConfig;
-	gpio_pin_config_t gpio_config;
-
-	gpio_config.pinDirection = 0;
-
-	if (obj->pin >= PTA_0) {
-		obj->IrqHandler = irqHandler;
-
-		if (irqMode == NO_IRQ) {
-			irqConfig = 0;
-		} else {
-			irqConfig = irqMode + 8;
-		}
 #if (defined(FSL_FEATURE_PORT_HAS_NO_INTERRUPT) && FSL_FEATURE_PORT_HAS_NO_INTERRUPT)
         GPIO_SetPinInterruptConfig(obj->port, obj->pinIndex, irqConfig);
 #else
 		PORT_SetPinInterruptConfig(obj->port, obj->pinIndex, irqConfig);
-		//PORT_SetPinInterruptConfig(BOARD_INITPINS_LEDRGB_BLUE_PORT, BOARD_INITPINS_LEDRGB_BLUE_PIN, kPORT_InterruptFallingEdge);
 #endif
 
 		GPIO_PinInit(obj->port, obj->pinIndex, &gpio_config);
