@@ -16,7 +16,7 @@
 #include "fsl_dmamux.h"
 
 #define SPI_DEFAULT_MASTER_CLK_FREQ 			CLOCK_GetFreq(DSPI0_CLK_SRC)
-#define TRANSFER_SIZE 							2
+#define TRANSFER_SIZE 							1
 
 /*!
  * k22SpiHandle_t is the struct enabling the user to use two different SPIs of the K22.
@@ -64,14 +64,10 @@ static k22SpiHandle_t SpiHandle0 = { .type = RADIO_SPI_MASTER_BASEADDR,
 		RADIO_SPI_CONF_CTAR_CPOL, .masterConfig.ctarConfig.cpha =
 		RADIO_SPI_CONF_CTAR_CPHA, .masterConfig.ctarConfig.direction =
 		RADIO_SPI_CONF_CTAR_DIR,
-		.masterConfig.ctarConfig.pcsToSckDelayInNanoSec = (1000000000U
-				/ RADIO_SPI_CONF_TRANSFER_BAUDRATE),
-		.masterConfig.ctarConfig.lastSckToPcsDelayInNanoSec = (1000000000U
-				/ RADIO_SPI_CONF_TRANSFER_BAUDRATE),
-		.masterConfig.ctarConfig.betweenTransferDelayInNanoSec = (1000000000U
-				/ RADIO_SPI_CONF_TRANSFER_BAUDRATE), .masterConfig.whichPcs =
-		RADIO_SPI_CONF_CS, .masterConfig.pcsActiveHighOrLow =
-		RADIO_SPI_CONF_CS_LOW_HIGH_ACTIVE, .masterConfig.enableContinuousSCK =
+		.masterConfig.ctarConfig.pcsToSckDelayInNanoSec = 64,
+		.masterConfig.ctarConfig.lastSckToPcsDelayInNanoSec = 64,
+		.masterConfig.ctarConfig.betweenTransferDelayInNanoSec = 256,
+		.masterConfig.enableContinuousSCK =
 		RADIO_SPI_CONF_CONT_SCK, .masterConfig.enableRxFifoOverWrite =
 		RADIO_SPI_CONF_RX_FIFO_OVERWRITE,
 		.masterConfig.enableModifiedTimingFormat =
@@ -165,11 +161,12 @@ void SpiDeInit(Spi_t *obj) {
  * this method makes use of EDMA with interrupts.
  */
 uint16_t SpiInOut(Spi_t *obj, uint16_t outData) {
+
 	k22SpiHandle_t *handle;
 	MapSpiIdToHandle(obj->SpiId, &handle);
 
-	handle->masterTxData[1] = (uint8_t) ((outData & 0xFF00) >> 8);
-	handle->masterTxData[0] = (uint8_t) (outData & 0x00FF);
+	handle->masterRxData[0] = 0x00;
+	handle->masterTxData[0] = (uint8_t) (outData);
 
 	/* Start master transfer, send data to slave */
 	handle->isTransferCompleted = false;
@@ -187,7 +184,7 @@ uint16_t SpiInOut(Spi_t *obj, uint16_t outData) {
 	while (!(handle->isTransferCompleted)) {
 	}
 
-	return (((uint16_t) handle->masterRxData[1] << 8) | handle->masterRxData[0]);
+	return handle->masterRxData[0];
 }
 
 /*!
