@@ -184,7 +184,6 @@ static LmHandlerCallbacks_t LmHandlerCallbacks =
 {
     .GetBatteryLevel = BoardGetBatteryLevel,
     .GetTemperature = MPL3115ReadTemperature,
-    .GetUniqueId = BoardGetUniqueId,
     .GetRandomSeed = BoardGetRandomSeed,
     .OnMacProcess = OnMacProcessNotify,
     .OnNvmContextChange = OnNvmContextChange,
@@ -264,6 +263,9 @@ int main( void )
         {
         }
     }
+
+    // Set system maximum tolerated rx error in milliseconds
+    LmHandlerSetSystemMaxRxError( 20 );
 
     // The LoRa-Alliance Compliance protocol package should always be
     // initialized and activated.

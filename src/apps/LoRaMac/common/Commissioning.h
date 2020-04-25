@@ -23,33 +23,18 @@
  ******************************************************************************
  ********************************** WARNING ***********************************
  ******************************************************************************
-  The secure-element implementation supports both 1.0.x and 1.1.x LoRaWAN 
-  versions of the specification.
-  Thus it has been decided to use the 1.1.x keys and EUI name definitions.
-  The below table shows the names equivalence between versions:
-               +---------------------+-------------------------+
-               |       1.0.x         |          1.1.x          |
-               +=====================+=========================+
-               | LORAWAN_DEVICE_EUI  | LORAWAN_DEVICE_EUI      |
-               +---------------------+-------------------------+
-               | LORAWAN_APP_EUI     | LORAWAN_JOIN_EUI        |
-               +---------------------+-------------------------+
-               | LORAWAN_GEN_APP_KEY | LORAWAN_APP_KEY         |
-               +---------------------+-------------------------+
-               | LORAWAN_APP_KEY     | LORAWAN_NWK_KEY         |
-               +---------------------+-------------------------+
-               | LORAWAN_NWK_S_KEY   | LORAWAN_F_NWK_S_INT_KEY |
-               +---------------------+-------------------------+
-               | LORAWAN_NWK_S_KEY   | LORAWAN_S_NWK_S_INT_KEY |
-               +---------------------+-------------------------+
-               | LORAWAN_NWK_S_KEY   | LORAWAN_NWK_S_ENC_KEY   |
-               +---------------------+-------------------------+
-               | LORAWAN_APP_S_KEY   | LORAWAN_APP_S_KEY       |
-               +---------------------+-------------------------+
+ 
+ The LoRaWAN AES128 keys are stored and provisionned on secure-elements.
+ 
+ This project providdes a software emulated secure-element.
+ The LoRaWAN AES128 keys SHALL be updated under 
+ src/peripherals/<secure-element name>-se\se-identity.h file.
+
  ******************************************************************************
  ******************************************************************************
  ******************************************************************************
  */
+#include "se-identity.h"
 
 /*!
  * When set to 1 the application uses the Over-the-Air activation procedure

@@ -81,14 +81,14 @@
  * \example   classC/NucleoL476/main.c
  *            LoRaWAN class C application example for the NucleoL476.
  *
- * \example   classA/SAML21/main.c
- *            LoRaWAN class A application example for the SAML21.
+ * \example   classA/SAMR34/main.c
+ *            LoRaWAN class A application example for the SAMR34.
  *
- * \example   classB/SAML21/main.c
- *            LoRaWAN class B application example for the SAML21.
+ * \example   classB/SAMR34/main.c
+ *            LoRaWAN class B application example for the SAMR34.
  *
- * \example   classC/SAML21/main.c
- *            LoRaWAN class C application example for the SAML21.
+ * \example   classC/SAMR34/main.c
+ *            LoRaWAN class C application example for the SAMR34.
  *
  * \example   classA/SKiM880B/main.c
  *            LoRaWAN class A application example for the SKiM880B.
@@ -150,22 +150,9 @@ extern "C"
 #define DOWN_LINK                                   1
 
 /*!
- * Sets the length of the LoRaMAC footer field.
- * Mainly indicates the MIC field length
- */
-#define LORAMAC_MFR_LEN                             4
-
-/*!
  * LoRaMac MLME-Confirm queue length
  */
 #define LORA_MAC_MLME_CONFIRM_QUEUE_LEN             5
-
-/*!
- * FRMPayload overhead to be used when setting the Radio.SetMaxPayloadLength
- * in RxWindowSetup function.
- * Maximum PHYPayload = MaxPayloadOfDatarate + LORA_MAC_FRMPAYLOAD_OVERHEAD
- */
-#define LORA_MAC_FRMPAYLOAD_OVERHEAD                13 // MHDR(1) + FHDR(7) + Port(1) + MIC(4)
 
 /*!
  * Maximum number of multicast context
@@ -683,6 +670,19 @@ typedef enum eMcps
 }Mcps_t;
 
 /*!
+ * Structure which defines return parameters for requests.
+ */
+typedef struct sRequestReturnParam
+{
+    /*!
+     * This value reports the time in milliseconds which
+     * an application must wait before its possible to send
+     * the next uplink.
+     */
+    TimerTime_t DutyCycleWaitTime;
+}RequestReturnParam_t;
+
+/*!
  * LoRaMAC MCPS-Request for an unconfirmed frame
  */
 typedef struct sMcpsReqUnconfirmed
@@ -802,6 +802,11 @@ typedef struct sMcpsReq
          */
         McpsReqProprietary_t Proprietary;
     }Req;
+
+    /*!
+     * MCPS-Request return parameters
+     */
+    RequestReturnParam_t ReqReturn;
 }McpsReq_t;
 
 /*!
@@ -1139,6 +1144,11 @@ typedef struct sMlmeReq
          */
         MlmeReqDeriveMcSessionKeyPair_t DeriveMcSessionKeyPair;
     }Req;
+
+    /*!
+     * MLME-Request return parameters
+     */
+    RequestReturnParam_t ReqReturn;
 }MlmeReq_t;
 
 /*!
@@ -1213,10 +1223,10 @@ typedef struct sMlmeIndication
  * \ref MIB_NETWORK_ACTIVATION                   | YES | YES
  * \ref MIB_DEV_EUI                              | YES | YES
  * \ref MIB_JOIN_EUI                             | YES | YES
+ * \ref MIB_SE_PIN                               | YES | YES
  * \ref MIB_ADR                                  | YES | YES
  * \ref MIB_NET_ID                               | YES | YES
  * \ref MIB_DEV_ADDR                             | YES | YES
- * \ref MIB_GEN_APP_KEY                          | NO  | YES
  * \ref MIB_APP_KEY                              | NO  | YES
  * \ref MIB_NWK_KEY                              | NO  | YES
  * \ref MIB_J_S_INT_KEY                          | NO  | YES
@@ -1311,6 +1321,10 @@ typedef enum eMib
      */
     MIB_JOIN_EUI,
     /*!
+     * Secure-element pin
+     */
+    MIB_SE_PIN,
+    /*!
      * Adaptive data rate
      *
      * LoRaWAN Specification V1.0.2, chapter 4.3.1.1
@@ -1330,12 +1344,6 @@ typedef enum eMib
      * LoRaWAN Specification V1.0.2, chapter 6.1.1
      */
     MIB_DEV_ADDR,
-    /*!
-     * Application root key - 1.0.x devices only.
-     *
-     * LoRaWAN Remote Multicast Setup v1.0.0 Specification, chapter 4.3
-     */
-    MIB_GEN_APP_KEY,
     /*!
      * Application root key
      *
@@ -1705,17 +1713,23 @@ typedef union uMibParam
      */
     ActivationType_t NetworkActivation;
     /*!
-     * LoRaWAN device class
+     * LoRaWAN device EUI
      *
      * Related MIB type: \ref MIB_DEV_EUI
      */
     uint8_t* DevEui;
     /*!
-     * LoRaWAN device class
+     * LoRaWAN Join server EUI
      *
      * Related MIB type: \ref MIB_JOIN_EUI
      */
     uint8_t* JoinEui;
+    /*!
+     * Secure-element pin
+     *
+     * Related MIB type: \ref MIB_SE_PIN
+     */
+    uint8_t* SePin;
     /*!
      * Activation state of ADR
      *
@@ -1734,12 +1748,6 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_DEV_ADDR
      */
     uint32_t DevAddr;
-    /*!
-     * Application root key - 1.0.x device only
-     *
-     * Related MIB type: \ref MIB_GEN_APP_KEY
-     */
-    uint8_t* GenAppKey;
     /*!
      * Application root key
      *
@@ -2192,7 +2200,17 @@ typedef enum eLoRaMacStatus
      */
     LORAMAC_STATUS_SKIPPED_APP_DATA,
     /*!
-     * ToDo
+     * An MCPS or MLME request can return this status. In this case,
+     * the MAC cannot send the frame, as the duty cycle limits all
+     * available bands. When a request returns this value, the
+     * variable "DutyCycleWaitTime" in "ReqReturn" of the input
+     * parameters contains the remaining time to wait. If the
+     * value is constant and does not change, the expected time
+     * on air for this frame is exceeding the maximum permitted
+     * time according to the duty cycle time period, defined
+     * in Region.h, DUTY_CYCLE_TIME_PERIOD. By default this time
+     * is 1 hour, and a band with 1% duty cycle is then allowed
+     * to use an air time of 36 seconds.
      */
     LORAMAC_STATUS_DUTYCYCLE_RESTRICTED,
     /*!
@@ -2389,7 +2407,7 @@ typedef struct sLoRaMacCallback
     /*!
      *\brief    Will be called each time a Radio IRQ is handled by the MAC
      *          layer.
-     * 
+     *
      *\warning  Runs in a IRQ context. Should only change variables state.
      */
     void ( *MacProcessNotify )( void );
@@ -2445,7 +2463,7 @@ LoRaMacStatus_t LoRaMacStop( void );
 
 /*!
  * \brief Returns a value indicating if the MAC layer is busy or not.
- * 
+ *
  * \retval isBusy Mac layer is busy.
  */
 bool LoRaMacIsBusy( void );
@@ -2456,30 +2474,6 @@ bool LoRaMacIsBusy( void );
  * \remark This function must be called in the main loop.
  */
 void LoRaMacProcess( void );
-
-/*!
- * \brief   Queries the LoRaMAC if it is possible to send the next frame with
- *          a given datarate.
- *
- * \param   [IN] datarate - The datarate which should be used for the next uplink. Please
- *                          note that in case ADR is enabled, the function will utilize
- *                          the datarate defined by ADR and will disregard this input parameter.
- *
- * \param   [OUT] time    - The remaining time for which the next uplink tranmission
- *                          is restricted. Will be 0, if the MAC is able to perform
- *                          a transmission without duty cycle restriction resp. delay.
- *
- * \retval  LoRaMacStatus_t Status of the operation. When the parameters are
- *          not valid, the function returns \ref LORAMAC_STATUS_PARAMETER_INVALID.
- *          In case the MAC is limited due to a duty cycle restriction, the function
- *          returns \ref LORAMAC_STATUS_DUTYCYCLE_RESTRICTED. If the MAC has not found
- *          a valid channel for the given datarate, it returns \ref LORAMAC_STATUS_NO_CHANNEL_FOUND.
- *          In the latter case, this function does not reenable default channels
- *          automatically.
- *          In case there is no delay due to the duty cycle,
- *          the function returns \ref LORAMAC_STATUS_OK.
- */
-LoRaMacStatus_t LoRaMacQueryNextTxDelay( int8_t datarate, TimerTime_t* time );
 
 /*!
  * \brief   Queries the LoRaMAC if it is possible to send the next frame with

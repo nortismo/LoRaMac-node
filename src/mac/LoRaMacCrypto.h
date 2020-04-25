@@ -49,7 +49,22 @@ extern "C"
 #include "LoRaMacTypes.h"
 #include "LoRaMacMessageTypes.h"
 
-/*
+/*!
+ * Indicates if LoRaWAN 1.1.x crypto scheme is enabled
+ */
+#define USE_LRWAN_1_1_X_CRYPTO                      0
+
+/*!
+ * Indicates if a random devnonce must be used or not
+ */
+#define USE_RANDOM_DEV_NONCE                        1
+
+/*!
+ * Indicates if JoinNonce is counter based and requires to be checked
+ */
+#define USE_JOIN_NONCE_COUNTER_CHECK                0
+
+/*!
  * Initial value of the frame counters
  */
 #define FCNT_DOWN_INITAL_VALUE          0xFFFFFFFF
@@ -285,15 +300,15 @@ LoRaMacCryptoStatus_t LoRaMacCryptoSecureMessage( uint32_t fCntUp, uint8_t txDr,
 LoRaMacCryptoStatus_t LoRaMacCryptoUnsecureMessage( AddressIdentifier_t addrID, uint32_t address, FCntIdentifier_t fCntID, uint32_t fCntDown, LoRaMacMessageData_t* macMsg );
 
 /*!
- * Derives the McRootKey from the GenAppKey or AppKey.
+ * Derives the McRootKey from the AppKey.
  *
  * 1.0.x
- * McRootKey = aes128_encrypt(GenAppKey , 0x00 | pad16)
+ * McRootKey = aes128_encrypt(AppKey, 0x00 | pad16)
  *
  * 1.1.x
- * McRootKey = aes128_encrypt(AppKey , 0x20 | pad16)
+ * McRootKey = aes128_encrypt(AppKey, 0x20 | pad16)
  *
- * \param[IN]     keyID           - Key identifier of the root key to use to perform the derivation ( GenAppKey or AppKey )
+ * \param[IN]     keyID           - Key identifier of the root key to use to perform the derivation ( AppKey )
  * \retval                        - Status of the operation
  */
 LoRaMacCryptoStatus_t LoRaMacCryptoDeriveMcRootKey( KeyIdentifier_t keyID );
