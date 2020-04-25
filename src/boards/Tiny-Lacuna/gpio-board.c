@@ -67,12 +67,12 @@ void GpioMcuInit(Gpio_t *obj, PinNames pin, PinModes mode, PinConfigs config,
 
 		gpio_config.pinDirection = mode;
 
+		GPIO_PinInit(obj->port, obj->pinIndex, &gpio_config);
+
 		// Sets initial output value
 		if (mode == PIN_OUTPUT) {
 			GpioMcuWrite(obj, value);
 		}
-
-		GPIO_PinInit(obj->port, obj->pinIndex, &gpio_config);
 
 	} else if (pin == NC) {
 		return;
