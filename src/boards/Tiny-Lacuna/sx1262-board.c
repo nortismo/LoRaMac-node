@@ -14,6 +14,8 @@
 #include "radio.h"
 #include "sx126x-board.h"
 
+Gpio_t AntPow;
+
 void SX126xIoInit(void) {
 	GpioInit(&SX126x.Spi.Nss, RADIO_NSS, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL,
 			1);
@@ -57,15 +59,15 @@ void SX126xReset(void) {
 	DelayMs(10);
 	GpioInit(&SX126x.Reset, RADIO_RESET, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL,
 			0);
-	DelayMs(20);
-	GpioInit(&SX126x.Reset, RADIO_RESET, PIN_ANALOGIC, PIN_PUSH_PULL,
-			PIN_NO_PULL, 0); // internal pull-up
+	DelayMs(100);
+	GpioInit(&SX126x.Reset, RADIO_RESET, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL,
+			1);
 	DelayMs(10);
 }
 
 void SX126xWaitOnBusy(void) {
-	while (GpioRead(&SX126x.BUSY) == 1)
-		;
+	while (GpioRead(&SX126x.BUSY) == 1) {
+	}
 }
 
 void SX126xWakeup(void) {
@@ -76,7 +78,7 @@ void SX126xWakeup(void) {
 
 	GpioWrite(&SX126x.Spi.Nss, 1);
 
-	// Wait for chip to be ready.
+// Wait for chip to be ready.
 	SX126xWaitOnBusy();
 }
 
@@ -204,18 +206,16 @@ uint8_t SX126xGetDeviceId(void) {
 }
 
 void SX126xAntSwOn(void) {
-	//TODO: Implement Ant Switch
-	//GpioInit(&AntPow, RADIO_ANT_SWITCH_POWER, PIN_OUTPUT, PIN_PUSH_PULL,
-	//		PIN_PULL_UP, 1);
+	GpioInit(&AntPow, RADIO_ANT_SWITCH_POWER, PIN_OUTPUT, PIN_PUSH_PULL,
+			PIN_PULL_UP, 1);
 }
 
 void SX126xAntSwOff(void) {
-	//TODO: Implement Ant Switch
-	//GpioInit(&AntPow, RADIO_ANT_SWITCH_POWER, PIN_ANALOGIC, PIN_PUSH_PULL,
-	//		PIN_NO_PULL, 0);
+	GpioInit(&AntPow, RADIO_ANT_SWITCH_POWER, PIN_OUTPUT, PIN_PUSH_PULL,
+			PIN_NO_PULL, 0);
 }
 
 bool SX126xCheckRfFrequency(uint32_t frequency) {
-	// Implement check. Currently all frequencies are supported
+// Implement check. Currently all frequencies are supported
 	return true;
 }

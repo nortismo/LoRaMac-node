@@ -27,13 +27,6 @@ void BOARD_InitBootPins(void);
 
 #define SOPT5_UART1TXSRC_UART_TX 0x00u /*!<@brief UART 1 transmit data source select: UART1_TX pin */
 
-/*! @name PORTD5 (number 62), J2[12]/BLUE_LED
-  @{ */
-#define BOARD_INITPINS_LEDRGB_BLUE_GPIO GPIOD /*!<@brief GPIO device name: GPIOD */
-#define BOARD_INITPINS_LEDRGB_BLUE_PORT PORTD /*!<@brief PORT device name: PORTD */
-#define BOARD_INITPINS_LEDRGB_BLUE_PIN 5U     /*!<@brief PORTD pin index: 5 */
-                                              /* @} */
-
 /*! @name PORTD2 (number 59), J1[2]/J8[P3]/uSD_SPI_MOSI
   @{ */
 #define BOARD_INITPINS_SD_CARD_CMD_PORT PORTD /*!<@brief PORT device name: PORTD */
@@ -77,6 +70,13 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_CLKOUT_PORT PORTC /*!<@brief PORT device name: PORTC */
 #define BOARD_INITPINS_CLKOUT_PIN 3U     /*!<@brief PORTC pin index: 3 */
                                          /* @} */
+
+/*! @name PORTA5 (number 27), J1[1]/I2S0_TX_BCLK
+  @{ */
+#define BOARD_INITPINS_AC_I2S_SCLK_GPIO GPIOA /*!<@brief GPIO device name: GPIOA */
+#define BOARD_INITPINS_AC_I2S_SCLK_PORT PORTA /*!<@brief PORT device name: PORTA */
+#define BOARD_INITPINS_AC_I2S_SCLK_PIN 5U     /*!<@brief PORTA pin index: 5 */
+                                              /* @} */
 
 /*! @name PORTD4 (number 61), J2[6]/SPI0_PCS1/LLWU_P14
   @{ */

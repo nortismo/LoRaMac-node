@@ -18,7 +18,7 @@ extern "C"
  * TCXO configuration
  */
 #define TCXO_WAKEUP_TIME                     		5
-#define TCXO_VOLTAGE_IN						 		TCXO_CTRL_1_8V
+#define TCXO_VOLTAGE_IN						 		TCXO_CTRL_1_7V
 
 /*!
  * Pin configuration:
@@ -47,23 +47,24 @@ extern "C"
 #define RADIO_SPI_MASTER_DMA_RX_CHANNEL 			2U
 #define RADIO_SPI_MASTER_DMA_INTERMEDIARY_CHANNEL	4U
 #define RADIO_SPI_CONF_TRANSFER_BAUDRATE			500000U
-#define RADIO_SPI_CONF_CTAR_SELECTION			    kDSPI_Ctar0
+#define RADIO_SPI_CONF_CTAR_SELECTION			    kDSPI_Ctar1
 #define RADIO_SPI_CONF_CTAR_BIT_PER_FRAME			8
 #define RADIO_SPI_CONF_CTAR_CPOL					kDSPI_ClockPolarityActiveHigh
 #define RADIO_SPI_CONF_CTAR_CPHA					kDSPI_ClockPhaseFirstEdge
 #define RADIO_SPI_CONF_CTAR_DIR						kDSPI_MsbFirst
-#define RADIO_SPI_CONF_CS							kDSPI_Pcs0
+#define RADIO_SPI_CONF_CS							NULL
 #define RADIO_SPI_CONF_CS_LOW_HIGH_ACTIVE			kDSPI_PcsActiveLow
 #define RADIO_SPI_CONF_SAMPLE_POINT					kDSPI_SckToSin0Clock
 #define RADIO_SPI_CONF_CONT_SCK						false
 #define RADIO_SPI_CONF_RX_FIFO_OVERWRITE			false
 #define RADIO_SPI_CONF_MOD_TIMING_FORMAT			false
-#define RADIO_SPI_TRANSFER_CONFIG_FLAGS				(kDSPI_MasterCtar0 | kDSPI_MasterPcs0 | kDSPI_MasterPcsContinuous)
+#define RADIO_SPI_TRANSFER_CONFIG_FLAGS				(kDSPI_MasterCtar1 | kDSPI_MasterPcs1 | kDSPI_MasterPcsContinuous)
 #define RADIO_SPI_FAKE_PIN							NC
 #define RADIO_NSS									PTD_4
 #define RADIO_BUSY									PTA_13
 #define RADIO_DIO_1									PTA_12
 #define RADIO_RESET									PTA_5
+#define RADIO_ANT_SWITCH_POWER						PTB_18
 
 /*!
  * DEBUG UART configuration

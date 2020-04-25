@@ -39,21 +39,22 @@ void BOARD_InitBootPins(void)
 BOARD_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: '62', peripheral: GPIOD, signal: 'GPIO, 5', pin_signal: ADC0_SE6b/PTD5/SPI0_PCS2/UART0_CTS_b/FTM0_CH5/FB_AD1/EWM_OUT_b/SPI1_SCK, direction: INPUT, gpio_interrupt: no_init,
-    slew_rate: fast, pull_select: up, pull_enable: enable}
   - {pin_num: '58', peripheral: SPI0, signal: SCK, pin_signal: ADC0_SE5b/PTD1/SPI0_SCK/UART2_CTS_b/FTM3_CH1/FB_CS0_b/LPUART0_CTS_b}
-  - {pin_num: '59', peripheral: SPI0, signal: SOUT, pin_signal: PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FB_AD4/LPUART0_RX/I2C0_SCL}
-  - {pin_num: '60', peripheral: SPI0, signal: SIN, pin_signal: PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FB_AD3/LPUART0_TX/I2C0_SDA}
+  - {pin_num: '59', peripheral: SPI0, signal: SOUT, pin_signal: PTD2/LLWU_P13/SPI0_SOUT/UART2_RX/FTM3_CH2/FB_AD4/LPUART0_RX/I2C0_SCL, pull_select: up, pull_enable: enable}
+  - {pin_num: '60', peripheral: SPI0, signal: SIN, pin_signal: PTD3/SPI0_SIN/UART2_TX/FTM3_CH3/FB_AD3/LPUART0_TX/I2C0_SDA, pull_select: up, pull_enable: enable}
   - {pin_num: '55', peripheral: I2C1, signal: SCL, pin_signal: ADC1_SE6b/PTC10/I2C1_SCL/FTM3_CH6/I2S0_RX_FS/FB_AD5}
   - {pin_num: '56', peripheral: I2C1, signal: SDA, pin_signal: ADC1_SE7b/PTC11/LLWU_P11/I2C1_SDA/FTM3_CH7/FB_RW_b}
-  - {pin_num: '27', peripheral: GPIOA, signal: 'GPIO, 5', pin_signal: PTA5/USB_CLKIN/FTM0_CH2/I2S0_TX_BCLK/JTAG_TRST_b}
-  - {pin_num: '29', peripheral: GPIOA, signal: 'GPIO, 13', pin_signal: PTA13/LLWU_P4/FTM1_CH1/I2S0_TX_FS/FTM1_QD_PHB}
-  - {pin_num: '28', peripheral: GPIOA, signal: 'GPIO, 12', pin_signal: PTA12/FTM1_CH0/I2S0_TXD0/FTM1_QD_PHA}
+  - {pin_num: '29', peripheral: GPIOA, signal: 'GPIO, 13', pin_signal: PTA13/LLWU_P4/FTM1_CH1/I2S0_TX_FS/FTM1_QD_PHB, direction: INPUT, gpio_interrupt: no_init}
+  - {pin_num: '28', peripheral: GPIOA, signal: 'GPIO, 12', pin_signal: PTA12/FTM1_CH0/I2S0_TXD0/FTM1_QD_PHA, direction: INPUT, gpio_interrupt: kPORT_InterruptRisingEdge}
   - {pin_num: '63', peripheral: GPIOD, signal: 'GPIO, 6', pin_signal: ADC0_SE7b/PTD6/LLWU_P15/SPI0_PCS3/UART0_RX/FTM0_CH6/FB_AD0/FTM0_FLT0/SPI1_SOUT}
   - {pin_num: '64', peripheral: GPIOD, signal: 'GPIO, 7', pin_signal: PTD7/UART0_TX/FTM0_CH7/FTM0_FLT1/SPI1_SIN}
   - {pin_num: '49', peripheral: UART1, signal: TX, pin_signal: PTC4/LLWU_P8/SPI0_PCS0/UART1_TX/FTM0_CH3/FB_AD11/CMP1_OUT/LPUART0_TX}
-  - {pin_num: '46', peripheral: UART1, signal: RX, pin_signal: CMP1_IN1/PTC3/LLWU_P7/SPI0_PCS1/UART1_RX/FTM0_CH2/CLKOUT/I2S0_TX_BCLK/LPUART0_RX}
-  - {pin_num: '61', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: PTD4/LLWU_P14/SPI0_PCS1/UART0_RTS_b/FTM0_CH4/FB_AD2/EWM_IN/SPI1_PCS0}
+  - {pin_num: '46', peripheral: UART1, signal: RX, pin_signal: CMP1_IN1/PTC3/LLWU_P7/SPI0_PCS1/UART1_RX/FTM0_CH2/CLKOUT/I2S0_TX_BCLK/LPUART0_RX, drive_strength: low}
+  - {pin_num: '27', peripheral: GPIOA, signal: 'GPIO, 5', pin_signal: PTA5/USB_CLKIN/FTM0_CH2/I2S0_TX_BCLK/JTAG_TRST_b, identifier: AC_I2S_SCLK, direction: OUTPUT,
+    gpio_init_state: 'true', slew_rate: fast, open_drain: disable, pull_enable: enable}
+  - {pin_num: '41', peripheral: GPIOB, signal: 'GPIO, 18', pin_signal: PTB18/FTM2_CH0/I2S0_TX_BCLK/FB_AD15/FTM2_QD_PHA, direction: OUTPUT, pull_select: up, pull_enable: enable}
+  - {pin_num: '61', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: PTD4/LLWU_P14/SPI0_PCS1/UART0_RTS_b/FTM0_CH4/FB_AD2/EWM_IN/SPI1_PCS0, direction: OUTPUT, gpio_init_state: 'true',
+    pull_select: up, pull_enable: enable}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -68,26 +69,84 @@ void BOARD_InitPins(void)
 {
     /* Port A Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortA);
+    /* Port B Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortB);
     /* Port C Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortC);
     /* Port D Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortD);
 
-    gpio_pin_config_t LEDRGB_BLUE_config = {
+    gpio_pin_config_t AC_I2S_SCLK_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U
+    };
+    /* Initialize GPIO functionality on pin PTA5 (pin 27)  */
+    GPIO_PinInit(BOARD_INITPINS_AC_I2S_SCLK_GPIO, BOARD_INITPINS_AC_I2S_SCLK_PIN, &AC_I2S_SCLK_config);
+
+    gpio_pin_config_t AC_I2S_DIN_config = {
         .pinDirection = kGPIO_DigitalInput,
         .outputLogic = 0U
     };
-    /* Initialize GPIO functionality on pin PTD5 (pin 62)  */
-    GPIO_PinInit(BOARD_INITPINS_LEDRGB_BLUE_GPIO, BOARD_INITPINS_LEDRGB_BLUE_PIN, &LEDRGB_BLUE_config);
+    /* Initialize GPIO functionality on pin PTA12 (pin 28)  */
+    GPIO_PinInit(BOARD_INITPINS_AC_I2S_DIN_GPIO, BOARD_INITPINS_AC_I2S_DIN_PIN, &AC_I2S_DIN_config);
+
+    gpio_pin_config_t AC_I2S_LRCLK_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTA13 (pin 29)  */
+    GPIO_PinInit(BOARD_INITPINS_AC_I2S_LRCLK_GPIO, BOARD_INITPINS_AC_I2S_LRCLK_PIN, &AC_I2S_LRCLK_config);
+
+    gpio_pin_config_t gpiob_pin41_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTB18 (pin 41)  */
+    GPIO_PinInit(GPIOB, 18U, &gpiob_pin41_config);
+
+    gpio_pin_config_t RF_CS_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U
+    };
+    /* Initialize GPIO functionality on pin PTD4 (pin 61)  */
+    GPIO_PinInit(BOARD_INITPINS_RF_CS_GPIO, BOARD_INITPINS_RF_CS_PIN, &RF_CS_config);
 
     /* PORTA12 (pin 28) is configured as PTA12 */
     PORT_SetPinMux(BOARD_INITPINS_AC_I2S_DIN_PORT, BOARD_INITPINS_AC_I2S_DIN_PIN, kPORT_MuxAsGpio);
+
+    /* Interrupt configuration on PORTA12 (pin 28): Interrupt on rising edge */
+    PORT_SetPinInterruptConfig(BOARD_INITPINS_AC_I2S_DIN_PORT, BOARD_INITPINS_AC_I2S_DIN_PIN, kPORT_InterruptRisingEdge);
 
     /* PORTA13 (pin 29) is configured as PTA13 */
     PORT_SetPinMux(BOARD_INITPINS_AC_I2S_LRCLK_PORT, BOARD_INITPINS_AC_I2S_LRCLK_PIN, kPORT_MuxAsGpio);
 
     /* PORTA5 (pin 27) is configured as PTA5 */
-    PORT_SetPinMux(PORTA, 5U, kPORT_MuxAsGpio);
+    PORT_SetPinMux(BOARD_INITPINS_AC_I2S_SCLK_PORT, BOARD_INITPINS_AC_I2S_SCLK_PIN, kPORT_MuxAsGpio);
+
+    PORTA->PCR[5] = ((PORTA->PCR[5] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ODE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is enabled on the corresponding pin. */
+                     | (uint32_t)(PORT_PCR_PE_MASK)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+                     /* Open Drain Enable: Open drain output is disabled on the corresponding pin. */
+                     | PORT_PCR_ODE(kPORT_OpenDrainDisable));
+
+    /* PORTB18 (pin 41) is configured as PTB18 */
+    PORT_SetPinMux(PORTB, 18U, kPORT_MuxAsGpio);
+
+    PORTB->PCR[18] = ((PORTB->PCR[18] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | (uint32_t)(kPORT_PullUp));
 
     /* PORTC10 (pin 55) is configured as I2C1_SCL */
     PORT_SetPinMux(PORTC, 10U, kPORT_MuxAlt2);
@@ -98,6 +157,14 @@ void BOARD_InitPins(void)
     /* PORTC3 (pin 46) is configured as UART1_RX */
     PORT_SetPinMux(BOARD_INITPINS_CLKOUT_PORT, BOARD_INITPINS_CLKOUT_PIN, kPORT_MuxAlt3);
 
+    PORTC->PCR[3] = ((PORTC->PCR[3] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin
+                      * is configured as a digital output. */
+                     | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
     /* PORTC4 (pin 49) is configured as UART1_TX */
     PORT_SetPinMux(BOARD_INITPINS_SD_CARD_DAT3_PORT, BOARD_INITPINS_SD_CARD_DAT3_PIN, kPORT_MuxAlt3);
 
@@ -107,26 +174,35 @@ void BOARD_InitPins(void)
     /* PORTD2 (pin 59) is configured as SPI0_SOUT */
     PORT_SetPinMux(BOARD_INITPINS_SD_CARD_CMD_PORT, BOARD_INITPINS_SD_CARD_CMD_PIN, kPORT_MuxAlt2);
 
+    PORTD->PCR[2] = ((PORTD->PCR[2] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | (uint32_t)(kPORT_PullUp));
+
     /* PORTD3 (pin 60) is configured as SPI0_SIN */
     PORT_SetPinMux(BOARD_INITPINS_SD_CARD_DAT0_PORT, BOARD_INITPINS_SD_CARD_DAT0_PIN, kPORT_MuxAlt2);
+
+    PORTD->PCR[3] = ((PORTD->PCR[3] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | (uint32_t)(kPORT_PullUp));
 
     /* PORTD4 (pin 61) is configured as PTD4 */
     PORT_SetPinMux(BOARD_INITPINS_RF_CS_PORT, BOARD_INITPINS_RF_CS_PIN, kPORT_MuxAsGpio);
 
-    /* PORTD5 (pin 62) is configured as PTD5 */
-    PORT_SetPinMux(BOARD_INITPINS_LEDRGB_BLUE_PORT, BOARD_INITPINS_LEDRGB_BLUE_PIN, kPORT_MuxAsGpio);
-
-    PORTD->PCR[5] = ((PORTD->PCR[5] &
+    PORTD->PCR[4] = ((PORTD->PCR[4] &
                       /* Mask bits to zero which are setting */
-                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
 
                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
                       * corresponding PE field is set. */
-                     | (uint32_t)(kPORT_PullUp)
-
-                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
-                      * configured as a digital output. */
-                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+                     | (uint32_t)(kPORT_PullUp));
 
     /* PORTD6 (pin 63) is configured as PTD6 */
     PORT_SetPinMux(PORTD, 6U, kPORT_MuxAsGpio);

@@ -162,7 +162,7 @@ void BoardInitMcu(void) {
 	RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN);
 
 	//TODO: Integration of SX1262
-	//SX126xIoInit( );
+	SX126xIoInit();
 
 	if (McuInitialized == false) {
 		McuInitialized = true;
