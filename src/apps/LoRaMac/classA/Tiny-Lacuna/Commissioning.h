@@ -27,29 +27,29 @@
  ******************************************************************************
  ********************************** WARNING ***********************************
  ******************************************************************************
-  The crypto-element implementation supports both 1.0.x and 1.1.x LoRaWAN 
-  versions of the specification.
-  Thus it has been decided to use the 1.1.x keys and EUI name definitions.
-  The below table shows the names equivalence between versions:
-               +---------------------+-------------------------+
-               |       1.0.x         |          1.1.x          |
-               +=====================+=========================+
-               | LORAWAN_DEVICE_EUI  | LORAWAN_DEVICE_EUI      |
-               +---------------------+-------------------------+
-               | LORAWAN_APP_EUI     | LORAWAN_JOIN_EUI        |
-               +---------------------+-------------------------+
-               | LORAWAN_GEN_APP_KEY | LORAWAN_APP_KEY         |
-               +---------------------+-------------------------+
-               | LORAWAN_APP_KEY     | LORAWAN_NWK_KEY         |
-               +---------------------+-------------------------+
-               | LORAWAN_NWK_S_KEY   | LORAWAN_F_NWK_S_INT_KEY |
-               +---------------------+-------------------------+
-               | LORAWAN_NWK_S_KEY   | LORAWAN_S_NWK_S_INT_KEY |
-               +---------------------+-------------------------+
-               | LORAWAN_NWK_S_KEY   | LORAWAN_NWK_S_ENC_KEY   |
-               +---------------------+-------------------------+
-               | LORAWAN_APP_S_KEY   | LORAWAN_APP_S_KEY       |
-               +---------------------+-------------------------+
+ The crypto-element implementation supports both 1.0.x and 1.1.x LoRaWAN
+ versions of the specification.
+ Thus it has been decided to use the 1.1.x keys and EUI name definitions.
+ The below table shows the names equivalence between versions:
+ +---------------------+-------------------------+
+ |       1.0.x         |          1.1.x          |
+ +=====================+=========================+
+ | LORAWAN_DEVICE_EUI  | LORAWAN_DEVICE_EUI      |
+ +---------------------+-------------------------+
+ | LORAWAN_APP_EUI     | LORAWAN_JOIN_EUI        |
+ +---------------------+-------------------------+
+ | LORAWAN_GEN_APP_KEY | LORAWAN_APP_KEY         |
+ +---------------------+-------------------------+
+ | LORAWAN_APP_KEY     | LORAWAN_NWK_KEY         |
+ +---------------------+-------------------------+
+ | LORAWAN_NWK_S_KEY   | LORAWAN_F_NWK_S_INT_KEY |
+ +---------------------+-------------------------+
+ | LORAWAN_NWK_S_KEY   | LORAWAN_S_NWK_S_INT_KEY |
+ +---------------------+-------------------------+
+ | LORAWAN_NWK_S_KEY   | LORAWAN_NWK_S_ENC_KEY   |
+ +---------------------+-------------------------+
+ | LORAWAN_APP_S_KEY   | LORAWAN_APP_S_KEY       |
+ +---------------------+-------------------------+
  ******************************************************************************
  ******************************************************************************
  ******************************************************************************
@@ -123,7 +123,7 @@
  *         a pseudo random generator seeded with a value derived from
  *         BoardUniqueId value if LORAWAN_DEVICE_ADDRESS is set to 0
  */
-#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x00000000
+#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x2601298C
 
 /*!
  * Forwarding Network session integrity key
