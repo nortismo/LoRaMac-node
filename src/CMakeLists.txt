@@ -23,7 +23,7 @@ cmake_minimum_required(VERSION 3.6)
 #---------------------------------------------------------------------------------------
 
 # Allow switching of target platform
-set(BOARD_LIST NAMote72 NucleoL073 NucleoL152 NucleoL476 SAML21 SKiM880B SKiM980A SKiM881AXL B-L072Z-LRWAN1)
+set(BOARD_LIST NAMote72 NucleoL073 NucleoL152 NucleoL476 SAML21 SKiM880B SKiM980A SKiM881AXL B-L072Z-LRWAN1  Tiny-Lacuna)
 set(BOARD NucleoL073 CACHE STRING "Default target platform is NucleoL073")
 set_property(CACHE BOARD PROPERTY STRINGS ${BOARD_LIST})
 
@@ -172,6 +172,18 @@ elseif(BOARD STREQUAL B-L072Z-LRWAN1)
 
     # Configure radio
     set(RADIO sx1276 CACHE INTERNAL "Radio sx1276 selected")
+
+    elseif(BOARD STREQUAL Tiny-Lacuna)
+    # Configure toolchain for Tiny-Lacuna
+    set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/boards/mcu/mk22/MK22F51212/gcc/MK22FN512xxx12_flash.ld)
+    include(mk22f51212)
+
+    # Build platform specific board implementation
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/boards/Tiny-Lacuna)
+
+    # Configure radio
+    set(RADIO sx126x CACHE INTERNAL "Radio sx126x selected")
+
 endif()
 
 #---------------------------------------------------------------------------------------
