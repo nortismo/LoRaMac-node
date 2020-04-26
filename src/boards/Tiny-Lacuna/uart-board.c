@@ -8,10 +8,9 @@
 
 #include "board.h"
 #include "fsl_common.h"
+#include "fsl_uart.h"
 #include "uart-board.h"
 #include "board-config.h"
-#include "fsl_uart_edma.h"
-#include "fsl_dmamux.h"
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "uart.h"
