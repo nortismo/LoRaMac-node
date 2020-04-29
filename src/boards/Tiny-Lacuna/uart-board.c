@@ -33,8 +33,8 @@ typedef struct {
 /*!
  * Configurations for the different Uart of the board
  */
-/* Configuration for Uart0. NOT USED YET */
-static k22UartHandle_t UartHandle0;
+/* Configuration for Uart0. */
+static k22UartHandle_t UartHandle0 = { .type = GPS_UART };
 
 /* Configuration for Uart1 */
 static k22UartHandle_t UartHandle1 = { .type = DEBUG_UART };

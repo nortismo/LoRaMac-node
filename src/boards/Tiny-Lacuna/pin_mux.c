@@ -55,6 +55,8 @@ BOARD_InitPins:
   - {pin_num: '41', peripheral: GPIOB, signal: 'GPIO, 18', pin_signal: PTB18/FTM2_CH0/I2S0_TX_BCLK/FB_AD15/FTM2_QD_PHA, direction: OUTPUT, pull_select: up, pull_enable: enable}
   - {pin_num: '61', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: PTD4/LLWU_P14/SPI0_PCS1/UART0_RTS_b/FTM0_CH4/FB_AD2/EWM_IN/SPI1_PCS0, direction: OUTPUT, gpio_init_state: 'true',
     pull_select: up, pull_enable: enable}
+  - {pin_num: '39', peripheral: UART0, signal: RX, pin_signal: PTB16/SPI1_SOUT/UART0_RX/FTM_CLKIN0/FB_AD17/EWM_IN}
+  - {pin_num: '40', peripheral: UART0, signal: TX, pin_signal: PTB17/SPI1_SIN/UART0_TX/FTM_CLKIN1/FB_AD16/EWM_OUT_b}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -137,6 +139,12 @@ void BOARD_InitPins(void)
                      /* Open Drain Enable: Open drain output is disabled on the corresponding pin. */
                      | PORT_PCR_ODE(kPORT_OpenDrainDisable));
 
+    /* PORTB16 (pin 39) is configured as UART0_RX */
+    PORT_SetPinMux(BOARD_INITPINS_SD_CARD_DETECT_PORT, BOARD_INITPINS_SD_CARD_DETECT_PIN, kPORT_MuxAlt3);
+
+    /* PORTB17 (pin 40) is configured as UART0_TX */
+    PORT_SetPinMux(BOARD_INITPINS_SW3_PORT, BOARD_INITPINS_SW3_PIN, kPORT_MuxAlt3);
+
     /* PORTB18 (pin 41) is configured as PTB18 */
     PORT_SetPinMux(PORTB, 18U, kPORT_MuxAsGpio);
 
@@ -212,7 +220,10 @@ void BOARD_InitPins(void)
 
     SIM->SOPT5 = ((SIM->SOPT5 &
                    /* Mask bits to zero which are setting */
-                   (~(SIM_SOPT5_UART1TXSRC_MASK)))
+                   (~(SIM_SOPT5_UART0TXSRC_MASK | SIM_SOPT5_UART1TXSRC_MASK)))
+
+                  /* UART 0 transmit data source select: UART0_TX pin. */
+                  | SIM_SOPT5_UART0TXSRC(SOPT5_UART0TXSRC_UART_TX)
 
                   /* UART 1 transmit data source select: UART1_TX pin. */
                   | SIM_SOPT5_UART1TXSRC(SOPT5_UART1TXSRC_UART_TX));

@@ -20,6 +20,7 @@
 #include "i2c.h"
 #include "delay.h"
 #include "sx126x-board.h"
+#include "gps.h"
 
 #define STDIO_MAX_WRITE_RETRY 200
 
@@ -32,6 +33,7 @@ Gpio_t Led2;
 /*!
  * Uart object
  */
+Uart_t Uart0;
 Uart_t Uart1;
 
 /*!
@@ -110,6 +112,9 @@ void BoardCriticalSectionEnd(uint32_t *mask) {
 
 void BoardInitPeriph(void) {
 
+	// Init GPS
+	GpsInit();
+	GpsProcess();
 }
 
 void BoardInitMcu(void) {

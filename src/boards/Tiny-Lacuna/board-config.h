@@ -69,6 +69,10 @@ extern "C"
 #define DEBUG_UART_BAUDRATE                 		115200
 #define DEBUG_UART									UART1_BASE
 
+#define GPS_UART									UART0_BASE
+#define GPS_UART_FAKE_PIN							NC
+#define GPS_UART_BAUDRATE                 			9600
+
 /*!
  * SE I2C configuration
  */

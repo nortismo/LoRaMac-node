@@ -25,6 +25,7 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
+#define SOPT5_UART0TXSRC_UART_TX 0x00u /*!<@brief UART 0 transmit data source select: UART0_TX pin */
 #define SOPT5_UART1TXSRC_UART_TX 0x00u /*!<@brief UART 1 transmit data source select: UART1_TX pin */
 
 /*! @name PORTD2 (number 59), J1[2]/J8[P3]/uSD_SPI_MOSI
@@ -84,6 +85,18 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_RF_CS_PORT PORTD /*!<@brief PORT device name: PORTD */
 #define BOARD_INITPINS_RF_CS_PIN 4U     /*!<@brief PORTD pin index: 4 */
                                         /* @} */
+
+/*! @name PORTB16 (number 39), J1[6]/J8[G1]/SD_CARD_DETECT
+  @{ */
+#define BOARD_INITPINS_SD_CARD_DETECT_PORT PORTB /*!<@brief PORT device name: PORTB */
+#define BOARD_INITPINS_SD_CARD_DETECT_PIN 16U    /*!<@brief PORTB pin index: 16 */
+                                                 /* @} */
+
+/*! @name PORTB17 (number 40), PUSH_BUTTON1
+  @{ */
+#define BOARD_INITPINS_SW3_PORT PORTB /*!<@brief PORT device name: PORTB */
+#define BOARD_INITPINS_SW3_PIN 17U    /*!<@brief PORTB pin index: 17 */
+                                      /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

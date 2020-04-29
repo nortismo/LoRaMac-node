@@ -15,6 +15,7 @@
 #include "radio.h"
 #include "gpio.h"
 #include "sx126x.h"
+#include "gps.h"
 
 #define RF_FREQUENCY                                868000000 // Hz
 #define TX_OUTPUT_POWER                             14        // dBm
@@ -101,8 +102,9 @@ void OnRxError(void);
 /*!
  * Example timer callback
  */
-void test_callback(void) {
-	printf("Test callback");
+bool gps_initialized = true;
+void test_callback(void *context) {
+	gps_initialized = false;
 }
 
 /**
@@ -151,8 +153,8 @@ int main(void) {
 	 * Example of how to init the timer and start it.
 	 * We don't use that here.
 	 */
-	//TimerInit(&timer_event, test_callback);
-	//TimerStart(&timer_event);
+	TimerInit(&timer_event, test_callback);
+	TimerStart(&timer_event);
 	/* Busy delay */
 	DelayMs(200);
 
@@ -230,6 +232,12 @@ int main(void) {
 		// Process Radio IRQ
 		if (Radio.IrqProcess != NULL) {
 			Radio.IrqProcess();
+		}
+
+		if (!gps_initialized) {
+			gps_initialized = true;
+			/* TODO: Make sure in future that this function is called from time to time */
+			GpsProcess();
 		}
 	}
 }
