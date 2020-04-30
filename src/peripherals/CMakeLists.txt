@@ -22,8 +22,28 @@ cmake_minimum_required(VERSION 3.6)
 # Target
 #---------------------------------------------------------------------------------------
 
-file(GLOB ${PROJECT_NAME}_SOURCES "*.c"
-                                  "soft-se/*.c")
+list(APPEND ${PROJECT_NAME}_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/gpio-ioe.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mag3110.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mma8451.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mpl3115.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pam7q.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sx1509.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sx9500.c"
+)
+
+if(SECURE_ELEMENT STREQUAL soft-se)
+    list(APPEND ${PROJECT_NAME}_SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/soft-se/aes.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/soft-se/cmac.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/soft-se/soft-se.c"
+    )
+
+elseif(SECURE_ELEMENT STREQUAL se050)
+    list(APPEND ${PROJECT_NAME}_SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/se050.c"
+    )
+endif()
 
 add_library(${PROJECT_NAME} OBJECT EXCLUDE_FROM_ALL ${${PROJECT_NAME}_SOURCES})
 

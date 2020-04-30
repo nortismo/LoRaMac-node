@@ -37,6 +37,11 @@ set(APPLICATION_LIST LoRaMac ping-pong rx-sensi tx-cw dev-application)
 set(APPLICATION LoRaMac CACHE STRING "Default Application is LoRaMac")
 set_property(CACHE APPLICATION PROPERTY STRINGS ${APPLICATION_LIST})
 
+# Allow switching of Secure Element
+set(SECURE_ELEMENT_LIST soft-se se050)
+set(SECURE_ELEMENT soft-se CACHE STRING "Default Secure Element is soft-se")
+set_property(CACHE SECURE_ELEMENT PROPERTY STRINGS ${SECURE_ELEMENT_LIST})
+
 # Switch for USB-Uart support, enable it for some Applications who needs it.
 option(USE_USB_CDC "Use USB-Uart" OFF)
 
@@ -173,7 +178,7 @@ elseif(BOARD STREQUAL B-L072Z-LRWAN1)
     # Configure radio
     set(RADIO sx1276 CACHE INTERNAL "Radio sx1276 selected")
 
-    elseif(BOARD STREQUAL Tiny-Lacuna)
+elseif(BOARD STREQUAL Tiny-Lacuna)
     # Configure toolchain for Tiny-Lacuna
     set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/boards/mcu/mk22/MK22F51212/gcc/MK22FN512xxx12_flash.ld)
     include(mk22f51212)
@@ -183,6 +188,9 @@ elseif(BOARD STREQUAL B-L072Z-LRWAN1)
 
     # Configure radio
     set(RADIO sx126x CACHE INTERNAL "Radio sx126x selected")
+
+    # Configure secure element
+    set(SECURE_ELEMENT se050 CACHE INTERNAL "Secure Element se050 selected")
 
 endif()
 
