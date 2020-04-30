@@ -34,6 +34,7 @@ file(GLOB ${PROJECT_NAME}_SOURCES "${CMAKE_CURRENT_LIST_DIR}/${BOARD}/*.c")
 
 add_executable(${PROJECT_NAME}
                             ${${PROJECT_NAME}_SOURCES}
+                            $<TARGET_OBJECTS:mac>
                             $<TARGET_OBJECTS:system>
                             $<TARGET_OBJECTS:radio>
                             $<TARGET_OBJECTS:peripherals>
@@ -61,6 +62,8 @@ target_compile_definitions(${PROJECT_NAME}  PUBLIC
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}
+    $<BUILD_INTERFACE:$<TARGET_PROPERTY:mac,INTERFACE_INCLUDE_DIRECTORIES>>
     $<BUILD_INTERFACE:$<TARGET_PROPERTY:system,INTERFACE_INCLUDE_DIRECTORIES>>
     $<BUILD_INTERFACE:$<TARGET_PROPERTY:radio,INTERFACE_INCLUDE_DIRECTORIES>>
     $<BUILD_INTERFACE:$<TARGET_PROPERTY:peripherals,INTERFACE_INCLUDE_DIRECTORIES>>
