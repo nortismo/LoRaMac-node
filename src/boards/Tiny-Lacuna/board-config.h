@@ -94,6 +94,12 @@ extern "C"
 #define BOARD_PORTD_IRQ_HANDLER                     PORTD_IRQHandler
 #define BOARD_PORTE_IRQ_HANDLER                     PORTE_IRQHandler
 
+/*!
+ * Board specific configuration for SE050
+ */
+#define T1oI2C_UM1225_SE050
+#define MBEDTLS_CONFIG_FILE							"sss_mbedtls_frdmk64f_config.h"
+
 #ifdef __cplusplus
 }
 #endif

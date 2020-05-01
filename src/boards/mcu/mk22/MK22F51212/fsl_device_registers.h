@@ -14,6 +14,8 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
+#define CPU_MK22FN512VLH12
+
 #if (defined(CPU_MK22FN512CAP12) || defined(CPU_MK22FN512VDC12) || defined(CPU_MK22FN512VFX12) || \
     defined(CPU_MK22FN512VLH12) || defined(CPU_MK22FN512VLL12) || defined(CPU_MK22FN512VMP12))
 

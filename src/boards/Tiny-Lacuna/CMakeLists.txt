@@ -43,7 +43,7 @@ set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/gcc/star
 
 add_library(${PROJECT_NAME} OBJECT EXCLUDE_FROM_ALL ${${PROJECT_NAME}_SOURCES})
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC -DCPU_MK22FN512CAP12)
+target_compile_definitions(${PROJECT_NAME} PUBLIC -DCPU_MK22FN512VLH12)
 
 # Add define if debbuger support is enabled
 target_compile_definitions(${PROJECT_NAME} PUBLIC $<$<BOOL:${USE_DEBUGGER}>:USE_DEBUGGER>)

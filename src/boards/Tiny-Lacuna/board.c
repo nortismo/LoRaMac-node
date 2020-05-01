@@ -21,6 +21,7 @@
 #include "delay.h"
 #include "sx126x-board.h"
 #include "gps.h"
+#include "secure-element.h"
 
 #define STDIO_MAX_WRITE_RETRY 200
 
@@ -37,6 +38,11 @@ Uart_t Uart0;
 Uart_t Uart1;
 
 /*!
+ * I2C object
+ */
+I2c_t I2c1;
+
+/*!
  * Variables for systick
  */
 volatile uint32_t sysTickCounter;
@@ -50,6 +56,11 @@ volatile uint32_t sysTickCountDown;
 Gpio_t testGpio;
 uint8_t testIrq = 0;
 void testFunction(void *context);
+
+/*!
+ * Secure Element
+ */
+static void EventSecureElementNvmCtxChanged(void);
 
 /*!
  * Example of I2C
@@ -111,10 +122,11 @@ void BoardCriticalSectionEnd(uint32_t *mask) {
 }
 
 void BoardInitPeriph(void) {
-
+	SecureElementStatus_t res = SECURE_ELEMENT_ERROR;
 	// Init GPS
-	GpsInit();
-	GpsProcess();
+	//GpsInit();
+	//GpsProcess();
+	res = SecureElementInit(EventSecureElementNvmCtxChanged);
 }
 
 void BoardInitMcu(void) {
@@ -275,4 +287,8 @@ int _read(int fd, const void *buf, size_t count) {
  */
 void testFunction(void *context) {
 	testIrq = 1;
+}
+
+static void EventSecureElementNvmCtxChanged(void) {
+	/* do something */
 }

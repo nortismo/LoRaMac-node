@@ -237,7 +237,7 @@ int main(void) {
 		if (!gps_initialized) {
 			gps_initialized = true;
 			/* TODO: Make sure in future that this function is called from time to time */
-			GpsProcess();
+			//GpsProcess();
 		}
 	}
 }
