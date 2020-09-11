@@ -33,6 +33,7 @@
 #include "rtc-board.h"
 #include "sx1276-board.h"
 #include "board.h"
+#include "mpl3115.h"
 
 /*!
  * Unique Devices IDs register set ( STM32L0xxx )
@@ -48,11 +49,13 @@ Gpio_t Led1;
 Gpio_t Led2;
 Gpio_t Led3;
 Gpio_t Led4;
+Gpio_t Mpl3115;
 
 /*
  * MCU objects
  */
 Uart_t Uart2;
+I2c_t I2c;
 
 /*!
  * Initializes the unused GPIO to a know status
@@ -125,7 +128,8 @@ void BoardCriticalSectionEnd( uint32_t *mask )
 
 void BoardInitPeriph( void )
 {
-
+    GpioInit( &Mpl3115, IRQ_MPL3115, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
+    MPL3115Init( );
 }
 
 void BoardInitMcu( void )
@@ -171,6 +175,8 @@ void BoardInitMcu( void )
 
     SpiInit( &SX1276.Spi, SPI_1, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, NC );
     SX1276IoInit( );
+
+    I2cInit( &I2c, I2C_1, I2C_SCL, I2C_SDA );
 
     if( McuInitialized == false )
     {

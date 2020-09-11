@@ -98,6 +98,8 @@ extern "C"
 #define RADIO_DBG_PIN_TX                            PB_13
 #define RADIO_DBG_PIN_RX                            PB_14
 
+#define IRQ_MPL3115                                 PB_15
+
 #ifdef __cplusplus
 }
 #endif

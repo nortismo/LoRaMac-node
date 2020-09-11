@@ -30,6 +30,7 @@
 #include "LoRaMac.h"
 #include "Commissioning.h"
 #include "NvmCtxMgmt.h"
+#include "mpl3115.h"
 
 #ifndef ACTIVE_REGION
 
@@ -969,6 +970,7 @@ int main( void )
     DeviceState = DEVICE_STATE_RESTORE;
 
     printf( "###### ===== ClassA demo application v1.0.0 ==== ######\n\n" );
+    printf("TEST-> MPL3115ReadTemperature: %i\r\n", ( int16_t )( MPL3115ReadTemperature( ) * 100 ));
 
     while( 1 )
     {
