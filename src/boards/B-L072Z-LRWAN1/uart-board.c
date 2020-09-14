@@ -31,10 +31,16 @@
  */
 #define TX_BUFFER_RETRY_COUNT                       10
 
-static UART_HandleTypeDef UartHandle;
-uint8_t RxData = 0;
-uint8_t TxData = 0;
+typedef struct
+{
+    UART_HandleTypeDef UartHandle;
+    uint8_t RxData;
+    uint8_t TxData;
+}UartContext_t;
 
+UartContext_t UartContext[2];
+
+extern Uart_t Uart1;
 extern Uart_t Uart2;
 
 void UartMcuInit( Uart_t *obj, UartId_t uartId, PinNames tx, PinNames rx )
@@ -49,12 +55,24 @@ void UartMcuInit( Uart_t *obj, UartId_t uartId, PinNames tx, PinNames rx )
     }
     else
     {
-        __HAL_RCC_USART2_FORCE_RESET( );
-        __HAL_RCC_USART2_RELEASE_RESET( );
-        __HAL_RCC_USART2_CLK_ENABLE( );
+        if( obj->UartId == UART_1 )
+        {
+            __HAL_RCC_USART1_FORCE_RESET( );
+            __HAL_RCC_USART1_RELEASE_RESET( );
+            __HAL_RCC_USART1_CLK_ENABLE( );
 
-        GpioInit( &obj->Tx, tx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART2 );
-        GpioInit( &obj->Rx, rx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART2 );
+            GpioInit( &obj->Tx, tx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART1 );
+            GpioInit( &obj->Rx, rx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART1 );
+        }
+        else if( obj->UartId == UART_2 )
+        {
+            __HAL_RCC_USART2_FORCE_RESET( );
+            __HAL_RCC_USART2_RELEASE_RESET( );
+            __HAL_RCC_USART2_CLK_ENABLE( );
+
+            GpioInit( &obj->Tx, tx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART2 );
+            GpioInit( &obj->Rx, rx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART2 );
+        }
     }
 }
 
@@ -68,8 +86,15 @@ void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_
     }
     else
     {
-        UartHandle.Instance = USART2;
-        UartHandle.Init.BaudRate = baudrate;
+        if( obj->UartId == UART_1 )
+        {
+            UartContext[obj->UartId].UartHandle.Instance = USART1;
+        }
+        else if( obj->UartId == UART_2 )
+        {
+            UartContext[obj->UartId].UartHandle.Instance = USART2;
+        }
+        UartContext[obj->UartId].UartHandle.Init.BaudRate = baudrate;
 
         if( mode == TX_ONLY )
         {
@@ -77,7 +102,7 @@ void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_
             {
                 assert_param( FAIL );
             }
-            UartHandle.Init.Mode = UART_MODE_TX;
+            UartContext[obj->UartId].UartHandle.Init.Mode = UART_MODE_TX;
         }
         else if( mode == RX_ONLY )
         {
@@ -85,7 +110,7 @@ void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_
             {
                 assert_param( FAIL );
             }
-            UartHandle.Init.Mode = UART_MODE_RX;
+            UartContext[obj->UartId].UartHandle.Init.Mode = UART_MODE_RX;
         }
         else if( mode == RX_TX )
         {
@@ -93,7 +118,7 @@ void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_
             {
                 assert_param( FAIL );
             }
-            UartHandle.Init.Mode = UART_MODE_TX_RX;
+            UartContext[obj->UartId].UartHandle.Init.Mode = UART_MODE_TX_RX;
         }
         else
         {
@@ -102,69 +127,75 @@ void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_
 
         if( wordLength == UART_8_BIT )
         {
-            UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
+            UartContext[obj->UartId].UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
         }
         else if( wordLength == UART_9_BIT )
         {
-            UartHandle.Init.WordLength = UART_WORDLENGTH_9B;
+            UartContext[obj->UartId].UartHandle.Init.WordLength = UART_WORDLENGTH_9B;
         }
 
         switch( stopBits )
         {
         case UART_2_STOP_BIT:
-            UartHandle.Init.StopBits = UART_STOPBITS_2;
+            UartContext[obj->UartId].UartHandle.Init.StopBits = UART_STOPBITS_2;
             break;
         case UART_1_5_STOP_BIT:
-            UartHandle.Init.StopBits = UART_STOPBITS_1_5;
+            UartContext[obj->UartId].UartHandle.Init.StopBits = UART_STOPBITS_1_5;
             break;
         case UART_1_STOP_BIT:
         default:
-            UartHandle.Init.StopBits = UART_STOPBITS_1;
+            UartContext[obj->UartId].UartHandle.Init.StopBits = UART_STOPBITS_1;
             break;
         }
 
         if( parity == NO_PARITY )
         {
-            UartHandle.Init.Parity = UART_PARITY_NONE;
+            UartContext[obj->UartId].UartHandle.Init.Parity = UART_PARITY_NONE;
         }
         else if( parity == EVEN_PARITY )
         {
-            UartHandle.Init.Parity = UART_PARITY_EVEN;
+            UartContext[obj->UartId].UartHandle.Init.Parity = UART_PARITY_EVEN;
         }
         else
         {
-            UartHandle.Init.Parity = UART_PARITY_ODD;
+            UartContext[obj->UartId].UartHandle.Init.Parity = UART_PARITY_ODD;
         }
 
         if( flowCtrl == NO_FLOW_CTRL )
         {
-            UartHandle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+            UartContext[obj->UartId].UartHandle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
         }
         else if( flowCtrl == RTS_FLOW_CTRL )
         {
-            UartHandle.Init.HwFlowCtl = UART_HWCONTROL_RTS;
+            UartContext[obj->UartId].UartHandle.Init.HwFlowCtl = UART_HWCONTROL_RTS;
         }
         else if( flowCtrl == CTS_FLOW_CTRL )
         {
-            UartHandle.Init.HwFlowCtl = UART_HWCONTROL_CTS;
+            UartContext[obj->UartId].UartHandle.Init.HwFlowCtl = UART_HWCONTROL_CTS;
         }
         else if( flowCtrl == RTS_CTS_FLOW_CTRL )
         {
-            UartHandle.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+            UartContext[obj->UartId].UartHandle.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
         }
 
-        UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
+        UartContext[obj->UartId].UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
 
-        if( HAL_UART_Init( &UartHandle ) != HAL_OK )
+        if( HAL_UART_Init( &UartContext[obj->UartId].UartHandle ) != HAL_OK )        
         {
             assert_param( FAIL );
         }
 
-        HAL_NVIC_SetPriority( USART2_IRQn, 1, 0 );
-        HAL_NVIC_EnableIRQ( USART2_IRQn );
+        if(obj->UartId == UART_1){
+            HAL_NVIC_SetPriority( USART1_IRQn, 1, 0 );
+            HAL_NVIC_EnableIRQ( USART1_IRQn );
+        }
+        else{
+            HAL_NVIC_SetPriority( USART2_IRQn, 1, 0 );
+            HAL_NVIC_EnableIRQ( USART2_IRQn );
+        }
 
         /* Enable the UART Data Register not empty Interrupt */
-        HAL_UART_Receive_IT( &UartHandle, &RxData, 1 );
+        HAL_UART_Receive_IT( &UartContext[obj->UartId].UartHandle, &UartContext[obj->UartId].RxData, 1 );
     }
 }
 
@@ -178,10 +209,18 @@ void UartMcuDeInit( Uart_t *obj )
     }
     else
     {
-        __HAL_RCC_USART2_FORCE_RESET( );
-        __HAL_RCC_USART2_RELEASE_RESET( );
-        __HAL_RCC_USART2_CLK_DISABLE( );
-
+        if( obj->UartId == UART_1 )
+        {
+            __HAL_RCC_USART1_FORCE_RESET( );
+            __HAL_RCC_USART1_RELEASE_RESET( );
+            __HAL_RCC_USART1_CLK_ENABLE( );
+        }
+        else if( obj->UartId == UART_2 )
+        {
+            __HAL_RCC_USART2_FORCE_RESET( );
+            __HAL_RCC_USART2_RELEASE_RESET( );
+            __HAL_RCC_USART2_CLK_ENABLE( );
+        }
         GpioInit( &obj->Tx, obj->Tx.pin, PIN_ANALOGIC, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
         GpioInit( &obj->Rx, obj->Rx.pin, PIN_ANALOGIC, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
     }
@@ -200,14 +239,14 @@ uint8_t UartMcuPutChar( Uart_t *obj, uint8_t data )
     else
     {
         CRITICAL_SECTION_BEGIN( );
-        TxData = data;
+        UartContext[obj->UartId].TxData = data;
 
         if( IsFifoFull( &obj->FifoTx ) == false )
         {
-            FifoPush( &obj->FifoTx, TxData );
+            FifoPush( &obj->FifoTx, UartContext[obj->UartId].TxData );
 
             // Trig UART Tx interrupt to start sending the FIFO contents.
-            __HAL_UART_ENABLE_IT( &UartHandle, UART_IT_TC );
+            __HAL_UART_ENABLE_IT( &UartContext[obj->UartId].UartHandle, UART_IT_TC );
 
             CRITICAL_SECTION_END( );
             return 0; // OK
@@ -302,41 +341,97 @@ uint8_t UartMcuGetBuffer( Uart_t *obj, uint8_t *buffer, uint16_t size, uint16_t 
 
 void HAL_UART_TxCpltCallback( UART_HandleTypeDef *handle )
 {
-    if( IsFifoEmpty( &Uart2.FifoTx ) == false )
+    Uart_t *uart = &Uart1;
+    UartId_t uartId = UART_1;
+
+    if( handle == &UartContext[UART_1].UartHandle )
     {
-        TxData = FifoPop( &Uart2.FifoTx );
+        uart = &Uart1;
+        uartId = UART_1;
+    }
+    else if( handle == &UartContext[UART_2].UartHandle )
+    {
+        uart = &Uart2;
+        uartId = UART_2;
+    }
+    else
+    {
+        // Unknown UART peripheral skip processing
+        return;
+    }
+    if( IsFifoEmpty( &uart->FifoTx ) == false )
+    {
+        UartContext[uartId].TxData = FifoPop( &uart->FifoTx );
         //  Write one byte to the transmit data register
-        HAL_UART_Transmit_IT( &UartHandle, &TxData, 1 );
+        HAL_UART_Transmit_IT( &UartContext[uartId].UartHandle, &UartContext[uartId].TxData, 1 );
     }
 
-    if( Uart2.IrqNotify != NULL )
+    if( uart->IrqNotify != NULL )
     {
-        Uart2.IrqNotify( UART_NOTIFY_TX );
+        uart->IrqNotify( UART_NOTIFY_TX );
     }
 }
 
 void HAL_UART_RxCpltCallback( UART_HandleTypeDef *handle )
 {
-    if( IsFifoFull( &Uart2.FifoRx ) == false )
+    Uart_t *uart = &Uart1;
+    UartId_t uartId = UART_1;
+
+    if( handle == &UartContext[UART_1].UartHandle )
+    {
+        uart = &Uart1;
+        uartId = UART_1;
+    }
+    else if( handle == &UartContext[UART_2].UartHandle )
+    {
+        uart = &Uart2;
+        uartId = UART_2;
+    }
+    else
+    {
+        // Unknown UART peripheral skip processing
+        return;
+    }
+    if( IsFifoFull( &uart->FifoRx ) == false )
     {
         // Read one byte from the receive data register
-        FifoPush( &Uart2.FifoRx, RxData );
+        FifoPush( &uart->FifoRx, UartContext[uartId].RxData );
     }
 
-    if( Uart2.IrqNotify != NULL )
+    if( uart->IrqNotify != NULL )
     {
-        Uart2.IrqNotify( UART_NOTIFY_RX );
+        uart->IrqNotify( UART_NOTIFY_RX );
     }
 
-    HAL_UART_Receive_IT( &UartHandle, &RxData, 1 );
+    HAL_UART_Receive_IT( &UartContext[uartId].UartHandle, &UartContext[uartId].RxData, 1 );
 }
 
 void HAL_UART_ErrorCallback( UART_HandleTypeDef *handle )
 {
-    HAL_UART_Receive_IT( &UartHandle, &RxData, 1 );
+    UartId_t uartId = UART_1;
+
+    if( handle == &UartContext[UART_1].UartHandle )
+    {
+        uartId = UART_1;
+    }
+    else if( handle == &UartContext[UART_2].UartHandle )
+    {
+        uartId = UART_2;
+    }
+    else
+    {
+        // Unknown UART peripheral skip processing
+        return;
+    }
+    HAL_UART_Receive_IT( &UartContext[uartId].UartHandle, &UartContext[uartId].RxData, 1 );
+}
+
+void USART1_IRQHandler( void )
+{
+    HAL_UART_IRQHandler( &UartContext[UART_1].UartHandle );
 }
 
 void USART2_IRQHandler( void )
 {
-    HAL_UART_IRQHandler( &UartHandle );
+    HAL_UART_IRQHandler( &UartContext[UART_2].UartHandle );
 }

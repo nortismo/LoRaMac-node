@@ -55,6 +55,7 @@ Gpio_t Mpl3115;
  * MCU objects
  */
 Uart_t Uart2;
+Uart_t Uart1;
 I2c_t I2c;
 
 /*!
