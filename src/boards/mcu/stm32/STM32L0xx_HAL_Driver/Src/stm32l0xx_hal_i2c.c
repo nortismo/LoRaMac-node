@@ -1737,7 +1737,8 @@ HAL_StatusTypeDef HAL_I2C_Mem_Write(I2C_HandleTypeDef *hi2c, uint16_t DevAddress
 
   if (hi2c->State == HAL_I2C_STATE_READY)
   {
-    if ((pData == NULL) || (Size == 0U))
+    //if ((pData == NULL) || (Size == 0U))
+    if ((pData == NULL))
     {
       return  HAL_ERROR;
     }

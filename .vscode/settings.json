@@ -54,7 +54,7 @@
 
         // Secure element type selection the following are supported
         // SOFT_SE(Default), LR1110_SE, ATECC608A_TNGLORA_SE
-        "SECURE_ELEMENT":"SOFT_SE",
+        "SECURE_ELEMENT":"ATECC608A_TNGLORA_SE",
 
         // Secure element is pre-provisioned
         "SECURE_ELEMENT_PRE_PROVISIONED":"ON",

@@ -36,7 +36,7 @@ void I2cInit( I2c_t *obj, I2cId_t i2cId, PinNames scl, PinNames sda )
         I2cInitialized = true;
 
         I2cMcuInit( obj, i2cId, scl, sda );
-        I2cMcuFormat( obj, MODE_I2C, I2C_DUTY_CYCLE_2, true, I2C_ACK_ADD_7_BIT, 400000 );
+        I2cMcuFormat( obj, MODE_I2C, I2C_DUTY_CYCLE_2, true, I2C_ACK_ADD_7_BIT, 100000U );
     }
 }
 

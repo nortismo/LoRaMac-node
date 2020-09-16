@@ -106,6 +106,8 @@ void I2cSetAddrSize( I2c_t *obj, I2cAddrSize addrSize )
     I2cInternalAddrSize = addrSize;
 }
 
+uint8_t I2cMcuScanAddresses(uint16_t addr, uint16_t memAddSize, uint8_t *buffer, uint16_t size);
+
 uint8_t I2cMcuWriteBuffer( I2c_t *obj, uint8_t deviceAddr, uint16_t addr, uint8_t *buffer, uint16_t size )
 {
     uint8_t status = FAIL;
@@ -121,7 +123,17 @@ uint8_t I2cMcuWriteBuffer( I2c_t *obj, uint8_t deviceAddr, uint16_t addr, uint8_
     }
     status = ( HAL_I2C_Mem_Write( &I2cHandle, deviceAddr, addr, memAddSize, buffer, size, 2000 ) == HAL_OK ) ? SUCCESS : FAIL;
 
+//    if(status == FAIL){
+//        I2cMcuScanAddresses(addr, memAddSize, buffer, size);
+//    }
     return status;
+}
+
+uint8_t I2cMcuScanAddresses(uint16_t addr, uint16_t memAddSize, uint8_t *buffer, uint16_t size){
+    for(volatile uint16_t i = 0; i <= 255; i++ ){
+        HAL_I2C_Mem_Write( &I2cHandle, i>>1, addr, memAddSize, buffer, size, 4000 );
+    }
+    return 0;
 }
 
 uint8_t I2cMcuReadBuffer( I2c_t *obj, uint8_t deviceAddr, uint16_t addr, uint8_t *buffer, uint16_t size )
