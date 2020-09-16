@@ -34,6 +34,7 @@
 #include "sx1276-board.h"
 #include "board.h"
 #include "mpl3115.h"
+#include "gps.h"
 
 /*!
  * Unique Devices IDs register set ( STM32L0xxx )
@@ -129,8 +130,13 @@ void BoardCriticalSectionEnd( uint32_t *mask )
 
 void BoardInitPeriph( void )
 {
-    GpioInit( &Mpl3115, IRQ_MPL3115, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
-    MPL3115Init( );
+
+    // Init temperature, pressure and altitude sensor
+    //GpioInit( &Mpl3115, IRQ_MPL3115, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
+    //MPL3115Init( );
+
+    // Init GPS
+    GpsInit( );
 }
 
 void BoardInitMcu( void )

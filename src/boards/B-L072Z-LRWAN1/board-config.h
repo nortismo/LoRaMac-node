@@ -100,6 +100,11 @@ extern "C"
 
 #define IRQ_MPL3115                                 PB_15
 
+#define GPS_POWER_ON                                PB_12
+#define GPS_PPS                                     PA_11
+#define GPS_UART_TX                                 PA_9
+#define GPS_UART_RX                                 PA_10
+
 #ifdef __cplusplus
 }
 #endif
