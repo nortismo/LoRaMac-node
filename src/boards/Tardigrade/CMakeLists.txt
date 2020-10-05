@@ -1,0 +1,70 @@
+##
+## License:  Revised BSD License, see LICENSE.TXT file included in the project
+## Authors:  Diego Bienz
+##
+project(Tardigrade)
+cmake_minimum_required(VERSION 3.6)
+enable_language(ASM)
+
+#---------------------------------------------------------------------------------------
+# Target
+#---------------------------------------------------------------------------------------
+
+# All source files, including the fsl drivers of the NXP MCU
+# If you plan to use an additional driver, you need to add it here
+list(APPEND ${PROJECT_NAME}_SOURCES
+    # Board drivers
+    # "${CMAKE_CURRENT_SOURCE_DIR}/board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/rtc-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/gpio-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/delay-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/spi-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/sx1262-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/i2c-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/gps-board.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/pin_mux.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/cmsis/clock_config.c"
+
+    # LPC system startup
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/gcc/startup_LPC55S16.S"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/system_LPC55S16.c"
+
+    # MCU drivers
+    # "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/utilities.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_rtc.c"
+)
+
+# Set language of startup file
+set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/gcc/startup_LPC55S16.S" PROPERTY LANGUAGE C)
+
+add_library(${PROJECT_NAME} OBJECT EXCLUDE_FROM_ALL ${${PROJECT_NAME}_SOURCES})
+
+# Set target CPU
+target_compile_definitions(${PROJECT_NAME} PUBLIC -DCPU_LPC55S16JBD64)
+
+# For debug builds set the symbol DEBUG
+set(CMAKE_C_FLAGS_DEBUG -DDEBUG)
+
+# Includes of all header files, including all header files of the fsl drivers of the NXP MCU
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmsis
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/cmsis
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/cmsis_drivers
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/utilities
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/utilities/debug_console
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/utilities/str
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/arm
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers
+    ${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/gcc
+    $<TARGET_PROPERTY:board,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:system,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:radio,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:peripherals,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
