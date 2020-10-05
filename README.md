@@ -63,6 +63,9 @@ The [Porting Guide](http://stackforce.github.io/LoRaMac-doc/_p_o_r_t_i_n_g__g_u_
 * SAMR34
   * [SAMR34 platform documentation](doc/SAMR34-platform.md)
 
+* Tardigrade *(Development ongoing)*
+  * [Tardigrade platform documentation](doc/Tardigrade-platform.md)
+
 ## Getting Started
 
 ### Prerequisites
