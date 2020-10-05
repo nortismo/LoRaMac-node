@@ -94,6 +94,9 @@ function(generate_vscode_launch_openocd TARGET)
     elseif(BOARD STREQUAL SAMR34)
         set(OPENOCD_INTERFACE cmsis-dap.cfg)
         set(OPENOCD_TARGET at91samdXX.cfg)
+    elseif(BOARD STREQUAL Tardigrade)
+        set(OPENOCD_INTERFACE jlink.cfg)
+        message(STATUS "WARNING: There's no OpenOCD configuration for LPC55 yet. Please use other tools than OpenOCD for programming & debugging.")
     endif()
 
 
