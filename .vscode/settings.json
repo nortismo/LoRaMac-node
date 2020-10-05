@@ -24,7 +24,7 @@
 
         // Determines the application. You can choose between:
         // LoRaMac (Default), ping-pong, rx-sensi, tx-cw.
-        "APPLICATION":"LoRaMac",
+        "APPLICATION":"ping-pong",
 
         // Select LoRaMac sub project. You can choose between:
         // periodic-uplink-lpp, fuota-test-01.
@@ -45,7 +45,7 @@
 
         // Target board, the following boards are supported:
         // NAMote72, NucleoL073 (Default), NucleoL152, NucleoL476, SAMR34, SKiM880B, SKiM980A, SKiM881AXL, B-L072Z-LRWAN1, Tardigrade
-        "BOARD":"NucleoL073",
+        "BOARD":"Tardigrade",
 
         // MBED Radio shield selection. (Applies only to Nucleo platforms)
         // The following shields are supported:
