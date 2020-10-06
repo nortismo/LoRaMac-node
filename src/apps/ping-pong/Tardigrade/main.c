@@ -166,7 +166,12 @@ int main( void )
     BoardInitMcu( );
     BoardInitPeriph( );
 
-    printf("HELLO FROM TADIGRADE!\r\n");
+    while(true){
+    	printf("HELLO FROM TADIGRADE!\r\n");
+    	DelayMs(1000);
+    }
+
+
 
     // Radio initialization
 //    RadioEvents.TxDone = OnTxDone;
