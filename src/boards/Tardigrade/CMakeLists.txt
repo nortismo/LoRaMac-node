@@ -15,9 +15,9 @@ enable_language(ASM)
 list(APPEND ${PROJECT_NAME}_SOURCES
     # Board drivers
     "${CMAKE_CURRENT_SOURCE_DIR}/board.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/rtc-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/gpio-board.c"
-    # "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/delay-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/spi-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/sx1262-board.c"
@@ -39,7 +39,9 @@ list(APPEND ${PROJECT_NAME}_SOURCES
 
     # MCU drivers
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/utilities.c"
-    # "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/mk22/MK22F51212/drivers/fsl_rtc.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_flexcomm.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_reset.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_usart.c"
 )
 
 # Set language of startup file

@@ -25,18 +25,24 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
-#define IOCON_PIO_ASW_DI 0x00u        /*!<@brief Analog switch is open (disabled) */
-#define IOCON_PIO_ASW_EN 0x0400u      /*!<@brief Analog switch is closed (enabled) */
-#define IOCON_PIO_DIGITAL_EN 0x0100u  /*!<@brief Enables digital function */
-#define IOCON_PIO_FUNC0 0x00u         /*!<@brief Selects pin function 0 */
-#define IOCON_PIO_FUNC6 0x06u         /*!<@brief Selects pin function 6 */
-#define IOCON_PIO_INV_DI 0x00u        /*!<@brief Input function is not inverted */
-#define IOCON_PIO_MODE_INACT 0x00u    /*!<@brief No addition pin function */
-#define IOCON_PIO_MODE_PULLUP 0x20u   /*!<@brief Selects pull-up function */
-#define IOCON_PIO_OPENDRAIN_DI 0x00u  /*!<@brief Open drain is disabled */
-#define IOCON_PIO_SLEW_STANDARD 0x00u /*!<@brief Standard mode, output slew rate control is enabled */
+/*!
+ * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
+#define PIO0_29_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 1. */
+#define PIO0_29_FUNC_ALT1 0x01u
+/*!
+ * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
+#define PIO0_30_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 1. */
+#define PIO0_30_FUNC_ALT1 0x01u
 
-/*! @name SWO (number 21), J9[1]/U18[12]/N4M_SWO
+/*! @name FC0_RXD_SDA_MOSI_DATA (number 92), U11[14]/U22[14]/FC0_USART_RXD
+  @{ */
+/* @} */
+
+/*! @name FC0_TXD_SCL_MISO_WS (number 94), U11[13]/U22[13]/FC0_USART_TXD
   @{ */
 /* @} */
 

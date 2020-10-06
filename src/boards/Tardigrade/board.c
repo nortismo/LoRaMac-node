@@ -73,9 +73,9 @@ void BoardInitMcu( void )
         BOARD_InitPins();
         SystemClockConfig( );
 
-        // // Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
-        // UartInit( &Uart2, UART_2, UART_TX, UART_RX );
-        // UartConfig( &Uart2, RX_TX, 921600, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
+        // Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
+        UartInit( &Uart0, UART_1, NC, NC );
+        UartConfig( &Uart0, RX_TX, 115200, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
 
         // RtcInit( );
 
@@ -89,7 +89,7 @@ void BoardInitMcu( void )
 	// SpiInit(&SX126x.Spi, SPI_1, RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN,
 	// RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN);
 	// SX126xIoInit();
-    // 
+    //
 	// if (McuInitialized == false) {
 	// 	McuInitialized = true;
 	// 	SX126xIoDbgInit();
@@ -112,7 +112,7 @@ void BoardDeInitMcu( void )
 }
 
 /**
-  * TODO: Implement random with secure-element 
+  * TODO: Implement random with secure-element
   */
 uint32_t BoardGetRandomSeed( void )
 {
@@ -120,7 +120,7 @@ uint32_t BoardGetRandomSeed( void )
 }
 
 /**
-  * TODO: Implement unique ID with secure-element 
+  * TODO: Implement unique ID with secure-element
   */
 void BoardGetUniqueId( uint8_t *id )
 {
@@ -261,7 +261,6 @@ void BoardLowPowerHandler( void )
   */
 int _write( int fd, const void *buf, size_t count )
 {
-    return count;
     while( UartPutBuffer( &Uart0, ( uint8_t* )buf, ( uint16_t )count ) != 0 ){ };
     return count;
 }
@@ -274,7 +273,6 @@ int _write( int fd, const void *buf, size_t count )
   */
 int _read( int fd, const void *buf, size_t count )
 {
-    return count;
     size_t bytesRead = 0;
     while( UartGetBuffer( &Uart0, ( uint8_t* )buf, count, ( uint16_t* )&bytesRead ) != 0 ){ };
     // Echo back the character
@@ -289,16 +287,16 @@ int _read( int fd, const void *buf, size_t count )
 // Keil compiler
 int fputc( int c, FILE *stream )
 {
-    while( UartPutChar( &Uart2, ( uint8_t )c ) != 0 );
+    while( UartPutChar( &Uart0, ( uint8_t )c ) != 0 );
     return c;
 }
 
 int fgetc( FILE *stream )
 {
     uint8_t c = 0;
-    while( UartGetChar( &Uart2, &c ) != 0 );
+    while( UartGetChar( &Uart0, &c ) != 0 );
     // Echo back the character
-    while( UartPutChar( &Uart2, c ) != 0 );
+    while( UartPutChar( &Uart0, c ) != 0 );
     return ( int )c;
 }
 

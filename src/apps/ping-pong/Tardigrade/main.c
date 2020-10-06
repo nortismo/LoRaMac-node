@@ -11,6 +11,7 @@
  *
  * \author    Diego Bienz
  */
+#include <stdio.h>
 #include <string.h>
 #include "board.h"
 #include "gpio.h"
@@ -164,6 +165,8 @@ int main( void )
     // Target board initialization
     BoardInitMcu( );
     BoardInitPeriph( );
+
+    printf("HELLO FROM TADIGRADE!\r\n");
 
     // Radio initialization
 //    RadioEvents.TxDone = OnTxDone;
