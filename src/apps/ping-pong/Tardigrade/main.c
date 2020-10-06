@@ -8,7 +8,7 @@
  * \author    Miguel Luis ( Semtech )
  *
  * \author    Gregory Cristian ( Semtech )
- * 
+ *
  * \author    Diego Bienz
  */
 #include <string.h>
@@ -161,12 +161,9 @@ int main( void )
     bool isMaster = true;
     uint8_t i;
 
-    for(;;)
-    {}
-
     // Target board initialization
-    // BoardInitMcu( );
-    // BoardInitPeriph( );
+    BoardInitMcu( );
+    BoardInitPeriph( );
 
     // Radio initialization
 //    RadioEvents.TxDone = OnTxDone;
@@ -326,6 +323,10 @@ int main( void )
 //        BoardLowPowerHandler( );
 //
 //    }
+
+    for(;;)
+    {}
+
 }
 
 void OnTxDone( void )

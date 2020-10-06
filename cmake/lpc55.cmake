@@ -15,6 +15,9 @@ message("Linker script: ${LINKER_SCRIPT}")
 # Set compiler/linker flags
 #---------------------------------------------------------------------------------------
 
+# Add static library for power management
+link_libraries("${CMAKE_SOURCE_DIR}/src/boards/Tardigrade/cmsis/arm-gcc/libpower_hardabi.a")
+
 # Object build options
 set(OBJECT_GEN_FLAGS "-Og -g -mthumb -g2 -fno-builtin -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -Wall -Wextra -pedantic -Wno-unused-parameter -ffunction-sections  -fdata-sections -fomit-frame-pointer -mabi=aapcs -fno-unroll-loops -ffast-math -ftree-vectorize")
 

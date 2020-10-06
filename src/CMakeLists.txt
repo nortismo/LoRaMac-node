@@ -186,7 +186,7 @@ elseif(BOARD STREQUAL B-L072Z-LRWAN1)
 
 elseif(BOARD STREQUAL Tardigrade)
     # Configure toolchain for Tardigrade
-    set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/boards/mcu/lpc55/LPC55S16/gcc/LPC55S16_flash.ld)
+    set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/boards/Tardigrade/cmsis/arm-gcc/LPC55S16_flash.ld)
     include(lpc55)
 
     # Build platform specific board implementation
