@@ -130,6 +130,16 @@ extern Gpio_t Led1;
 extern Gpio_t Led2;
 
 /*!
+ * Timer and event for blinking LED
+ */
+#define LED_BLINKING_INTERVAL	1500
+TimerEvent_t blinkTimer;
+void toggleLed(void *context) {
+	GpioToggle(&Led1);
+	TimerStart(&blinkTimer);
+}
+
+/*!
  * \brief Function to be executed on Radio Tx Done event
  */
 void OnTxDone( void );
@@ -166,12 +176,14 @@ int main( void )
     BoardInitMcu( );
     BoardInitPeriph( );
 
+    TimerInit(&blinkTimer, toggleLed);
+    TimerSetValue(&blinkTimer, LED_BLINKING_INTERVAL);
+    TimerStart(&blinkTimer);
+
     while(true){
     	printf("HELLO FROM TADIGRADE!\r\n");
-    	GpioToggle(&Led1);
     	DelayMs(1000);
     }
-
 
     // Radio initialization
 //    RadioEvents.TxDone = OnTxDone;

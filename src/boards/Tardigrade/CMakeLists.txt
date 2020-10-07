@@ -18,7 +18,7 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/uart-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/delay-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/gpio-board.c"
-    # "${CMAKE_CURRENT_SOURCE_DIR}/rtc-board.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/rtc-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/spi-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/sx1262-board.c"
     # "${CMAKE_CURRENT_SOURCE_DIR}/i2c-board.c"
@@ -45,6 +45,8 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_gpio.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_pint.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_inputmux.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_utick.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_rtc.c"
 )
 
 # Set language of startup file

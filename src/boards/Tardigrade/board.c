@@ -18,6 +18,7 @@
 #include "clock_config.h"
 #include "pin_mux.h"
 #include "gpio.h"
+#include "rtc-board.h"
 
 /*!
  * Unique Devices IDs
@@ -99,7 +100,7 @@ void BoardInitMcu( void )
         UartInit( &Uart0, UART_1, NC, NC );
         UartConfig( &Uart0, RX_TX, 115200, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
 
-        // RtcInit( );
+        RtcInit( );
 
         BoardUnusedIoInit( );
     }
