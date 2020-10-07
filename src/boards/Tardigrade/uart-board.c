@@ -20,7 +20,7 @@
 typedef struct {
 	UartId_t id;
 	USART_Type *type;
-	uint32_t clkSrc;
+	uint32_t srcClk;
 	const IRQn_Type irqn;
 	const uint32_t interruptEnable;
 	const uint32_t interruptFlags;
@@ -67,11 +67,11 @@ void UartMcuInit(Uart_t *obj, UartId_t uartId, PinNames tx, PinNames rx) {
 
 #if(LPC_NUMBER_OF_USARTS > 0)
 	if(handle == &UsartHandle0){
-		handle->clkSrc = LPC_USART1_CLK_SRC;
+		handle->srcClk = LPC_USART1_CLK_FRQ;
 	}
 #elif(LPC_NUMBER_OF_USARTS > 1)
 	if(handle == &UsartHandle1){
-		handle->clkSrc = LPC_USART2_CLK_SRC;
+		handle->srcClk = LPC_USART2_CLK_FRQ;
 	}
 #endif
 
@@ -80,7 +80,7 @@ void UartMcuInit(Uart_t *obj, UartId_t uartId, PinNames tx, PinNames rx) {
     config.enableTx     = true;
     config.enableRx     = true;
 
-	USART_Init(handle->type, &config, handle->clkSrc);
+	USART_Init(handle->type, &config, handle->srcClk);
 
 	/* Enable interrupts if there is a callback function */
 	if (obj->IrqNotify != NULL) {
@@ -119,7 +119,7 @@ void UartMcuConfig(Uart_t *obj, UartMode_t mode, uint32_t baudrate,
 		config.parityMode = kUSART_ParityOdd;
 	}
 
-	USART_Init(handle->type, &config, handle->clkSrc);
+	USART_Init(handle->type, &config, handle->srcClk);
 
 	/* Enable interrupts if there is a callback function */
 	if (obj->IrqNotify != NULL) {

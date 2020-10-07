@@ -28,7 +28,7 @@ extern "C"
 
 #if(LPC_NUMBER_OF_USARTS > 0)
 #define LPC_USART1_TYPE                         USART0
-#define LPC_USART1_CLK_SRC                      CLOCK_GetFlexCommClkFreq(0U)
+#define LPC_USART1_CLK_FRQ                      CLOCK_GetFlexCommClkFreq(0U)
 #define LPC_USART1_IRQn                         FLEXCOMM0_IRQn
 #define LPC_USART1_IRQ_HANDLER                  FLEXCOMM0_IRQHandler
 #define LPC_USART1_IRQ_ENABLE                   kUSART_RxLevelInterruptEnable | kUSART_RxErrorInterruptEnable
@@ -37,7 +37,7 @@ extern "C"
 #elif(LPC_NUMER_OF_USARTS > 1)
 // Not used yet
 #define LPC_USART2_TYPE
-#define LPC_USART2_CLK_SRC
+#define LPC_USART2_CLK_FRQ
 #define LPC_USART2_IRQn
 #define LPC_USART2_IRQ_HANDLER
 #define LPC_USART2_IRQ_ENABLE
