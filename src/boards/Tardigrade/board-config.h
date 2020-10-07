@@ -45,6 +45,35 @@ extern "C"
 
 #endif
 
+/**
+ * SPI definitions
+ */
+#define LPC_NUMBER_OF_SPI                       1
+
+#if(LPC_NUMBER_OF_SPI > 0)
+#define LPC_SPI1_TYPE                           SPI2
+#define LPC_SPI1_CLK_FRQ                        CLOCK_GetFlexCommClkFreq(2U)
+#define LPC_SPI1_CONFIG_POLARITY                kSPI_ClockPolarityActiveHigh
+#define LPC_SPI1_CONFIG_PHASE                   kSPI_ClockPhaseFirstEdge
+#define LPC_SPI1_CONFIG_DIRECTION               kSPI_MsbFirst
+#define LPC_SPI1_CONFIG_BAUDRATE                500000U
+#define LPC_SPI1_CONFIG_DATAWIDTH               kSPI_Data8Bits
+#define LPC_SPI1_CONFIG_SS                      kSPI_Ssel0
+#define LPC_SPI1_CONFIG_SPOL                    kSPI_SpolActiveAllLow
+
+#elif(LPC_NUMBER_OF_SPI > 1)
+#define LPC_SPI2_TYPE                           SPI7
+#define LPC_SPI2_CLK_FRQ                        CLOCK_GetFlexCommClkFreq(7U)
+#define LPC_SPI2_CONFIG_POLARITY                kSPI_ClockPolarityActiveHigh
+#define LPC_SPI2_CONFIG_PHASE                   kSPI_ClockPhaseFirstEdge
+#define LPC_SPI2_CONFIG_DIRECTION               kSPI_MsbFirst
+#define LPC_SPI2_CONFIG_BAUDRATE                500000U
+#define LPC_SPI2_CONFIG_DATAWIDTH               kSPI_Data8Bits
+#define LPC_SPI2_CONFIG_SS                      kSPI_Ssel0
+#define LPC_SPI2_CONFIG_SPOL                    kSPI_SpolActiveAllLow
+
+#endif
+
 #ifdef __cplusplus
 }
 #endif
