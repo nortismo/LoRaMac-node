@@ -168,9 +168,9 @@ int main( void )
 
     while(true){
     	printf("HELLO FROM TADIGRADE!\r\n");
+    	GpioToggle(&Led1);
     	DelayMs(1000);
     }
-
 
 
     // Radio initialization

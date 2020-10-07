@@ -37,6 +37,18 @@ void BOARD_InitBootPins(void);
 /*!
  * @brief Selects pin function.: Alternative connection 1. */
 #define PIO0_30_FUNC_ALT1 0x01u
+/*!
+ * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
+#define PIO1_7_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO1_7_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
+#define PIO1_9_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO1_9_FUNC_ALT0 0x00u
 
 /*! @name FC0_RXD_SDA_MOSI_DATA (number 92), U11[14]/U22[14]/FC0_USART_RXD
   @{ */
@@ -45,6 +57,13 @@ void BOARD_InitBootPins(void);
 /*! @name FC0_TXD_SCL_MISO_WS (number 94), U11[13]/U22[13]/FC0_USART_TXD
   @{ */
 /* @} */
+
+/*! @name PIO1_7 (number 9), Q4[G2]/J12[8]/ARD_LEDG_PWM
+  @{ */
+#define BOARD_INITPINS_LED_GREEN_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_INITPINS_LED_GREEN_PORT 1U   /*!<@brief PORT device name: 1U */
+#define BOARD_INITPINS_LED_GREEN_PIN 7U    /*!<@brief 1U pin index: 7 */
+                                           /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
