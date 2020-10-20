@@ -29,6 +29,7 @@
 #define         ID2                                 ( 0x1FFF7594 )
 #define         ID3                                 ( 0x1FFF7594 )
 
+
 /*!
  * Uart object
  */
@@ -42,12 +43,6 @@ Gpio_t SW3;
 void buttonSw3Pressed( void* context ){
 	printf("SW3 was pressed!\r\n");
 }
-
-/**
- * SPI Object for SPI Test
- */
-Gpio_t nss;
-Spi_t Spi;
 
 /*!
  * Initializes the unused GPIO to a know status
@@ -110,24 +105,13 @@ void BoardInitMcu( void )
         SystemClockReConfig( );
     }
 
-    //GpioInit( &nss, PIO1_15, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
-
-	//SpiInit(&Spi, SPI_1, NC, NC, NC, NC);
-
-	//DelayMs(100);
-
-	//GpioWrite(&nss, 0);
-	//SpiInOut(&SX126x.Spi, 0x00);
-	//volatile uint16_t test = SpiInOut(&SX126x.Spi, 0x12);
-	//GpioWrite(&nss, 1);
-
-	// SX126xIoInit();
-    //
-	// if (McuInitialized == false) {
-	// 	McuInitialized = true;
-	// 	SX126xIoDbgInit();
-	// 	SX126xIoTcxoInit();
-	// }
+    SpiInit( &SX126x.Spi, SPI_1, NC, NC, NC, NC );
+    SX126xIoInit( );
+    if (McuInitialized == false) {
+    	McuInitialized = true;
+    	SX126xIoDbgInit();
+    	SX126xIoTcxoInit();
+	}
 }
 
 void BoardResetMcu( void )

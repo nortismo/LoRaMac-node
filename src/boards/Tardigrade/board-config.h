@@ -74,6 +74,17 @@ extern "C"
 
 #endif
 
+
+/**
+ * Radio definitions
+ */
+#define RADIO_NSS_PIN							PIO0_1
+#define RADIO_TCXO_WAKEUP_TIME                  5
+#define RADIO_RESET_PIN							PIO0_25
+#define RADIO_ANT_SWITCH_PIN					PIO0_6
+#define RADIO_BUSY_PIN							PIO0_24
+#define RADIO_DIO_1_PIN							PIO0_28
+
 #ifdef __cplusplus
 }
 #endif
