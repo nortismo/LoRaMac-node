@@ -124,18 +124,12 @@ int8_t SnrValue = 0;
 static RadioEvents_t RadioEvents;
 
 /*!
- * LED GPIO pins objects
- */
-extern Gpio_t Led1;
-extern Gpio_t Led2;
-
-/*!
  * Timer and event for blinking LED
  */
 #define LED_BLINKING_INTERVAL	1500
 TimerEvent_t blinkTimer;
 void toggleLed(void *context) {
-	GpioToggle(&Led1);
+	printf("%ims interrupt!\r\n", LED_BLINKING_INTERVAL);
 	TimerStart(&blinkTimer);
 }
 

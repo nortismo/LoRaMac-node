@@ -19,6 +19,8 @@
 #include "pin_mux.h"
 #include "gpio.h"
 #include "rtc-board.h"
+#include "spi-board.h"
+#include "delay.h"
 
 /*!
  * Unique Devices IDs
@@ -26,11 +28,6 @@
 #define         ID1                                 ( 0x1FFF7590 )
 #define         ID2                                 ( 0x1FFF7594 )
 #define         ID3                                 ( 0x1FFF7594 )
-
-/**
- * LED Objects
- */
-Gpio_t Led1;
 
 /*!
  * Uart object
@@ -45,6 +42,12 @@ Gpio_t SW3;
 void buttonSw3Pressed( void* context ){
 	printf("SW3 was pressed!\r\n");
 }
+
+/**
+ * SPI Object for SPI Test
+ */
+Gpio_t nss;
+Spi_t Spi;
 
 /*!
  * Initializes the unused GPIO to a know status
@@ -90,11 +93,9 @@ void BoardInitMcu( void )
         BOARD_InitPins();
         SystemClockConfig( );
 
-        GpioInit( &Led1, PIO1_7, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
-
         // Example GPIO interrupt using SW3
-        GpioInit( &SW3, PIO1_9, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
-        GpioSetInterrupt(&SW3, IRQ_FALLING_EDGE, IRQ_HIGH_PRIORITY, buttonSw3Pressed);
+        //GpioInit( &SW3, PIO1_9, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
+        //GpioSetInterrupt(&SW3, IRQ_FALLING_EDGE, IRQ_HIGH_PRIORITY, buttonSw3Pressed);
 
         // Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
         UartInit( &Uart0, UART_1, NC, NC );
@@ -109,8 +110,17 @@ void BoardInitMcu( void )
         SystemClockReConfig( );
     }
 
-	// SpiInit(&SX126x.Spi, SPI_1, RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN,
-	// RADIO_SPI_FAKE_PIN, RADIO_SPI_FAKE_PIN);
+    //GpioInit( &nss, PIO1_15, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
+
+	//SpiInit(&Spi, SPI_1, NC, NC, NC, NC);
+
+	//DelayMs(100);
+
+	//GpioWrite(&nss, 0);
+	//SpiInOut(&SX126x.Spi, 0x00);
+	//volatile uint16_t test = SpiInOut(&SX126x.Spi, 0x12);
+	//GpioWrite(&nss, 1);
+
 	// SX126xIoInit();
     //
 	// if (McuInitialized == false) {
