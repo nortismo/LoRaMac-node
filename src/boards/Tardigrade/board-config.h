@@ -58,8 +58,8 @@ extern "C"
 #define LPC_SPI1_CONFIG_DATAWIDTH               kSPI_Data8Bits
 #define LPC_SPI1_CONFIG_SS                      kSPI_Ssel0
 #define LPC_SPI1_CONFIG_SPOL                    kSPI_SpolActiveAllLow
-
-#elif(LPC_NUMBER_OF_SPI > 1)
+#endif
+#if(LPC_NUMBER_OF_SPI > 1)
 #define LPC_SPI2_TYPE                           SPI7
 #define LPC_SPI2_CLK_FRQ                        CLOCK_GetFlexCommClkFreq(7U)
 #define LPC_SPI2_CONFIG_POLARITY                kSPI_ClockPolarityActiveHigh

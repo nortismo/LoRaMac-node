@@ -36,18 +36,11 @@ static lpcSpiHandle_t spiHandle0 = {
 	.id = SPI_1,
 	.type = LPC_SPI1_TYPE,
 };
-
-#elif(LPC_NUMBER_OF_SPI > 1)
+#endif
+#if(LPC_NUMBER_OF_SPI > 1)
 static lpcSpiHandle_t spiHandle1 = {
 	.id = SPI_2,
 	.type = LPC_SPI2_TYPE,
-    .masterConfig.polarity = LPC_SPI2_CONFIG_POLARITY,
-    .masterConfig.phase = LPC_SPI2_CONFIG_PHASE,
-    .masterConfig.direction = LPC_SPI2_CONFIG_DIRECTION,
-    .masterConfig.baudRate_Bps = LPC_SPI2_CONFIG_BAUDRATE,
-    .masterConfig.dataWidth = LPC_SPI2_CONFIG_DATAWIDTH,
-	.masterConfig.sselNum = LPC_SPI2_CONFIG_SS,
-    .masterConfig.sselPol = LPC_SPI2_CONFIG_SPOL
 };
 #endif
 
@@ -77,7 +70,8 @@ void SpiInit(Spi_t *obj, SpiId_t spiId, PinNames mosi, PinNames miso,
 		handle->masterConfig.sselNum = LPC_SPI1_CONFIG_SS;
 		handle->masterConfig.sselPol = LPC_SPI1_CONFIG_SPOL;
 	}
-#elif(LPC_NUMBER_OF_SPI > 1)
+#endif
+#if(LPC_NUMBER_OF_SPI > 1)
 	if(handle == &spiHandle1){
 		handle->srcClk = LPC_SPI2_CLK_FRQ;
 		SPI_MasterGetDefaultConfig(&(handle->masterConfig));
@@ -136,7 +130,8 @@ static void MapSpiIdToHandle(SpiId_t spiId, lpcSpiHandle_t **handle) {
 	if(spiHandle0.id == spiId){
 		*handle = &spiHandle0;
 	}
-#elif(LPC_NUMBER_OF_USARTS > 1)
+#endif
+#if(LPC_NUMBER_OF_SPI > 1)
 	if(spiHandle1.id == spiId){
 		*handle = &spiHandle1;
 	}
