@@ -51,8 +51,8 @@ extern "C"
 #define LPC_NUMBER_OF_SPI                       1
 
 #if(LPC_NUMBER_OF_SPI > 0)
-#define LPC_SPI1_TYPE                           SPI2
-#define LPC_SPI1_CLK_FRQ                        CLOCK_GetFlexCommClkFreq(2U)
+#define LPC_SPI1_TYPE                           SPI1
+#define LPC_SPI1_CLK_FRQ                        CLOCK_GetFlexCommClkFreq(1U)
 #define LPC_SPI1_CONFIG_POLARITY                kSPI_ClockPolarityActiveHigh
 #define LPC_SPI1_CONFIG_PHASE                   kSPI_ClockPhaseFirstEdge
 #define LPC_SPI1_CONFIG_DIRECTION               kSPI_MsbFirst

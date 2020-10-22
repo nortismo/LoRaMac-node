@@ -46,6 +46,7 @@ void SX126xIoInit( void )
     GpioInit( &SX126x.Spi.Nss, RADIO_NSS_PIN, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
     GpioInit( &SX126x.BUSY, RADIO_BUSY_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
     GpioInit( &SX126x.DIO1, RADIO_DIO_1_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
+    SX126xReset();
 }
 
 void SX126xIoIrqInit( DioIrqHandler dioIrq )
@@ -69,7 +70,7 @@ void SX126xIoTcxoInit( void )
 {
     CalibrationParams_t calibParam;
 
-    SX126xSetDio3AsTcxoCtrl( TCXO_CTRL_1_7V, SX126xGetBoardTcxoWakeupTime( ) << 6 ); // convert from ms to SX126x time base
+    SX126xSetDio3AsTcxoCtrl( TCXO_CTRL_1_8V, SX126xGetBoardTcxoWakeupTime( ) << 6 ); // convert from ms to SX126x time base
     calibParam.Value = 0x7F;
     SX126xCalibrate( calibParam );
 }

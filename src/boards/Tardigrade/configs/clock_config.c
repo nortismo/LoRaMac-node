@@ -21,7 +21,7 @@ product: Clocks v7.0
 processor: LPC55S16
 package_id: LPC55S16JBD64
 mcu_data: ksdk2_0
-processor_version: 7.0.0
+processor_version: 8.0.3
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 
@@ -61,7 +61,6 @@ outputs:
 - {id: FXCOM2_clock.outFreq, value: 12 MHz}
 - {id: System_clock.outFreq, value: 12 MHz}
 - {id: UTICK_clock.outFreq, value: 1 MHz}
-- {id: WDT_clock.outFreq, value: 1 MHz}
 settings:
 - {id: SYSCON.FCCLKSEL2.sel, value: ANACTRL.fro_12m_clk}
 - {id: SYSCON_CLOCK_CTRL_FRO1MHZ_CLK_ENA_CFG, value: Enabled}
@@ -96,18 +95,10 @@ void BOARD_BootClockRUN(void)
 
     /*!< Set up dividers */
     CLOCK_SetClkDiv(kCLOCK_DivAhbClk, 1U, false);         /*!< Set AHBCLKDIV divider to value 1 */
-    CLOCK_SetClkDiv(kCLOCK_DivArmTrClkDiv, 0U, true);               /*!< Reset TRACECLKDIV divider counter and halt it */
-    CLOCK_SetClkDiv(kCLOCK_DivArmTrClkDiv, 1U, false);         /*!< Set TRACECLKDIV divider to value 1 */
-    CLOCK_SetClkDiv(kCLOCK_DivSystickClk0, 0U, true);               /*!< Reset SYSTICKCLKDIV0 divider counter and halt it */
-    CLOCK_SetClkDiv(kCLOCK_DivSystickClk0, 1U, false);         /*!< Set SYSTICKCLKDIV0 divider to value 1 */
+    CLOCK_SetClkDiv(kCLOCK_DivAhbClk, 0U, true);               /*!< Reset AHBCLKDIV divider counter and halt it */
+    CLOCK_SetClkDiv(kCLOCK_DivAhbClk, 1U, false);         /*!< Set AHBCLKDIV divider to value 1 */
     CLOCK_SetClkDiv(kCLOCK_DivFlexFrg2, 0U, true);               /*!< Reset FRGCTRL2_DIV divider counter and halt it */
     CLOCK_SetClkDiv(kCLOCK_DivFlexFrg2, 256U, false);         /*!< Set FRGCTRL2_DIV divider to value 256 */
-    CLOCK_SetClkDiv(kCLOCK_DivWdtClk, 0U, true);               /*!< Reset WDTCLKDIV divider counter and halt it */
-    CLOCK_SetClkDiv(kCLOCK_DivWdtClk, 1U, false);         /*!< Set WDTCLKDIV divider to value 1 */
-    CLOCK_SetClkDiv(kCLOCK_DivFro1mClk, 0U, true);               /*!< Reset FRO1MDIV divider counter and halt it */
-    CLOCK_SetClkDiv(kCLOCK_DivFro1mClk, 32U, false);         /*!< Set FRO1MDIV divider to value 32 */
-    CLOCK_SetClkDiv(kCLOCK_DivCanClk, 0U, true);               /*!< Reset CANCLKDIV divider counter and halt it */
-    CLOCK_SetClkDiv(kCLOCK_DivCanClk, 1U, false);         /*!< Set CANCLKDIV divider to value 1 */
 
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO12M */

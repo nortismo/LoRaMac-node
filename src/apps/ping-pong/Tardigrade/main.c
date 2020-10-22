@@ -124,16 +124,6 @@ int8_t SnrValue = 0;
 static RadioEvents_t RadioEvents;
 
 /*!
- * Timer and event for blinking LED
- */
-#define SAMPLE_INTERRUPT_INTERVAL	1500
-TimerEvent_t sampleTimer;
-void toggleLed(void *context) {
-	printf("%ims interrupt!\r\n", SAMPLE_INTERRUPT_INTERVAL);
-	TimerStart(&sampleTimer);
-}
-
-/*!
  * \brief Function to be executed on Radio Tx Done event
  */
 void OnTxDone( void );
@@ -164,17 +154,17 @@ void OnRxError( void );
 int main( void )
 {
     bool isMaster = true;
-    uint8_t i;
+    uint8_t i = 0;
 
     // Target board initialization
     BoardInitMcu( );
     BoardInitPeriph( );
 
-    TimerInit(&sampleTimer, toggleLed);
-    TimerSetValue(&sampleTimer, SAMPLE_INTERRUPT_INTERVAL);
-    TimerStart(&sampleTimer);
-
-    printf("HELLO FROM TADIGRADE!\r\n");
+    // Stay in this loop, because power supply for sending LoRa messages is insufficient
+    while(true){
+    	printf("HELLO #%i FROM TADIGRADE!\r\n", i++);
+    	DelayMs(1000);
+    }
 
     // Radio initialization
 	RadioEvents.TxDone = OnTxDone;

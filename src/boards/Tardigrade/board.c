@@ -35,15 +35,6 @@
  */
 Uart_t Uart0;
 
-/**
- * Interrupt Example / Test
- */
-Gpio_t SW3;
-
-void buttonSw3Pressed( void* context ){
-	printf("SW3 was pressed!\r\n");
-}
-
 /*!
  * Initializes the unused GPIO to a know status
  */
@@ -87,10 +78,6 @@ void BoardInitMcu( void )
     {
         BOARD_InitPins();
         SystemClockConfig( );
-
-        // Example GPIO interrupt using SW3
-        //GpioInit( &SW3, PIO1_9, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
-        //GpioSetInterrupt(&SW3, IRQ_FALLING_EDGE, IRQ_HIGH_PRIORITY, buttonSw3Pressed);
 
         // Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
         UartInit( &Uart0, UART_1, NC, NC );
