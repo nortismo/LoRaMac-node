@@ -21,6 +21,7 @@
 #include "rtc-board.h"
 #include "spi-board.h"
 #include "delay.h"
+#include "gps.h"
 
 /*!
  * Unique Devices IDs
@@ -33,7 +34,8 @@
 /*!
  * Uart object
  */
-Uart_t Uart0;
+Uart_t Uart0;  // Board Uart
+Uart_t Uart1;  // GPS
 
 /*!
  * Initializes the unused GPIO to a know status
@@ -69,7 +71,7 @@ void BoardCriticalSectionEnd( uint32_t *mask )
 
 void BoardInitPeriph( void )
 {
-
+	GpsInit();
 }
 
 void BoardInitMcu( void )

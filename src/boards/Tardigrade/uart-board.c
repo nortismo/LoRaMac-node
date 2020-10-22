@@ -39,8 +39,8 @@ static lpcUartHandle_t UsartHandle0 = {
 	.interruptEnable = LPC_USART1_IRQ_ENABLE,
 	.interruptFlags = LPC_USART1_IRQ_FLAGS
 };
-
-#elif(LPC_NUMER_OF_USARTS > 1)
+#endif
+#if(LPC_NUMBER_OF_USARTS > 1)
 static lpcUartHandle_t UsartHandle1 = {
 	.id = UART_2,
 	.type = LPC_USART2_TYPE,
@@ -69,7 +69,8 @@ void UartMcuInit(Uart_t *obj, UartId_t uartId, PinNames tx, PinNames rx) {
 	if(handle == &UsartHandle0){
 		handle->srcClk = LPC_USART1_CLK_FRQ;
 	}
-#elif(LPC_NUMBER_OF_USARTS > 1)
+#endif
+#if(LPC_NUMBER_OF_USARTS > 1)
 	if(handle == &UsartHandle1){
 		handle->srcClk = LPC_USART2_CLK_FRQ;
 	}
@@ -190,7 +191,8 @@ static void MapUartIdToHandle(UartId_t uartId, lpcUartHandle_t **handle) {
 	if(UsartHandle0.id == uartId){
 		*handle = &UsartHandle0;
 	}
-#elif(LPC_NUMBER_OF_USARTS > 1)
+#endif
+#if(LPC_NUMBER_OF_USARTS > 1)
 	if(UsartHandle1.id == uartId){
 		*handle = &UsartHandle1;
 	}
@@ -212,7 +214,8 @@ void LPC_USART1_IRQ_HANDLER(void) {
 	}
 }
 
-#elif(LPC_NUMBER_OF_USARTS > 1)
+#endif
+#if(LPC_NUMBER_OF_USARTS > 1)
 void LPC_USART2_IRQ_HANDLER(void) {
 	uint32_t irqs = USART_GetStatusFlags(UsartHandle1.type);
 	if (UsartHandle1.interruptFlags & irqs) {
