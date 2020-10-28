@@ -207,9 +207,11 @@ int main( void )
                     &appVersion,
                     &gitHubVersion );
 
+
+    printf( "Initializing LoRa MAC layer...\r\n\r\n" );
     if ( LmHandlerInit( &LmHandlerCallbacks, &LmHandlerParams ) != LORAMAC_HANDLER_SUCCESS )
     {
-        printf( "LoRaMac wasn't properly initialized" );
+        printf( "LoRaMac wasn't properly initialized\r\n" );
         // Fatal error, endless loop.
         while ( 1 )
         {
