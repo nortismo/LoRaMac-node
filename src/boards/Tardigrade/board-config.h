@@ -72,6 +72,23 @@ extern "C"
 
 #endif
 
+/**
+ * I2C definitions
+ */
+#define LPC_NUMBER_OF_I2C                       1
+
+#if(LPC_NUMBER_OF_I2C > 0)
+#define LPC_I2C1_TYPE                           I2C2
+#define LPC_I2C1_CLK_FRQ                        12000000
+#define LPC_I2C1_BAUDRATE                       100000
+#define LPC_I2C1_SLAVE_ADDR_SIZE                I2C_ADDR_SIZE_8
+#endif
+#if(LPC_NUMBER_OF_I2C > 1)
+#define LPC_I2C2_TYPE                           I2C2
+#define LPC_I2C2_CLK_FRQ                        12000000
+#define LPC_I2C2_BAUDRATE                       100000
+#define LPC_I2C2_SLAVE_ADDR_SIZE                I2C_ADDR_SIZE_8
+#endif
 
 /**
  * Radio definitions

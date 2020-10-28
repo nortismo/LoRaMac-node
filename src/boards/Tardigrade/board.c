@@ -22,6 +22,7 @@
 #include "spi-board.h"
 #include "delay.h"
 #include "gps.h"
+#include "i2c-board.h"
 
 /*!
  * Unique Devices IDs
@@ -32,10 +33,15 @@
 
 
 /*!
- * Uart object
+ * Uart objects
  */
 Uart_t Uart0;  // Board Uart
 Uart_t Uart1;  // GPS
+
+/*!
+ * I2c objects
+ */
+I2c_t I2c0;  // Secure Element
 
 /*!
  * Initializes the unused GPIO to a know status
@@ -93,7 +99,7 @@ void BoardInitMcu( void )
     {
         SystemClockReConfig( );
     }
-
+    //SPI for LoRa transceiver
     SpiInit( &SX126x.Spi, SPI_1, NC, NC, NC, NC );
     SX126xIoInit( );
     if (McuInitialized == false) {
@@ -101,6 +107,8 @@ void BoardInitMcu( void )
     	SX126xIoDbgInit();
     	SX126xIoTcxoInit();
 	}
+    //I2C for Secure Element
+    I2cInit(&I2c0, I2C_1, NC, NC);
 }
 
 void BoardResetMcu( void )
