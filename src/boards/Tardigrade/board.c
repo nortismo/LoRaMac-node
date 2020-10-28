@@ -23,6 +23,7 @@
 #include "delay.h"
 #include "gps.h"
 #include "i2c-board.h"
+#include "eeprom-board.h"
 
 /*!
  * Unique Devices IDs
@@ -62,6 +63,20 @@ static void SystemClockReConfig( void );
  * Flag to indicate if the MCU is Initialized
  */
 static bool McuInitialized = false;
+
+/*!
+ * \brief Initializes the EEPROM emulation driver to access the flash.
+ *
+ * \remark This function is defined in eeprom-board.c file
+ */
+void EepromMcuInit( void );
+
+/*!
+ * \brief Get the UUID from the eeprom driver.
+ *
+ * \remark This function is defined in eeprom-board.c file
+ */
+void EepromMcuGetUuid( uint8_t *uuid  );
 
 void BoardCriticalSectionBegin( uint32_t *mask )
 {
@@ -109,6 +124,8 @@ void BoardInitMcu( void )
 	}
     //I2C for Secure Element
     I2cInit(&I2c0, I2C_1, NC, NC);
+
+    EepromMcuInit();
 }
 
 void BoardResetMcu( void )
@@ -125,27 +142,35 @@ void BoardDeInitMcu( void )
 	//SX126xIoDeInit();
 }
 
-/**
-  * TODO: Implement random with secure-element
-  */
 uint32_t BoardGetRandomSeed( void )
 {
-    return ( ( *( uint32_t* )ID1 ) ^ ( *( uint32_t* )ID2 ) ^ ( *( uint32_t* )ID3 ) );
+	uint32_t seed[4];
+	uint8_t uuid[16];
+	BoardGetUniqueId(uuid);
+
+	seed[0] = 0;
+	for(int i = 0; i < 4; i++){
+		seed[0] += uuid[i] << 8*i;
+	}
+	seed[1] = 0;
+	for(int i = 0; i < 4; i++){
+		seed[1] += uuid[i+4] << 8*i;
+	}
+	seed[2] = 0;
+	for(int i = 0; i < 4; i++){
+		seed[2] += uuid[i+8] << 8*i;
+	}
+	seed[3] = 0;
+	for(int i = 0; i < 4; i++){
+		seed[3] += uuid[i+12] << 8*i;
+	}
+
+    return seed[0] ^ seed[1] ^ seed[2] ^ seed[3];
 }
 
-/**
-  * TODO: Implement unique ID with secure-element
-  */
 void BoardGetUniqueId( uint8_t *id )
 {
-    id[7] = ( ( *( uint32_t* )ID1 )+ ( *( uint32_t* )ID3 ) ) >> 24;
-    id[6] = ( ( *( uint32_t* )ID1 )+ ( *( uint32_t* )ID3 ) ) >> 16;
-    id[5] = ( ( *( uint32_t* )ID1 )+ ( *( uint32_t* )ID3 ) ) >> 8;
-    id[4] = ( ( *( uint32_t* )ID1 )+ ( *( uint32_t* )ID3 ) );
-    id[3] = ( ( *( uint32_t* )ID2 ) ) >> 24;
-    id[2] = ( ( *( uint32_t* )ID2 ) ) >> 16;
-    id[1] = ( ( *( uint32_t* )ID2 ) ) >> 8;
-    id[0] = ( ( *( uint32_t* )ID2 ) );
+	EepromMcuGetUuid(id);
 }
 
 /**

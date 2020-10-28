@@ -8,6 +8,7 @@
  * \author    Diego Bienz
  */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include "../firmwareVersion.h"
 #include "../../common/githubVersion.h"
@@ -207,8 +208,18 @@ int main( void )
                     &appVersion,
                     &gitHubVersion );
 
+    // Printing Board UUID
+    uint8_t* uuid;
+    uuid = (uint8_t*) malloc (16* sizeof(uint8_t));
+    BoardGetUniqueId(uuid);
+    printf( "######   Board UUID: ");
+    for( int i = 0; i < 16; i++ )
+    {
+        printf( "%X", uuid[i] );
+    }
+    printf("   ######\r\n\r\n");
+    free(uuid);
 
-    printf( "Initializing LoRa MAC layer...\r\n\r\n" );
     if ( LmHandlerInit( &LmHandlerCallbacks, &LmHandlerParams ) != LORAMAC_HANDLER_SUCCESS )
     {
         printf( "LoRaMac wasn't properly initialized\r\n" );
