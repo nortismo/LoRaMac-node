@@ -270,9 +270,6 @@ void BoardLowPowerHandler( void )
 /*
  * Function to be used by stdout for printf etc
  */
-/**
-  * TODO: Implement Uart to be able to use write
-  */
 int _write( int fd, const void *buf, size_t count )
 {
     while( UartPutBuffer( &Uart0, ( uint8_t* )buf, ( uint16_t )count ) != 0 ){ };
@@ -282,9 +279,6 @@ int _write( int fd, const void *buf, size_t count )
 /*
  * Function to be used by stdin for scanf etc
  */
-/**
-  * TODO: Implement Uart to be able to use read
-  */
 int _read( int fd, const void *buf, size_t count )
 {
     size_t bytesRead = 0;
