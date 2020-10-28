@@ -150,7 +150,7 @@ ATCA_STATUS hal_i2c_send(ATCAIface iface, uint8_t *txdata, int txlength)
 {
 
     txdata[0] = 0x3;
-    if (I2cMcuWriteBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0x3, txdata+1, (size_t)txlength) == 0)
+    if (I2cMcuWriteBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0x3, txdata+1, (size_t)txlength) == 1)
     {
         return ATCA_SUCCESS;
     }
@@ -176,12 +176,12 @@ ATCA_STATUS hal_i2c_receive(ATCAIface iface, uint8_t *rxdata, uint16_t *rxlength
     uint8_t lengthPackage[1] = {0};
     int r = -1;
     int retries = iface->mIfaceCFG->rx_retries;
-    while (--retries > 0 && r != 0)
+    while (--retries > 0 && r != 1)
     {
         r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0x3, lengthPackage, 1);
     }
 
-    if (r != 0)
+    if (r != 1)
     {
         return ATCA_RX_TIMEOUT;
     }
@@ -199,12 +199,12 @@ ATCA_STATUS hal_i2c_receive(ATCAIface iface, uint8_t *rxdata, uint16_t *rxlength
 
     r = -1;
     retries = iface->mIfaceCFG->rx_retries;
-    while (--retries > 0 && r != 0)
+    while (--retries > 0 && r != 1)
     {
         r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0x3, rxdata, bytesToRead);
     }
 
-    if (r != 0)
+    if (r != 1)
     {
         return ATCA_RX_TIMEOUT;
     }
@@ -243,7 +243,7 @@ ATCA_STATUS hal_i2c_wake(ATCAIface iface)
     // 4. Read from normal slave_address
     r = -1;
     int retries = iface->mIfaceCFG->rx_retries;
-    while (--retries > 0 && r != 0)
+    while (--retries > 0 && r != 1)
     {
         r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0, rx_buffer, 4);
     }
@@ -271,7 +271,7 @@ ATCA_STATUS hal_i2c_wake(ATCAIface iface)
 ATCA_STATUS hal_i2c_idle(ATCAIface iface)
 {
     uint8_t buffer[1] = { 0x2 }; // idle word address value 
-    I2cMcuWriteBuffer((I2c_t*)NULL, iface->mIfaceCFG->atcai2c.slave_address,0, buffer, (size_t)1); 
+    I2cMcuWriteBuffer((I2c_t*)NULL, iface->mIfaceCFG->atcai2c.slave_address,0x2, buffer, (size_t)1);
     return ATCA_SUCCESS;
 }
 
@@ -283,7 +283,7 @@ ATCA_STATUS hal_i2c_idle(ATCAIface iface)
 ATCA_STATUS hal_i2c_sleep(ATCAIface iface)
 {
     uint8_t buffer[1] = { 0x1 };  // sleep word address value 
-    I2cMcuWriteBuffer((I2c_t*)NULL, iface->mIfaceCFG->atcai2c.slave_address,0, buffer, (size_t)1); 
+    I2cMcuWriteBuffer((I2c_t*)NULL, iface->mIfaceCFG->atcai2c.slave_address,0x1, buffer, (size_t)1);
     return ATCA_SUCCESS;
 }
 
