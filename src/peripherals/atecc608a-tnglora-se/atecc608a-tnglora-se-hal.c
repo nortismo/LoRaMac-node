@@ -150,8 +150,7 @@ ATCA_STATUS hal_i2c_send(ATCAIface iface, uint8_t *txdata, int txlength)
 {
 
     txdata[0] = 0x3;
-    txlength++;
-    if (I2cMcuWriteBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0, txdata, (size_t)txlength) == 1)
+    if (I2cMcuWriteBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0x3, txdata+1, (size_t)txlength) == 0)
     {
         return ATCA_SUCCESS;
     }
@@ -177,17 +176,17 @@ ATCA_STATUS hal_i2c_receive(ATCAIface iface, uint8_t *rxdata, uint16_t *rxlength
     uint8_t lengthPackage[1] = {0};
     int r = -1;
     int retries = iface->mIfaceCFG->rx_retries;
-    while (--retries > 0 && r != 1)
+    while (--retries > 0 && r != 0)
     {
-        r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0, lengthPackage, 1);
+        r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0x3, lengthPackage, 1);
     }
 
-    if (r != 1)
+    if (r != 0)
     {
         return ATCA_RX_TIMEOUT;
     }
 
-    uint8_t bytesToRead = lengthPackage[0] - 1;
+    uint8_t bytesToRead = lengthPackage[0];
 
     if (bytesToRead > *rxlength)
     {
@@ -200,12 +199,12 @@ ATCA_STATUS hal_i2c_receive(ATCAIface iface, uint8_t *rxdata, uint16_t *rxlength
 
     r = -1;
     retries = iface->mIfaceCFG->rx_retries;
-    while (--retries > 0 && r != 1)
+    while (--retries > 0 && r != 0)
     {
-        r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0, rxdata + 1, bytesToRead);
+        r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0x3, rxdata, bytesToRead);
     }
 
-    if (r != 1)
+    if (r != 0)
     {
         return ATCA_RX_TIMEOUT;
     }
@@ -244,7 +243,7 @@ ATCA_STATUS hal_i2c_wake(ATCAIface iface)
     // 4. Read from normal slave_address
     r = -1;
     int retries = iface->mIfaceCFG->rx_retries;
-    while (--retries > 0 && r != 1)
+    while (--retries > 0 && r != 0)
     {
         r = I2cMcuReadBuffer((I2c_t *)NULL, iface->mIfaceCFG->atcai2c.slave_address, 0, rx_buffer, 4);
     }
