@@ -12,6 +12,7 @@
 #include "i2c-board.h"
 #include "i2c.h"
 #include "fsl_i2c.h"
+#include "utilities.h"
 
 typedef struct {
 	I2cId_t id;
@@ -103,6 +104,7 @@ void I2cSetAddrSize(I2c_t *obj, I2cAddrSize addrSize) {
 
 uint8_t I2cMcuWriteBuffer(I2c_t *obj, uint8_t deviceAddr, uint16_t addr,
 		uint8_t *buffer, uint16_t size) {
+	uint8_t status = FAIL;
 	lpcI2cHandle_t *handle;
 	MapI2cIdToHandle(obj->I2cId, &handle);
 
@@ -114,11 +116,13 @@ uint8_t I2cMcuWriteBuffer(I2c_t *obj, uint8_t deviceAddr, uint16_t addr,
 	handle->masterXfer.dataSize = size;
 	handle->masterXfer.flags = kI2C_TransferDefaultFlag;
 
-	return I2C_MasterTransferBlocking(handle->type, &(handle->masterXfer));
+	status = (I2C_MasterTransferBlocking(handle->type, &(handle->masterXfer)) == kStatus_Success ) ? SUCCESS : FAIL;
+	return status;
 }
 
 uint8_t I2cMcuReadBuffer(I2c_t *obj, uint8_t deviceAddr, uint16_t addr,
 		uint8_t *buffer, uint16_t size) {
+	uint8_t status = FAIL;
 	lpcI2cHandle_t *handle;
 	MapI2cIdToHandle(obj->I2cId, &handle);
 
@@ -130,12 +134,13 @@ uint8_t I2cMcuReadBuffer(I2c_t *obj, uint8_t deviceAddr, uint16_t addr,
 	handle->masterXfer.dataSize = size;
 	handle->masterXfer.flags = kI2C_TransferDefaultFlag;
 
-	return I2C_MasterTransferBlocking(handle->type, &(handle->masterXfer));
+	status = (I2C_MasterTransferBlocking(handle->type, &(handle->masterXfer)) == kStatus_Success ) ? SUCCESS : FAIL;
+	return status;
 }
 
 uint8_t I2cMcuWaitStandbyState(I2c_t *obj, uint8_t deviceAddr) {
 	/* Function not implemented -> Always returns successfully */
-	return 1;
+	return SUCCESS;
 }
 
 /*!
