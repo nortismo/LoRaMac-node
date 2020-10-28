@@ -40,6 +40,7 @@
 #include "secure-element.h"
 #include "se-identity.h"
 #include "atecc608a-tnglora-se-hal.h"
+#include "delay.h"
 
 /*!
  * Number of supported crypto keys
@@ -314,11 +315,13 @@ SecureElementStatus_t SecureElementInit( SecureElementNvmEvent seNvmCtxChanged )
         return SECURE_ELEMENT_ERROR;
     }
 
+    DelayMs(1500);
     if( atcab_read_devEUI( SeNvmCtx.DevEui ) != ATCA_SUCCESS )
     {
         return SECURE_ELEMENT_ERROR;
     }
 
+    DelayMs(1500);
     if( atcab_read_joinEUI( SeNvmCtx.JoinEui ) != ATCA_SUCCESS )
     {
         return SECURE_ELEMENT_ERROR;
