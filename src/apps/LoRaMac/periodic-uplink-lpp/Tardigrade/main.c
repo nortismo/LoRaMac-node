@@ -140,6 +140,11 @@ static void OnPingSlotPeriodicityChanged( uint8_t pingSlotPeriodicity );
  */
 static void OnTxTimerEvent( void* context );
 
+/*!
+ * Function to print the UUID of the board
+ */
+static void PrintUUID(void);
+
 static LmHandlerCallbacks_t LmHandlerCallbacks =
 {
     .GetBatteryLevel = BoardGetBatteryLevel,
@@ -208,17 +213,7 @@ int main( void )
                     &appVersion,
                     &gitHubVersion );
 
-    // Printing Board UUID
-    uint8_t* uuid;
-    uuid = (uint8_t*) malloc (16* sizeof(uint8_t));
-    BoardGetUniqueId(uuid);
-    printf( "######   Board UUID: ");
-    for( int i = 0; i < 16; i++ )
-    {
-        printf( "%X", uuid[i] );
-    }
-    printf("   ######\r\n\r\n");
-    free(uuid);
+    PrintUUID( );
 
     if ( LmHandlerInit( &LmHandlerCallbacks, &LmHandlerParams ) != LORAMAC_HANDLER_SUCCESS )
     {
@@ -454,4 +449,17 @@ static void OnTxTimerEvent( void* context )
     // Schedule next transmission
     TimerSetValue( &TxTimer, TxPeriodicity );
     TimerStart( &TxTimer );
+}
+
+static void PrintUUID(void){
+    uint8_t* uuid;
+    uuid = (uint8_t*) malloc (16* sizeof(uint8_t));
+    BoardGetUniqueId(uuid);
+    printf( "######   Board UUID: ");
+    for( int i = 0; i < 16; i++ )
+    {
+        printf( "%X", uuid[i] );
+    }
+    printf("   ######\r\n\r\n");
+    free(uuid);
 }

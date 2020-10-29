@@ -13,12 +13,12 @@
 #include "rtc-board.h"
 #include "lpm-board.h"
 #include "timer.h"
-#include "fsl_utick.h"
+#include "fsl_ctimer.h"
 #include "fsl_rtc.h"
 
-static bool alarmPending = false;
-static uint32_t milisecondCounts = 0;
-static uint32_t alarmCount = 0;
+#define CTIMER          			CTIMER0  /* Timer 0 */
+#define CTIMER_CLK_FREQ 			CLOCK_GetCTimerClkFreq(0U)
+#define CTIMER_MATCH_OUT	 		kCTIMER_Match_0
 
 /*!
  * RTC timer context
@@ -34,20 +34,27 @@ typedef struct {
  */
 static RtcTimerContext_t RtcTimerContext;
 
+static ctimer_config_t config;
+static ctimer_match_config_t matchConfig;
+
 /*!
- * Override of the RTC IRQ handler.
+ * Callback for the ctimer match
  */
-void RtcUtickIrqHandler(void);
+void CTIMER_Callback(uint32_t flags);
+
+/* Array of function pointers for callback for each channel */
+ctimer_callback_t ctimer_callback_table[] = {
+		CTIMER_Callback, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 /**
  * TODO: Implement possibility to set time from GNSS
- * TODO: Driver is probably not safe while sleeping or deep power mode
  */
 void RtcInit(void) {
 
-	/* UTICK initialization */
-	UTICK_Init(UTICK0);
-	UTICK_SetTick(UTICK0, kUTICK_Repeat, RtcMs2Tick(1), RtcUtickIrqHandler);
+	CTIMER_GetDefaultConfig(&config);
+	CTIMER_Init(CTIMER, &config);
+
+	CTIMER_RegisterCallBack(CTIMER, &ctimer_callback_table[0], kCTIMER_SingleCallback);
 
 	/* RTC initialization */
 	RTC_Init(RTC);
@@ -78,11 +85,11 @@ uint32_t RtcGetMinimumTimeout(void) {
 }
 
 uint32_t RtcMs2Tick(TimerTime_t milliseconds) {
-	return MSEC_TO_COUNT(milliseconds, CLOCK_GetFro1MFreq());
+	return MSEC_TO_COUNT(milliseconds, CTIMER_CLK_FREQ);
 }
 
 TimerTime_t RtcTick2Ms(uint32_t tick) {
-	return COUNT_TO_MSEC(tick, CLOCK_GetFro1MFreq());
+	return COUNT_TO_MSEC(tick, CTIMER_CLK_FREQ);
 }
 
 void RtcDelayMs(TimerTime_t milliseconds) {
@@ -102,8 +109,8 @@ void RtcSetAlarm(uint32_t timeout) {
 }
 
 void RtcStopAlarm(void) {
-	alarmPending = false;
 	LpmSetStopMode(LPM_RTC_ID, LPM_ENABLE);
+	CTIMER_StopTimer(CTIMER);
 }
 
 void RtcStartAlarm(uint32_t timeout) {
@@ -112,8 +119,16 @@ void RtcStartAlarm(uint32_t timeout) {
 	RtcStopAlarm();
 	LpmSetStopMode(LPM_RTC_ID, LPM_DISABLE);
 
-	alarmCount = milisecondCounts + RtcTick2Ms(timeout);
-	alarmPending = true;
+    /* Configuration 0 */
+	matchConfig.enableCounterReset = false;
+	matchConfig.enableCounterStop  = false;
+	matchConfig.matchValue         = timeout + RtcGetTimerValue();
+	matchConfig.outControl         = kCTIMER_Output_Toggle;
+	matchConfig.outPinInitState    = false;
+	matchConfig.enableInterrupt    = true;
+
+    CTIMER_SetupMatch(CTIMER, CTIMER_MATCH_OUT, &matchConfig);
+    CTIMER_StartTimer(CTIMER);
 
 	CRITICAL_SECTION_END();
 }
@@ -140,7 +155,7 @@ uint32_t RtcGetCalendarTime(uint16_t *milliseconds) {
 }
 
 uint32_t RtcGetTimerValue(void) {
-	return RtcMs2Tick(milisecondCounts);
+	return CTIMER_GetTimerCountValue(CTIMER);
 }
 
 uint32_t RtcGetTimerElapsedTime(void) {
@@ -173,12 +188,7 @@ TimerTime_t RtcTempCompensation(TimerTime_t period, float temperature) {
 	return period;
 }
 
-void RtcUtickIrqHandler(void) {
-	/* Clear alarm flag */
-	UTICK_ClearStatusFlags(UTICK0);
-	milisecondCounts++;
-	if (alarmPending && milisecondCounts >= alarmCount) {
-		RtcStopAlarm();
-		TimerIrqHandler();
-	}
+void CTIMER_Callback(uint32_t flags){
+	RtcStopAlarm();
+	TimerIrqHandler();
 }

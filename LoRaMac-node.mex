@@ -197,16 +197,16 @@
                   <clock_source id="SYSCON.fro_1m.outFreq" value="1 MHz" locked="false" enabled="false"/>
                </clock_sources>
                <clock_outputs>
+                  <clock_output id="CTIMER0_clock.outFreq" value="1 MHz" locked="false" accuracy=""/>
                   <clock_output id="FRO_12MHz_clock.outFreq" value="12 MHz" locked="false" accuracy=""/>
                   <clock_output id="FRO_1MHz_clock.outFreq" value="1 MHz" locked="false" accuracy=""/>
                   <clock_output id="FXCOM2_clock.outFreq" value="12 MHz" locked="false" accuracy=""/>
                   <clock_output id="System_clock.outFreq" value="12 MHz" locked="false" accuracy=""/>
-                  <clock_output id="UTICK_clock.outFreq" value="1 MHz" locked="false" accuracy=""/>
                </clock_outputs>
                <clock_settings>
+                  <setting id="SYSCON.CTIMERCLKSEL0.sel" value="SYSCON.fro_1m" locked="false"/>
                   <setting id="SYSCON.FCCLKSEL2.sel" value="ANACTRL.fro_12m_clk" locked="false"/>
                   <setting id="SYSCON_CLOCK_CTRL_FRO1MHZ_CLK_ENA_CFG" value="Enabled" locked="false"/>
-                  <setting id="UTICK_EN_CFG" value="Enable" locked="false"/>
                </clock_settings>
                <called_from_default_init>true</called_from_default_init>
             </clock_configuration>

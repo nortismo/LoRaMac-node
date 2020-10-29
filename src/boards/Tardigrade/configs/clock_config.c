@@ -56,15 +56,15 @@ void BOARD_InitBootClocks(void)
 name: BOARD_BootClockRUN
 called_from_default_init: true
 outputs:
+- {id: CTIMER0_clock.outFreq, value: 1 MHz}
 - {id: FRO_12MHz_clock.outFreq, value: 12 MHz}
 - {id: FRO_1MHz_clock.outFreq, value: 1 MHz}
 - {id: FXCOM2_clock.outFreq, value: 12 MHz}
 - {id: System_clock.outFreq, value: 12 MHz}
-- {id: UTICK_clock.outFreq, value: 1 MHz}
 settings:
+- {id: SYSCON.CTIMERCLKSEL0.sel, value: SYSCON.fro_1m}
 - {id: SYSCON.FCCLKSEL2.sel, value: ANACTRL.fro_12m_clk}
 - {id: SYSCON_CLOCK_CTRL_FRO1MHZ_CLK_ENA_CFG, value: Enabled}
-- {id: UTICK_EN_CFG, value: Enable}
 sources:
 - {id: SYSCON.fro_1m.outFreq, value: 1 MHz}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
@@ -88,8 +88,6 @@ void BOARD_BootClockRUN(void)
     /*!< Configure fro_1m */
     SYSCON->CLOCK_CTRL |=  SYSCON_CLOCK_CTRL_FRO1MHZ_CLK_ENA_MASK;                 /*!< Ensure fro_1m is on */
 
-    SYSCON->CLOCK_CTRL |= SYSCON_CLOCK_CTRL_FRO1MHZ_UTICK_ENA_MASK;               /* The FRO 1 MHz clock to UTICK is enabled. */
-
     POWER_SetVoltageForFreq(12000000U);                  /*!< Set voltage for the one of the fastest clock outputs: System clock output */
     CLOCK_SetFLASHAccessCyclesForFreq(12000000U);          /*!< Set FLASH wait states for core */
 
@@ -103,6 +101,7 @@ void BOARD_BootClockRUN(void)
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO12M */
     CLOCK_AttachClk(kFRO12M_to_FLEXCOMM2);                 /*!< Switch FLEXCOMM2 to FRO12M */
+    CLOCK_AttachClk(kFRO1M_to_CTIMER0);                 /*!< Switch CTIMER0 to FRO1M */
 
     /*< Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
