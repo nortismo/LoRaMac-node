@@ -237,5 +237,7 @@ static void GetIrqFromGpio(irq_t** irq, Gpio_t* gpio){
 
 void GpioIrqCallback(pint_pin_int_t pintr, uint32_t pmatch_status){
 	Gpio_t* gpio = interruptPins[pintr].usedBy;
-	gpio->IrqHandler(gpio->Context);
+	if(gpio->IrqHandler != NULL){
+		gpio->IrqHandler(gpio->Context);
+	}
 }
