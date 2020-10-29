@@ -14,6 +14,7 @@
 #include "fsl_iap.h"
 
 flash_config_t flashInstance;
+bool ErasingOnGoing = false;
 
 /*!
  * \brief Initializes the EEPROM emulation module.
@@ -32,6 +33,16 @@ void EepromMcuInit( void ){
 
 void EepromMcuGetUuid( uint8_t *uuid ){
 	FFR_GetUUID(&flashInstance, uuid);
+}
+
+/*!
+ * \brief Indicates if an erasing operation is on going.
+ *
+ * \retval isEradingOnGoing Returns true is an erasing operation is on going.
+ */
+bool EepromMcuIsErasingOnGoing( void )
+{
+    return ErasingOnGoing;
 }
 
 uint8_t EepromMcuWriteBuffer( uint16_t addr, uint8_t *buffer, uint16_t size )

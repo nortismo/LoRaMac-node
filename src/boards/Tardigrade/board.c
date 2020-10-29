@@ -19,19 +19,37 @@
 #include "pin_mux.h"
 #include "gpio.h"
 #include "rtc-board.h"
-#include "spi-board.h"
+#include "spi.h"
 #include "delay.h"
 #include "gps.h"
-#include "i2c-board.h"
+#include "i2c.h"
+#include "lpm-board.h"
 #include "eeprom-board.h"
+#include "fsl_power.h"
 
 /*!
- * Unique Devices IDs
+ * LPC Sleep modes
+ * SLEEP_MODE is used as normal sleep mode
+ * DEEP_SLEEP_MODE is used as stop mode
  */
-#define         ID1                                 ( 0x1FFF7590 )
-#define         ID2                                 ( 0x1FFF7594 )
-#define         ID3                                 ( 0x1FFF7594 )
+typedef enum {
+	SLEEP_MODE,				// CPU is stopped, instructions are suspended, peripherals are working
+	DEEP_SLEEP_MODE			// Additionally to sleep: Flash is powered down, peripheral clocks are turned off but can be turned on by software
+} lpcSleepModes;
 
+/*!
+ * LPC Power Down modes
+ * Both can be used as off mode, by selecting the mode with the variable 'selectedOffMode'
+ */
+typedef enum {
+	POWER_DOWN_MODE,		// CPU state is retained but power turned off, peripheral clocks are turned off but can be turned on by software, SRAM can be retained
+	DEEP_POWER_DOWN_MODE	// Power is turned off to the entire chip except RTC power domain, SRAM can be retained
+} lpcPowerDownModes;
+
+/*!
+ * Selection which power down mode should be used for off mode
+ */
+static lpcPowerDownModes selectedOffMode = POWER_DOWN_MODE;
 
 /*!
  * Uart objects
@@ -76,7 +94,16 @@ void EepromMcuInit( void );
  *
  * \remark This function is defined in eeprom-board.c file
  */
+
 void EepromMcuGetUuid( uint8_t *uuid  );
+/*!
+ * \brief Indicates if an erasing operation is on going.
+ *
+ * \remark This function is defined in eeprom-board.c file
+ *
+ * \retval isEradingOnGoing Returns true is an erasing operation is on going.
+ */
+bool EepromMcuIsErasingOnGoing( void );
 
 void BoardCriticalSectionBegin( uint32_t *mask )
 {
@@ -121,11 +148,15 @@ void BoardInitMcu( void )
     	McuInitialized = true;
     	SX126xIoDbgInit();
     	SX126xIoTcxoInit();
+    	SX126xReset();
 	}
     //I2C for Secure Element
     I2cInit(&I2c0, I2C_1, NC, NC);
 
     EepromMcuInit();
+
+    // Disabling Off mode, because it is not implemented yet
+    LpmSetOffMode( LPM_APPLI_ID, LPM_DISABLE );
 }
 
 void BoardResetMcu( void )
@@ -139,6 +170,7 @@ void BoardResetMcu( void )
 void BoardDeInitMcu( void )
 {
 	SpiDeInit(&SX126x.Spi);
+	I2cDeInit(&I2c0);
 	SX126xIoDeInit();
 }
 
@@ -238,35 +270,23 @@ uint8_t GetBoardPowerSource( void )
   *
   * \note ARM exits the function when waking up
   */
-/**
-  * TODO: Implement Lpm
-  */
 void LpmEnterStopMode( void)
 {
-    // CRITICAL_SECTION_BEGIN( );
-    //
-    // BoardDeInitMcu( );
-    //
-    // CRITICAL_SECTION_END( );
-    //
-    // Enter Stop Mode
+	// TODO: For debug purposes. Can be removed later
+	printf("Going to Deep Sleep!\r\n");
+
+    // Enter Deep Sleep Mode
+    POWER_EnterDeepSleep(BOARD_EXCLUDE_FROM_DEEPSLEEP, BOARD_SRAM_RETENTION_IN_DEEPSLEEP, BOARD_WAKEUP_INTERRUPTS, 0);
 }
 
 /*!
  * \brief Exits Low Power Stop Mode
  */
-/**
-  * TODO: Implement Lpm
-  */
 void LpmExitStopMode( void )
 {
-    // Disable IRQ while the MCU is not running on HSI
-    // CRITICAL_SECTION_BEGIN( );
-    //
-    // Initilizes the peripherals
-    // BoardInitMcu( );
-    //
-    // CRITICAL_SECTION_END( );
+    CRITICAL_SECTION_BEGIN( );
+    SystemClockReConfig();
+    CRITICAL_SECTION_END( );
 }
 
 /*!
@@ -274,20 +294,25 @@ void LpmExitStopMode( void )
  *
  * \note ARM exits the function when waking up
  */
-/**
-  * TODO: Implement Sleep
-  */
 void LpmEnterSleepMode( void)
 {
-
+	POWER_EnterSleep();
 }
 
-/**
-  * TODO: Implement Low Power Handler
-  */
 void BoardLowPowerHandler( void )
 {
+    // Wait for any cleanup to complete before entering standby/shutdown mode
+    while( EepromMcuIsErasingOnGoing( ) == true ){ }
 
+    __disable_irq( );
+    /*!
+     * If an interrupt has occurred after __disable_irq( ), it is kept pending
+     * and cortex will not enter low power anyway
+     */
+
+    LpmEnterLowPower( );
+
+    __enable_irq( );
 }
 
 #if !defined ( __CC_ARM )

@@ -11,6 +11,7 @@
 #include "board.h"
 #include "board-config.h"
 #include "rtc-board.h"
+#include "lpm-board.h"
 #include "timer.h"
 #include "fsl_utick.h"
 #include "fsl_rtc.h"
@@ -102,12 +103,14 @@ void RtcSetAlarm(uint32_t timeout) {
 
 void RtcStopAlarm(void) {
 	alarmPending = false;
+	LpmSetStopMode(LPM_RTC_ID, LPM_ENABLE);
 }
 
 void RtcStartAlarm(uint32_t timeout) {
 
 	CRITICAL_SECTION_BEGIN();
 	RtcStopAlarm();
+	LpmSetStopMode(LPM_RTC_ID, LPM_DISABLE);
 
 	alarmCount = milisecondCounts + RtcTick2Ms(timeout);
 	alarmPending = true;
