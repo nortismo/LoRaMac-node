@@ -16,6 +16,7 @@
 #include "gps-board.h"
 #include "string.h"
 #include "delay.h"
+#include "lpm-board.h"
 
 /*!
  * Pin and Uart definition
@@ -67,6 +68,9 @@ void GpsMcuInit(void) {
 
 	GpioInit(&gpsPpsPin, GNSS_PPS_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
 	GpioSetInterrupt(&gpsPpsPin, IRQ_FALLING_EDGE, IRQ_VERY_LOW_PRIORITY, &GpsMcuOnPpsSignal);
+
+	/* Disable stop mode, so interrupts from GPS can fire an event */
+	LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
 }
 
 void GpsMcuStart(void) {
@@ -78,7 +82,8 @@ void GpsMcuStop(void) {
 }
 
 void GpsMcuProcess(void) {
-	/* The processing is based on the PPS interrupt */
+	/* Disable stop mode, so interrupts from GPS can fire an event */
+	LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
 }
 
 void GpsMcuIrqNotify(UartNotifyId_t id) {
@@ -95,6 +100,7 @@ void GpsMcuIrqNotify(UartNotifyId_t id) {
 				NmeaString[NmeaStringSize++] = '\0';
 				GpsParseGpsData((int8_t*) NmeaString, NmeaStringSize);
 				UartDeInit(&Uart1);
+				LpmSetStopMode(LPM_GPS_ID, LPM_ENABLE);
 			}
 		}
 	}
