@@ -272,9 +272,6 @@ uint8_t GetBoardPowerSource( void )
   */
 void LpmEnterStopMode( void)
 {
-	// TODO: For debug purposes. Can be removed later
-	printf("Going to Deep Sleep!\r\n");
-
     // Enter Deep Sleep Mode
     POWER_EnterDeepSleep(BOARD_EXCLUDE_FROM_DEEPSLEEP, BOARD_SRAM_RETENTION_IN_DEEPSLEEP, BOARD_WAKEUP_INTERRUPTS, 0);
 }

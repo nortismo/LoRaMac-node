@@ -109,7 +109,7 @@ void RtcSetAlarm(uint32_t timeout) {
 }
 
 void RtcStopAlarm(void) {
-	LpmSetStopMode(LPM_RTC_ID, LPM_ENABLE);
+	LpmSetOffMode(LPM_RTC_ID, LPM_ENABLE);
 	CTIMER_StopTimer(CTIMER);
 }
 
@@ -117,7 +117,7 @@ void RtcStartAlarm(uint32_t timeout) {
 
 	CRITICAL_SECTION_BEGIN();
 	RtcStopAlarm();
-	LpmSetStopMode(LPM_RTC_ID, LPM_DISABLE);
+	LpmSetOffMode(LPM_RTC_ID, LPM_DISABLE);
 
     /* Configuration 0 */
 	matchConfig.enableCounterReset = false;
