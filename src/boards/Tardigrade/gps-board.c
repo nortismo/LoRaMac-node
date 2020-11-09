@@ -18,6 +18,12 @@
 #include "delay.h"
 #include "lpm-board.h"
 
+#define DATA_PARSING_RETRIES	10
+/*!
+ * Retries for parsing of the nmea string
+ */
+static uint8_t retry = DATA_PARSING_RETRIES;
+
 /*!
  * Pin and Uart definition
  */
@@ -44,6 +50,7 @@ void GpsMcuOnPpsSignal(void *context) {
 		/* If data should be parsed, enabled uart and wait for receving the gps info */
 		UartInit(&Uart1, UART_2, NC, NC);
 		UartConfig(&Uart1, RX_TX, GNSS_UART_BAUDRATE, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL);
+		LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
 	}
 }
 
@@ -98,9 +105,11 @@ void GpsMcuIrqNotify(UartNotifyId_t id) {
 
 			if (data == '\n') {
 				NmeaString[NmeaStringSize++] = '\0';
-				GpsParseGpsData((int8_t*) NmeaString, NmeaStringSize);
-				UartDeInit(&Uart1);
-				LpmSetStopMode(LPM_GPS_ID, LPM_ENABLE);
+				if(retry-- <= 0 && GpsParseGpsData((int8_t*) NmeaString, NmeaStringSize)){
+					UartDeInit(&Uart1);
+					LpmSetStopMode(LPM_GPS_ID, LPM_ENABLE);
+					retry = DATA_PARSING_RETRIES;
+				}
 			}
 		}
 	}
