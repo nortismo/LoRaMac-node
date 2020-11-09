@@ -126,7 +126,7 @@ uint16_t SpiInOut(Spi_t *obj, uint16_t outData) {
   */
 static void MapSpiIdToHandle(SpiId_t spiId, lpcSpiHandle_t **handle) {
 
-#if(LPC_NUMBER_OF_USARTS > 0)
+#if(LPC_NUMBER_OF_SPI > 0)
 	if(spiHandle0.id == spiId){
 		*handle = &spiHandle0;
 	}
