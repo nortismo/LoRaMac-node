@@ -23,6 +23,7 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/sx1262-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/gps-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/i2c-board.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/adc-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/eeprom-board.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/lpm-board.c"
 
@@ -51,6 +52,7 @@ list(APPEND ${PROJECT_NAME}_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_iap.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_power.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_ctimer.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../mcu/lpc55/LPC55S16/drivers/fsl_lpadc.c"
 )
 
 # Set language of startup file

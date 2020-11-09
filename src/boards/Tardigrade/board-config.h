@@ -91,6 +91,14 @@ extern "C"
 #endif
 
 /**
+ * ADC definitions
+ */
+#define LPC_ADC1_TYPE							ADC0
+#define LPC_ADC1_VREF_SRC						kLPADC_ReferenceVoltageAlt2
+#define LPC_ADC1_DO_OFFSET_CALIBRATION			true
+#define LPC_ADC1_USE_HIGH_RESOLUTION			true
+
+/**
  * Radio definitions
  */
 #define RADIO_NSS_PIN							PIO0_1
