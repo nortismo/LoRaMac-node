@@ -13,13 +13,12 @@
 #include "rtc-board.h"
 #include "lpm-board.h"
 #include "timer.h"
-#include "fsl_ctimer.h"
 #include "fsl_rtc.h"
+#include "fsl_ostimer.h"
+#include "fsl_power.h"
 
-#define CTIMER          			CTIMER0  /* Timer 0 */
-#define CTIMER_CLK_FREQ 			CLOCK_GetCTimerClkFreq(0U)
-#define CTIMER_MATCH_OUT	 		kCTIMER_Match_0
-
+#define OSTIMER_REF					OSTIMER
+#define OSTIMER_CLK_FREQ        	32768
 /*!
  * RTC timer context
  */
@@ -34,27 +33,20 @@ typedef struct {
  */
 static RtcTimerContext_t RtcTimerContext;
 
-static ctimer_config_t config;
-static ctimer_match_config_t matchConfig;
+static bool PendingAlarm = false;
 
 /*!
- * Callback for the ctimer match
+ * Callback function for the OS Timer
  */
-void CTIMER_Callback(uint32_t flags);
-
-/* Array of function pointers for callback for each channel */
-ctimer_callback_t ctimer_callback_table[] = {
-		CTIMER_Callback, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+void RtcOSTimerCallback(void);
 
 /**
  * TODO: Implement possibility to set time from GNSS
  */
 void RtcInit(void) {
 
-	CTIMER_GetDefaultConfig(&config);
-	CTIMER_Init(CTIMER, &config);
-
-	CTIMER_RegisterCallBack(CTIMER, &ctimer_callback_table[0], kCTIMER_SingleCallback);
+	/* OS Timer initialization */
+	OSTIMER_Init(OSTIMER_REF);
 
 	/* RTC initialization */
 	RTC_Init(RTC);
@@ -85,11 +77,11 @@ uint32_t RtcGetMinimumTimeout(void) {
 }
 
 uint32_t RtcMs2Tick(TimerTime_t milliseconds) {
-	return MSEC_TO_COUNT(milliseconds, CTIMER_CLK_FREQ);
+	return MSEC_TO_COUNT(milliseconds, OSTIMER_CLK_FREQ);
 }
 
 TimerTime_t RtcTick2Ms(uint32_t tick) {
-	return COUNT_TO_MSEC(tick, CTIMER_CLK_FREQ);
+	return COUNT_TO_MSEC(tick, OSTIMER_CLK_FREQ);
 }
 
 void RtcDelayMs(TimerTime_t milliseconds) {
@@ -110,7 +102,7 @@ void RtcSetAlarm(uint32_t timeout) {
 
 void RtcStopAlarm(void) {
 	LpmSetOffMode(LPM_RTC_ID, LPM_ENABLE);
-	CTIMER_StopTimer(CTIMER);
+	PendingAlarm = false;
 }
 
 void RtcStartAlarm(uint32_t timeout) {
@@ -118,17 +110,10 @@ void RtcStartAlarm(uint32_t timeout) {
 	CRITICAL_SECTION_BEGIN();
 	RtcStopAlarm();
 	LpmSetOffMode(LPM_RTC_ID, LPM_DISABLE);
+	PendingAlarm = true;
 
-    /* Configuration 0 */
-	matchConfig.enableCounterReset = false;
-	matchConfig.enableCounterStop  = false;
-	matchConfig.matchValue         = timeout + RtcGetTimerValue();
-	matchConfig.outControl         = kCTIMER_Output_Toggle;
-	matchConfig.outPinInitState    = false;
-	matchConfig.enableInterrupt    = true;
-
-    CTIMER_SetupMatch(CTIMER, CTIMER_MATCH_OUT, &matchConfig);
-    CTIMER_StartTimer(CTIMER);
+    /* Set the match value with unit of ticks. */
+    OSTIMER_SetMatchValue(OSTIMER_REF, timeout + RtcGetTimerValue(), RtcOSTimerCallback);
 
 	CRITICAL_SECTION_END();
 }
@@ -155,7 +140,7 @@ uint32_t RtcGetCalendarTime(uint16_t *milliseconds) {
 }
 
 uint32_t RtcGetTimerValue(void) {
-	return CTIMER_GetTimerCountValue(CTIMER);
+	return OSTIMER_GetCurrentTimerValue(OSTIMER_REF);
 }
 
 uint32_t RtcGetTimerElapsedTime(void) {
@@ -188,7 +173,9 @@ TimerTime_t RtcTempCompensation(TimerTime_t period, float temperature) {
 	return period;
 }
 
-void CTIMER_Callback(uint32_t flags){
-	RtcStopAlarm();
-	TimerIrqHandler();
+void RtcOSTimerCallback(void){
+	if(PendingAlarm){
+		RtcStopAlarm();
+		TimerIrqHandler();
+	}
 }

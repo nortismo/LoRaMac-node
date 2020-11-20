@@ -123,9 +123,9 @@ extern "C"
 												/* kPDRUNCFG_PD_BIAS | */         \
 												/* kPDRUNCFG_PD_BODCORE | */      \
 												/* kPDRUNCFG_PD_BODVBAT | */ 	  \
-												kPDRUNCFG_PD_FRO1M 				  \
+												/* kPDRUNCFG_PD_FRO1M |	*/		  \
 												/* kPDRUNCFG_PD_FRO192M | */      \
-												/* kPDRUNCFG_PD_FRO32K | */       \
+												 kPDRUNCFG_PD_FRO32K         	  \
 												/* kPDRUNCFG_PD_XTAL32K | */      \
 												/* kPDRUNCFG_PD_XTAL32M | */      \
 												/* kPDRUNCFG_PD_PLL0 | */         \
@@ -145,7 +145,7 @@ extern "C"
 												/* kPDRUNCFG_PD_PLL0_SSCG | */    \
 												/* kPDRUNCFG_PD_ROM   */          \
 
-#define BOARD_SRAM_RETENTION_IN_DEEPSLEEP		                                        	  \
+#define BOARD_SRAM_RETENTION_DEEPSLEEP		                                        	  	  \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAMX0 |            \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAMX1 |            \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAMX1 |            \
@@ -156,7 +156,7 @@ extern "C"
 												LOWPOWER_SRAMRETCTRL_RETEN_RAM20 |            \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAM_USB_HS         \
 
-#define BOARD_WAKEUP_INTERRUPTS					                                      \
+#define BOARD_WAKEUP_INTERRUPTS_DEEPSLEEP		                                      \
 												/* WAKEUP_SYS | */                    \
 												/* WAKEUP_SDMA0 | */                  \
 												/* WAKEUP_GPIO_GLOBALINT0 | */        \
@@ -167,7 +167,7 @@ extern "C"
 												/* WAKEUP_GPIO_INT0_3 | */            \
 												/* WAKEUP_UTICK | */                  \
 												/* WAKEUP_MRT | */                    \
-												WAKEUP_CTIMER0                        \
+												/* WAKEUP_CTIMER0 */                  \
 												/* WAKEUP_CTIMER1 | */                \
 												/* WAKEUP_SCT | */                    \
 												/* WAKEUP_CTIMER3 | */                \
@@ -192,7 +192,7 @@ extern "C"
 												/* WAKEUP_GPIO_INT0_7 | */            \
 												/* WAKEUP_CTIMER2 | */                \
 												/* WAKEUP_CTIMER4 | */                \
-												/* WAKEUP_OS_EVENT_TIMER | */         \
+												WAKEUP_OS_EVENT_TIMER 		          \
 												/* WAKEUP_USB1 | */                   \
 												/* WAKEUP_USB1_NEEDCLK | */           \
 												/* WAKEUP_SEC_HYPERVISOR_CALL | */    \
@@ -206,7 +206,6 @@ extern "C"
 												/* WAKEUP_SDMA1 | */                  \
 												/* WAKEUP_LSPI_HS | */                \
 												/* WAKEUP_ALLWAKEUPIOS   */           \
-												
 
 #ifdef __cplusplus
 }
