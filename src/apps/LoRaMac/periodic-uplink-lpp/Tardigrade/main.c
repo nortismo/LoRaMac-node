@@ -15,6 +15,7 @@
 #include "utilities.h"
 #include "board.h"
 #include "gpio.h"
+#include "lpm-board.h"
 
 #include "Commissioning.h"
 #include "LmHandler.h"
@@ -213,6 +214,9 @@ int main( void )
                     &gitHubVersion );
 
     PrintUUID( );
+
+    /* The interrupts of the radio don't work in off mode */
+    LpmSetOffMode(LPM_APPLI_ID, LPM_DISABLE);
 
     if ( LmHandlerInit( &LmHandlerCallbacks, &LmHandlerParams ) != LORAMAC_HANDLER_SUCCESS )
     {

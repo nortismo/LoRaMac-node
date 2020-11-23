@@ -148,7 +148,6 @@ extern "C"
 #define BOARD_SRAM_RETENTION_DEEPSLEEP		                                        	  	  \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAMX0 |            \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAMX1 |            \
-												LOWPOWER_SRAMRETCTRL_RETEN_RAMX1 |            \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAMX2 |            \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAMX3 |            \
 												LOWPOWER_SRAMRETCTRL_RETEN_RAM00 |            \
@@ -206,6 +205,12 @@ extern "C"
 												/* WAKEUP_SDMA1 | */                  \
 												/* WAKEUP_LSPI_HS | */                \
 												/* WAKEUP_ALLWAKEUPIOS   */           \
+												
+#define BOARD_EXCLUDE_FROM_POWERDOWN 			kPDRUNCFG_PD_FRO32K
+
+#define BOARD_WAKEUP_INTERRUPTS_POWERDOWN		WAKEUP_OS_EVENT_TIMER
+
+#define BOARD_SRAM_RETENTION_POWERDOWN			0x7FFF
 
 #ifdef __cplusplus
 }

@@ -28,30 +28,6 @@
 #include "fsl_power.h"
 
 /*!
- * LPC Sleep modes
- * SLEEP_MODE is used as normal sleep mode
- * DEEP_SLEEP_MODE is used as stop mode
- */
-typedef enum {
-	SLEEP_MODE,				// CPU is stopped, instructions are suspended, peripherals are working
-	DEEP_SLEEP_MODE			// Additionally to sleep: Flash is powered down, peripheral clocks are turned off but can be turned on by software
-} lpcSleepModes;
-
-/*!
- * LPC Power Down modes
- * Both can be used as off mode, by selecting the mode with the variable 'selectedOffMode'
- */
-typedef enum {
-	POWER_DOWN_MODE,		// CPU state is retained but power turned off, peripheral clocks are turned off but can be turned on by software, SRAM can be retained
-	DEEP_POWER_DOWN_MODE	// Power is turned off to the entire chip except RTC power domain, SRAM can be retained
-} lpcPowerDownModes;
-
-/*!
- * Selection which power down mode should be used for off mode
- */
-static lpcPowerDownModes selectedOffMode = POWER_DOWN_MODE;
-
-/*!
  * Uart objects
  */
 Uart_t Uart0;  // Board Uart
@@ -76,11 +52,6 @@ static void SystemClockConfig( void );
  * System Clock Re-Configuration when waking up from STOP mode
  */
 static void SystemClockReConfig( void );
-
-/*!
- * Flag to indicate if the MCU is Initialized
- */
-static bool McuInitialized = false;
 
 /*!
  * \brief Initializes the EEPROM emulation driver to access the flash.
@@ -124,39 +95,28 @@ void BoardInitPeriph( void )
 
 void BoardInitMcu( void )
 {
-    if( McuInitialized == false )
-    {
-        BOARD_InitPins();
-        SystemClockConfig( );
+	BOARD_InitPins();
+	SystemClockConfig( );
 
-        // Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
-        UartInit( &Uart0, UART_1, NC, NC );
-        UartConfig( &Uart0, RX_TX, 115200, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
+	// Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
+	UartInit( &Uart0, UART_1, NC, NC );
+	UartConfig( &Uart0, RX_TX, 115200, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
 
-        RtcInit( );
+	RtcInit( );
 
-        BoardUnusedIoInit( );
-    }
-    else
-    {
-        SystemClockReConfig( );
-    }
+	BoardUnusedIoInit( );
+
     //SPI for LoRa transceiver
     SpiInit( &SX126x.Spi, SPI_1, NC, NC, NC, NC );
     SX126xIoInit( );
-    if (McuInitialized == false) {
-    	McuInitialized = true;
-    	SX126xIoDbgInit();
-    	SX126xIoTcxoInit();
-    	SX126xReset();
-	}
+	SX126xIoDbgInit();
+	SX126xIoTcxoInit();
+	SX126xReset();
+
     //I2C for Secure Element
     I2cInit(&I2c0, I2C_1, NC, NC);
 
     EepromMcuInit();
-
-    // Disabling Off mode, because it is not implemented yet
-    LpmSetOffMode( LPM_APPLI_ID, LPM_DISABLE );
 }
 
 void BoardResetMcu( void )
@@ -263,6 +223,21 @@ uint8_t GetBoardPowerSource( void )
     //     return USB_POWER;
     // }
     return USB_POWER;
+}
+
+/*!
+ * \brief Enters off Power Mode
+ */
+void LpmEnterOffMode( void ){
+    POWER_EnterPowerDown(BOARD_EXCLUDE_FROM_POWERDOWN, BOARD_SRAM_RETENTION_POWERDOWN, BOARD_WAKEUP_INTERRUPTS_POWERDOWN, 1);
+}
+
+/*!
+ * \brief Exits off Power Mode
+ */
+void LpmExitOffMode( void ){
+	Uart0.IsInitialized = false;
+	BoardInitMcu();
 }
 
 /**

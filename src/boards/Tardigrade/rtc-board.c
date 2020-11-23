@@ -101,7 +101,6 @@ void RtcSetAlarm(uint32_t timeout) {
 }
 
 void RtcStopAlarm(void) {
-	LpmSetOffMode(LPM_RTC_ID, LPM_ENABLE);
 	PendingAlarm = false;
 }
 
@@ -109,7 +108,6 @@ void RtcStartAlarm(uint32_t timeout) {
 
 	CRITICAL_SECTION_BEGIN();
 	RtcStopAlarm();
-	LpmSetOffMode(LPM_RTC_ID, LPM_DISABLE);
 	PendingAlarm = true;
 
     /* Set the match value with unit of ticks. */
