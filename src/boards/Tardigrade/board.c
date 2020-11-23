@@ -226,6 +226,23 @@ uint8_t GetBoardPowerSource( void )
 }
 
 /*!
+ * \brief Enters the deepest power down mode
+ * A reset is executed automatically on wake up
+ *
+ * IMPORTANT: SRAM retention defines which RAM sections should be retained while deep power down. It is important to place
+ * variables in the retained sections if they are used after wake up from deep power down. One can place a variable
+ * in a specified section as follows:
+ *
+ * bool __attribute__((section ("m_usb_bdt"))) myBool = false;
+ *
+ * While the defined section m_usb_bdt is defined in the linker script.
+ */
+void BoardEnterDeepPowerDown( void ){
+	printf("deeppowerdown\r\n");
+    POWER_EnterDeepPowerDown(BOARD_EXCLUDE_FROM_DEEP_POWERDOWN, BOARD_SRAM_RETENTION_DEEP_POWERDOWN, BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN, 0);
+}
+
+/*!
  * \brief Enters off Power Mode
  */
 void LpmEnterOffMode( void ){

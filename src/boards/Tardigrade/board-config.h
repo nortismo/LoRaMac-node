@@ -212,6 +212,17 @@ extern "C"
 
 #define BOARD_SRAM_RETENTION_POWERDOWN			0x7FFF
 
+#define BOARD_EXCLUDE_FROM_DEEP_POWERDOWN 		kPDRUNCFG_PD_FRO32K
+
+#define BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN	WAKEUP_OS_EVENT_TIMER
+
+#define BOARD_SRAM_RETENTION_DEEP_POWERDOWN	    0                                    	  	  \
+												/* LOWPOWER_SRAMRETCTRL_RETEN_RAMX2 |    */   \
+												/* LOWPOWER_SRAMRETCTRL_RETEN_RAMX3 |    */   \
+												/* LOWPOWER_SRAMRETCTRL_RETEN_RAM10 |    */   \
+												/* LOWPOWER_SRAMRETCTRL_RETEN_RAM20 |    */   \
+												/* LOWPOWER_SRAMRETCTRL_RETEN_RAM_USB_HS */   \
+
 #ifdef __cplusplus
 }
 #endif
