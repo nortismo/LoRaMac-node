@@ -125,8 +125,8 @@ extern "C"
 												/* kPDRUNCFG_PD_BODVBAT | */ 	  \
 												/* kPDRUNCFG_PD_FRO1M |	*/		  \
 												/* kPDRUNCFG_PD_FRO192M | */      \
-												 kPDRUNCFG_PD_FRO32K         	  \
-												/* kPDRUNCFG_PD_XTAL32K | */      \
+												/* kPDRUNCFG_PD_FRO32K  | */   	  \
+												kPDRUNCFG_PD_XTAL32K        	  \
 												/* kPDRUNCFG_PD_XTAL32M | */      \
 												/* kPDRUNCFG_PD_PLL0 | */         \
 												/* kPDRUNCFG_PD_PLL1 | */         \
@@ -206,13 +206,13 @@ extern "C"
 												/* WAKEUP_LSPI_HS | */                \
 												/* WAKEUP_ALLWAKEUPIOS   */           \
 												
-#define BOARD_EXCLUDE_FROM_POWERDOWN 			kPDRUNCFG_PD_FRO32K
+#define BOARD_EXCLUDE_FROM_POWERDOWN 			kPDRUNCFG_PD_XTAL32K
 
 #define BOARD_WAKEUP_INTERRUPTS_POWERDOWN		WAKEUP_OS_EVENT_TIMER
 
 #define BOARD_SRAM_RETENTION_POWERDOWN			0x7FFF
 
-#define BOARD_EXCLUDE_FROM_DEEP_POWERDOWN 		kPDRUNCFG_PD_FRO32K
+#define BOARD_EXCLUDE_FROM_DEEP_POWERDOWN 		kPDRUNCFG_PD_XTAL32K
 
 #define BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN	WAKEUP_OS_EVENT_TIMER
 
