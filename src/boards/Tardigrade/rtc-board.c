@@ -13,6 +13,7 @@
 #include "rtc-board.h"
 #include "lpm-board.h"
 #include "timer.h"
+#include "gps.h"
 #include "fsl_rtc.h"
 #include "fsl_ostimer.h"
 #include "fsl_power.h"
@@ -33,16 +34,36 @@ typedef struct {
  */
 static RtcTimerContext_t RtcTimerContext;
 
+/*!
+ * State if an alarm is pending
+ */
 static bool PendingAlarm = false;
+
+/*!
+ * Date from the last GPS update
+ */
+rtc_datetime_t lastGpsUpdate;
+
+/*!
+ * External Nmea GPS data, stored in gps.c
+ */
+extern NmeaGpsData_t NmeaGpsData;
 
 /*!
  * Callback function for the OS Timer
  */
 void RtcOSTimerCallback(void);
 
-/**
- * TODO: Implement possibility to set time from GNSS
+/*!
+ * Compare two rtc_datetimes and return true if they are the same
  */
+static bool RtcDatetimeEqual(rtc_datetime_t* one, rtc_datetime_t* two);
+
+/*!
+ * Check if the databuffer (either UtcTime or Date) contains valid data
+ */
+static bool IsGpsDateTimeValid(char* dataBuffer);
+
 void RtcInit(void) {
 
 	/* OS Timer initialization */
@@ -50,20 +71,19 @@ void RtcInit(void) {
 
 	/* RTC initialization */
 	RTC_Init(RTC);
-	rtc_datetime_t date;
 
-	date.year = 2020U;
-	date.month = 10U;
-	date.day = 7U;
-	date.hour = 12U;
-	date.minute = 0;
-	date.second = 0;
+	lastGpsUpdate.year = 2020U;
+	lastGpsUpdate.month = 10U;
+	lastGpsUpdate.day = 7U;
+	lastGpsUpdate.hour = 12U;
+	lastGpsUpdate.minute = 0;
+	lastGpsUpdate.second = 0;
 
 	/* RTC time counter has to be stopped before setting the date & time in the TSR register */
 	RTC_EnableTimer(RTC, false);
 
 	/* Set RTC time to default */
-	RTC_SetDatetime(RTC, &date);
+	RTC_SetDatetime(RTC, &lastGpsUpdate);
 
 	/* When working under Normal Mode, the interrupt is controlled by NVIC. */
 	EnableIRQ(RTC_IRQn);
@@ -158,10 +178,26 @@ void RtcBkupRead(uint32_t *data0, uint32_t *data1) {
 }
 
 void RtcProcess(void) {
-	/**
-	  * Not used on this bpard (yet).
-	  * This driver is working with interrupts
-	  */
+	/* Update time from GPS if GPS has fix and the time is valid */
+	if(GpsHasFix() && IsGpsDateTimeValid(NmeaGpsData.NmeaDate) && IsGpsDateTimeValid(NmeaGpsData.NmeaUtcTime)){
+		rtc_datetime_t date;
+
+		date.year = ((uint16_t) (NmeaGpsData.NmeaDate[4] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaDate[5] - 48)) + 2000;
+		date.month = (uint16_t) (NmeaGpsData.NmeaDate[2] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaDate[3] - 48);
+		date.day = (uint16_t) (NmeaGpsData.NmeaDate[0] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaDate[1] - 48);
+		date.hour = (uint16_t) (NmeaGpsData.NmeaUtcTime[0] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaUtcTime[1]  - 48);
+		date.minute =  (uint16_t) (NmeaGpsData.NmeaUtcTime[2]  - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaUtcTime[3]  - 48);
+		date.second = (uint16_t) (NmeaGpsData.NmeaUtcTime[4] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaUtcTime[5]  - 48);
+
+		/* Only update if the last update is not the same */
+		if(RtcDatetimeEqual(&date, &lastGpsUpdate) == false){
+			lastGpsUpdate = date;
+
+			RTC_EnableTimer(RTC, false);
+			RTC_SetDatetime(RTC, &date);
+			RTC_EnableTimer(RTC, true);
+		}
+	}
 }
 
 TimerTime_t RtcTempCompensation(TimerTime_t period, float temperature) {
@@ -176,4 +212,35 @@ void RtcOSTimerCallback(void){
 		RtcStopAlarm();
 		TimerIrqHandler();
 	}
+}
+
+static bool RtcDatetimeEqual(rtc_datetime_t* one, rtc_datetime_t* two){
+	if(one->year != two->year){
+		return false;
+	}
+	if(one->month != two->month){
+		return false;
+	}
+	if(one->day != two->day){
+		return false;
+	}
+	if(one->hour != two->hour){
+		return false;
+	}
+	if(one->minute != two->minute){
+		return false;
+	}
+	if(one->second != two->second){
+		return false;
+	}
+	return true;
+}
+
+static bool IsGpsDateTimeValid(char* dataBuffer){
+	for(int i = 0; i < 6; i++){
+		if(dataBuffer[i] == 0){
+			return false;
+		}
+	}
+	return true;
 }
