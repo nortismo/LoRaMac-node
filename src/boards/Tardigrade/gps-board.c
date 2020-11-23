@@ -50,7 +50,6 @@ void GpsMcuOnPpsSignal(void *context) {
 		/* If data should be parsed, enabled uart and wait for receving the gps info */
 		UartInit(&Uart1, UART_2, NC, NC);
 		UartConfig(&Uart1, RX_TX, GNSS_UART_BAUDRATE, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL);
-		LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
 	}
 }
 
@@ -75,22 +74,24 @@ void GpsMcuInit(void) {
 
 	GpioInit(&gpsPpsPin, GNSS_PPS_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
 	GpioSetInterrupt(&gpsPpsPin, IRQ_FALLING_EDGE, IRQ_VERY_LOW_PRIORITY, &GpsMcuOnPpsSignal);
-
-	/* Disable stop mode, so interrupts from GPS can fire an event */
-	LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
 }
 
 void GpsMcuStart(void) {
 	GpioInit(&gpsResetPin, GNSS_RESET_PIN, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1);
+
+	/* Disable stop mode, so interrupts from GPS can fire an event */
+	LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
 }
 
 void GpsMcuStop(void) {
 	GpioInit(&gpsResetPin, GNSS_RESET_PIN, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0);
+
+	/* Enable stop mode again when GPS is not used anymore */
+	LpmSetStopMode(LPM_GPS_ID, LPM_ENABLE);
 }
 
 void GpsMcuProcess(void) {
-	/* Disable stop mode, so interrupts from GPS can fire an event */
-	LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
+
 }
 
 void GpsMcuIrqNotify(UartNotifyId_t id) {
@@ -107,7 +108,6 @@ void GpsMcuIrqNotify(UartNotifyId_t id) {
 				NmeaString[NmeaStringSize++] = '\0';
 				if(retry-- <= 0 && GpsParseGpsData((int8_t*) NmeaString, NmeaStringSize)){
 					UartDeInit(&Uart1);
-					LpmSetStopMode(LPM_GPS_ID, LPM_ENABLE);
 					retry = DATA_PARSING_RETRIES;
 				}
 			}
