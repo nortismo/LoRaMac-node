@@ -238,7 +238,6 @@ uint8_t GetBoardPowerSource( void )
  * While the defined section m_usb_bdt is defined in the linker script.
  */
 void BoardEnterDeepPowerDown( void ){
-	printf("deeppowerdown\r\n");
     POWER_EnterDeepPowerDown(BOARD_EXCLUDE_FROM_DEEP_POWERDOWN, BOARD_SRAM_RETENTION_DEEP_POWERDOWN, BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN, 0);
 }
 
