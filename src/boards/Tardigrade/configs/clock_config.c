@@ -59,7 +59,7 @@ outputs:
 - {id: FRO_12MHz_clock.outFreq, value: 12 MHz}
 - {id: FRO_1MHz_clock.outFreq, value: 1 MHz}
 - {id: FXCOM0_clock.outFreq, value: 1 MHz}
-- {id: FXCOM2_clock.outFreq, value: 1 MHz}
+- {id: FXCOM7_clock.outFreq, value: 1 MHz}
 - {id: HSUSB1_32K_clock.outFreq, value: 32.768 kHz}
 - {id: OSC32KHZ_clock.outFreq, value: 32.768 kHz}
 - {id: OSTIMER_clock.outFreq, value: 32.768 kHz}
@@ -69,7 +69,7 @@ settings:
 - {id: PMC_PDRUNCFG_PDEN_XTAL32K_CFG, value: Power_up}
 - {id: RTC.RTCOSC32KSEL.sel, value: RTC.XTAL32K}
 - {id: SYSCON.FCCLKSEL0.sel, value: SYSCON.fro_1m}
-- {id: SYSCON.FCCLKSEL2.sel, value: SYSCON.fro_1m}
+- {id: SYSCON.FCCLKSEL7.sel, value: SYSCON.fro_1m}
 - {id: SYSCON_CLOCK_CTRL_FRO1MHZ_CLK_ENA_CFG, value: Enabled}
 sources:
 - {id: RTC.XTAL32K.outFreq, value: 32.768 kHz, enabled: true}
@@ -113,13 +113,13 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetClkDiv(kCLOCK_DivAhbClk, 1U, false);         /*!< Set AHBCLKDIV divider to value 1 */
     CLOCK_SetClkDiv(kCLOCK_DivFlexFrg0, 0U, true);               /*!< Reset FRGCTRL0_DIV divider counter and halt it */
     CLOCK_SetClkDiv(kCLOCK_DivFlexFrg0, 256U, false);         /*!< Set FRGCTRL0_DIV divider to value 256 */
-    CLOCK_SetClkDiv(kCLOCK_DivFlexFrg2, 0U, true);               /*!< Reset FRGCTRL2_DIV divider counter and halt it */
-    CLOCK_SetClkDiv(kCLOCK_DivFlexFrg2, 256U, false);         /*!< Set FRGCTRL2_DIV divider to value 256 */
+    CLOCK_SetClkDiv(kCLOCK_DivFlexFrg7, 0U, true);               /*!< Reset FRGCTRL7_DIV divider counter and halt it */
+    CLOCK_SetClkDiv(kCLOCK_DivFlexFrg7, 256U, false);         /*!< Set FRGCTRL7_DIV divider to value 256 */
 
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to FRO12M */
     CLOCK_AttachClk(kFRO1M_to_FLEXCOMM0);                 /*!< Switch FLEXCOMM0 to FRO1M */
-    CLOCK_AttachClk(kFRO1M_to_FLEXCOMM2);                 /*!< Switch FLEXCOMM2 to FRO1M */
+    CLOCK_AttachClk(kFRO1M_to_FLEXCOMM7);                 /*!< Switch FLEXCOMM7 to FRO1M */
     CLOCK_AttachClk(kOSC32K_to_CLK32K);                 /*!< Switch CLK32K to OSC32K */
     CLOCK_AttachClk(kOSC32K_to_OSTIMER);                 /*!< Switch OSTIMER to OSC32K */
 

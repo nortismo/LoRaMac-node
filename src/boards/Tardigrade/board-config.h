@@ -78,7 +78,7 @@ extern "C"
 #define LPC_NUMBER_OF_I2C                       1
 
 #if(LPC_NUMBER_OF_I2C > 0)
-#define LPC_I2C1_TYPE                           I2C2
+#define LPC_I2C1_TYPE                           I2C7
 #define LPC_I2C1_CLK_FRQ                        12000000
 #define LPC_I2C1_BAUDRATE                       100000
 #define LPC_I2C1_SLAVE_ADDR_SIZE                I2C_ADDR_SIZE_8
@@ -103,16 +103,16 @@ extern "C"
  */
 #define RADIO_NSS_PIN							PIO0_1
 #define RADIO_TCXO_WAKEUP_TIME                  5
-#define RADIO_RESET_PIN							PIO0_25
+#define RADIO_RESET_PIN							PIO0_17
 #define RADIO_ANT_SWITCH_PIN					PIO0_6
-#define RADIO_BUSY_PIN							PIO0_24
+#define RADIO_BUSY_PIN							PIO1_0
 #define RADIO_DIO_1_PIN							PIO0_28
 
 /**
  * GNSS definitions
  */
 #define GNSS_UART_BAUDRATE						9600
-#define GNSS_PPS_PIN							PIO0_0
+#define GNSS_PPS_PIN							PIO0_25
 #define GNSS_RESET_PIN							PIO0_4
 
 /**

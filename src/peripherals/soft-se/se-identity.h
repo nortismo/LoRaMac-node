@@ -71,7 +71,7 @@ extern "C" {
 /*!
  * end-device IEEE EUI (big endian)
  */
-#define LORAWAN_DEVICE_EUI                                 { 0x00, 0x04, 0xA3, 0x10, 0x00, 0x1A, 0xAE, 0x14 }
+#define LORAWAN_DEVICE_EUI                                 { 0x00, 0xE9, 0xDA, 0xBA, 0x41, 0xF4, 0x84, 0x5B }
 
 /*!
  * App/Join server IEEE EUI (big endian)
@@ -88,12 +88,12 @@ extern "C" {
  * When set to 0 DevAddr is automatically set with a value provided by a pseudo
  *      random generator seeded with a value provided by the MCU platform
  */
-#define STATIC_DEVICE_ADDRESS                              0
+#define STATIC_DEVICE_ADDRESS                              1
 
 /*!
  * Device address on the network (big endian)
  */
-#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x00000000
+#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x0b0a33d3
 
 #define SOFT_SE_KEY_LIST                                                                                            \
     {                                                                                                               \
@@ -103,8 +103,8 @@ extern "C" {
              * WARNING: FOR 1.0.x DEVICES IT IS THE \ref LORAWAN_GEN_APP_KEY                                        \
              */                                                                                                     \
             .KeyID    = APP_KEY,                                                                                    \
-            .KeyValue = { 0xE5, 0x82, 0x8C, 0xA1, 0x2A, 0xA5, 0xF8, 0x37, 0x83, 0x0D, 0xBA, 0x0B, 0xF5, 0xF3, 0xE1, \
-            		      0x08 },                                                                                   \
+            .KeyValue = { 0xCB, 0x7F, 0xD1, 0x4D, 0x1E, 0xD4, 0xF2, 0x05, 0xB1, 0x8B, 0x06, 0x46, 0x62, 0x41, 0xD4, \
+            			  0xD3 },                                                                                   \
         },                                                                                                          \
         {                                                                                                           \
             /*!                                                                                                     \
@@ -112,8 +112,8 @@ extern "C" {
              * WARNING: FOR 1.0.x DEVICES IT IS THE \ref LORAWAN_APP_KEY                                            \
              */                                                                                                     \
             .KeyID    = NWK_KEY,                                                                                    \
-            .KeyValue = { 0xE5, 0x82, 0x8C, 0xA1, 0x2A, 0xA5, 0xF8, 0x37, 0x83, 0x0D, 0xBA, 0x0B, 0xF5, 0xF3, 0xE1, \
-            		      0x08 },                                                                                    \
+            .KeyValue = { 0xCB, 0x7F, 0xD1, 0x4D, 0x1E, 0xD4, 0xF2, 0x05, 0xB1, 0x8B, 0x06, 0x46, 0x62, 0x41, 0xD4, \
+            		      0xD3 },                                                                                   \
         },                                                                                                          \
         {                                                                                                           \
             /*!                                                                                                     \
