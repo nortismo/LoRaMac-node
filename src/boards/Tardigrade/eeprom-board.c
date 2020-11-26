@@ -12,6 +12,7 @@
 #include "utilities.h"
 #include "eeprom-board.h"
 #include "fsl_iap.h"
+#include "fsl_iap_ffr.h"
 
 flash_config_t flashInstance;
 bool ErasingOnGoing = false;
