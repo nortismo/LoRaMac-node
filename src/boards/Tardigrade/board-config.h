@@ -113,7 +113,7 @@ extern "C"
  */
 #define GNSS_UART_BAUDRATE						9600
 #define GNSS_PPS_PIN							PIO0_25
-#define GNSS_RESET_PIN							PIO0_4
+#define GNSS_RESET_PIN							PIO0_22
 
 /**
  * Power options
