@@ -23,6 +23,7 @@
 #include "delay.h"
 #include "gps.h"
 #include "i2c.h"
+#include "i2c-board.h"
 #include "lpm-board.h"
 #include "eeprom-board.h"
 #include "fsl_power.h"
@@ -38,6 +39,10 @@ Uart_t Uart1;  // GPS
  */
 I2c_t I2c0;  // Secure Element
 
+/*!
+ * Puts the secure element into sleep mode
+ */
+static void BoardPutSecureElementInSleepMode( void );
 /*!
  * Puts the radio in sleep mode
  * If coldstart enabled, the radio will loose it's configuration
@@ -144,8 +149,9 @@ void BoardDeInitMcu( void )
 	}
 	BoardPutRadioInSleepMode(true);
 	SpiDeInit(&SX126x.Spi);
+
+	BoardPutSecureElementInSleepMode();
 	I2cDeInit(&I2c0);
-	SX126xIoDeInit();
 }
 
 uint32_t BoardGetRandomSeed( void )
@@ -320,11 +326,20 @@ void BoardLowPowerHandler( void )
 
 static void BoardPutRadioInSleepMode(bool coldstart){
     SleepParams_t params = { 0 };
-
     params.Fields.WarmStart = coldstart;
-    SX126xSetSleep( params );
 
-    DelayMs( 2 );
+    SX126xSetSleep( params );
+}
+
+static void BoardPutSecureElementInSleepMode( void ){
+    /* Wake up */
+	uint8_t buffer[1] = {0};
+    I2cMcuWriteBuffer(&I2c0, 0x00, 0, buffer, (size_t)0);
+	DelayMs(100);
+
+	/* Send to sleep */
+    buffer[0] = 0x1;  // sleep word address value
+    I2cMcuWriteBuffer(&I2c0, 0xC0, 0x1, buffer, (size_t)1);
 }
 
 #if !defined ( __CC_ARM )
