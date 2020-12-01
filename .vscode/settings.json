@@ -24,11 +24,11 @@
 
         // Determines the application. You can choose between:
         // LoRaMac (Default), ping-pong, rx-sensi, tx-cw.
-        "APPLICATION":"LoRaMac",
+        "APPLICATION":"Tardigrade-Dev",
 
         // Select LoRaMac sub project. You can choose between:
         // periodic-uplink-lpp, fuota-test-01.
-        "SUB_PROJECT":"periodic-uplink-lpp",
+        "SUB_PROJECT":"energy-mgmt",
 
         // Switch for Class B support of LoRaMac:
         "CLASSB_ENABLED":"ON",

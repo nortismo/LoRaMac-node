@@ -230,4 +230,8 @@ elseif(APPLICATION STREQUAL tx-cw)
 
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/apps/tx-cw)
 
+elseif(APPLICATION STREQUAL Tardigrade-Dev)
+
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/apps/Tardigrade-Dev)
+
 endif()
