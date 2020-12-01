@@ -39,6 +39,12 @@ Uart_t Uart1;  // GPS
 I2c_t I2c0;  // Secure Element
 
 /*!
+ * Puts the radio in sleep mode
+ * If coldstart enabled, the radio will loose it's configuration
+ * and needs to be reinitialised after wake up
+ */
+static void BoardPutRadioInSleepMode(bool coldstart);
+/*!
  * Initializes the unused GPIO to a know status
  */
 static void BoardUnusedIoInit( void );
@@ -136,6 +142,7 @@ void BoardDeInitMcu( void )
 	if(Uart1.IsInitialized) {
 		UartDeInit(&Uart1);
 	}
+	BoardPutRadioInSleepMode(true);
 	SpiDeInit(&SX126x.Spi);
 	I2cDeInit(&I2c0);
 	SX126xIoDeInit();
@@ -309,6 +316,15 @@ void BoardLowPowerHandler( void )
     LpmEnterLowPower( );
 
     __enable_irq( );
+}
+
+static void BoardPutRadioInSleepMode(bool coldstart){
+    SleepParams_t params = { 0 };
+
+    params.Fields.WarmStart = coldstart;
+    SX126xSetSleep( params );
+
+    DelayMs( 2 );
 }
 
 #if !defined ( __CC_ARM )
