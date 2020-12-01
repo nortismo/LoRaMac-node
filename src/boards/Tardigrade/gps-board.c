@@ -24,7 +24,6 @@
  * Retries for parsing of the nmea string
  */
 static uint8_t retry = DATA_PARSING_RETRIES;
-
 /*!
  * Pin and Uart definition
  */
@@ -37,7 +36,6 @@ static Gpio_t gpsResetPin;
  * Pin for the PPS signal of the GPS
  */
 static Gpio_t gpsPpsPin;
-
 /*!
  * Timer used to check when GPS is silent and messages can be sent
  */
@@ -62,7 +60,6 @@ static bool GpsIsSilent = true;
  * Bool to check if stop procedure is ongoing
  */
 static bool StopProcedureOngoing = false;
-
 /*!
  * UBX Message for stop the GPS module (UBX-RXM-PMREQ)
  */
@@ -71,8 +68,12 @@ static const uint8_t ubxPmreqStop[] = {
 		0x62, /* Header */
 		0x02, /* Class */
 		0x41, /* ID */
-		0x08, /* Length (LSB) */
+		0x10, /* Length (LSB) */
 		0x00, /* Length (MSB) */
+		0x00, /* Version */
+		0x00, /* Reserved */
+		0x00, /* Reserved */
+		0x00, /* Reserved */
 		0x00, /* Duration */
 		0x00, /* Duration */
 		0x00, /* Duration */
@@ -81,10 +82,13 @@ static const uint8_t ubxPmreqStop[] = {
 		0x00, /* Flags */
 		0x00, /* Flags */
 		0x00, /* Flags */
-		0x4D, /* CK_A */
-		0x3B, /* CK_B */
+		0x00, /* Wake-Up Sources */
+		0x00, /* Wake-Up Sources */
+		0x00, /* Wake-Up Sources */
+		0x00, /* Wake-Up Sources */
+		0x55, /* CK_A */
+		0x2B, /* CK_B */
 };
-
 /*!
  * \brief Buffer holding the  raw data received from the gps
  */
@@ -155,7 +159,7 @@ void GpsMcuStop(void) {
 	}
 
 	CRITICAL_SECTION_BEGIN( );
-	UartPutBuffer(&Uart1, (uint8_t*) ubxPmreqStop, 16);
+	UartPutBuffer(&Uart1, (uint8_t*) ubxPmreqStop, 24);
 	DelayMs(MILISECONDS_TO_WAIT_FOR_SILENCE);
 	UartDeInit(&Uart1);
 	StopProcedureOngoing = false;
