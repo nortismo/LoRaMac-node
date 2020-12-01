@@ -129,6 +129,13 @@ void BoardResetMcu( void )
 
 void BoardDeInitMcu( void )
 {
+	GpsStop();
+	if(Uart0.IsInitialized) {
+		UartDeInit(&Uart0);
+	}
+	if(Uart1.IsInitialized) {
+		UartDeInit(&Uart1);
+	}
 	SpiDeInit(&SX126x.Spi);
 	I2cDeInit(&I2c0);
 	SX126xIoDeInit();
@@ -238,6 +245,7 @@ uint8_t GetBoardPowerSource( void )
  * While the defined section m_usb_bdt is defined in the linker script.
  */
 void BoardEnterDeepPowerDown( void ){
+	BoardDeInitMcu();
     POWER_EnterDeepPowerDown(BOARD_EXCLUDE_FROM_DEEP_POWERDOWN, BOARD_SRAM_RETENTION_DEEP_POWERDOWN, BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN, 0);
 }
 
