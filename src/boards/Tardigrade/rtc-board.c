@@ -17,9 +17,12 @@
 #include "fsl_rtc.h"
 #include "fsl_ostimer.h"
 #include "fsl_power.h"
+#include "eeprom.h"
 
 #define OSTIMER_REF					OSTIMER
 #define OSTIMER_CLK_FREQ        	32768
+#define BACKUP_FLASH_ADDRESS		64512
+#define BACKUP_SIZE					512
 /*!
  * RTC timer context
  */
@@ -166,38 +169,47 @@ uint32_t RtcGetTimerElapsedTime(void) {
 }
 
 void RtcBkupWrite(uint32_t data0, uint32_t data1) {
-	/**
-	  * Not used on this bpard (yet).
-	  */
+
+	uint8_t flashBackupPage[BACKUP_SIZE];
+
+	/* Save data0 to the first 4 bytes (Big endian) */
+	flashBackupPage[0] = data0 >> 24;
+	flashBackupPage[1] = data0 >> 16;
+	flashBackupPage[2] = data0 >>  8;
+	flashBackupPage[3] = data0;
+
+	/* Save data1 to the second 4 bytes (Big endian) */
+	flashBackupPage[4] = data1 >> 24;
+	flashBackupPage[5] = data1 >> 16;
+	flashBackupPage[6] = data1 >>  8;
+	flashBackupPage[7] = data1;
+
+	EepromWriteBuffer(BACKUP_FLASH_ADDRESS, flashBackupPage, BACKUP_SIZE);
 }
 
 void RtcBkupRead(uint32_t *data0, uint32_t *data1) {
-	/**
-	  * Not used on this bpard (yet).
-	  */
+	uint8_t flashBackupPage[BACKUP_SIZE];
+
+	*data0 = 0;
+	*data1 = 0;
+
+	if(EepromReadBuffer(BACKUP_FLASH_ADDRESS, flashBackupPage, BACKUP_SIZE) == SUCCESS){
+		*data0 = flashBackupPage[0];
+		*data0 = (*data0  << 8) + flashBackupPage[1];
+		*data0 = (*data0  << 8) + flashBackupPage[2];
+		*data0 = (*data0  << 8) + flashBackupPage[3];
+
+		*data1 = flashBackupPage[4];
+		*data1 = (*data1  << 8) + flashBackupPage[5];
+		*data1 = (*data1  << 8) + flashBackupPage[6];
+		*data1 = (*data1  << 8) + flashBackupPage[7];
+	}
 }
 
 void RtcProcess(void) {
-	/* Update time from GPS if GPS has fix and the time is valid */
-	if(GpsHasFix() && IsGpsDateTimeValid(NmeaGpsData.NmeaDate) && IsGpsDateTimeValid(NmeaGpsData.NmeaUtcTime)){
-		rtc_datetime_t date;
-
-		date.year = ((uint16_t) (NmeaGpsData.NmeaDate[4] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaDate[5] - 48)) + 2000;
-		date.month = (uint16_t) (NmeaGpsData.NmeaDate[2] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaDate[3] - 48);
-		date.day = (uint16_t) (NmeaGpsData.NmeaDate[0] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaDate[1] - 48);
-		date.hour = (uint16_t) (NmeaGpsData.NmeaUtcTime[0] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaUtcTime[1]  - 48);
-		date.minute =  (uint16_t) (NmeaGpsData.NmeaUtcTime[2]  - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaUtcTime[3]  - 48);
-		date.second = (uint16_t) (NmeaGpsData.NmeaUtcTime[4] - 48) * 10 + (uint16_t) (NmeaGpsData.NmeaUtcTime[5]  - 48);
-
-		/* Only update if the last update is not the same */
-		if(RtcDatetimeEqual(&date, &lastGpsUpdate) == false){
-			lastGpsUpdate = date;
-
-			RTC_EnableTimer(RTC, false);
-			RTC_SetDatetime(RTC, &date);
-			RTC_EnableTimer(RTC, true);
-		}
-	}
+	/**
+	  * Not used
+	  */
 }
 
 TimerTime_t RtcTempCompensation(TimerTime_t period, float temperature) {
