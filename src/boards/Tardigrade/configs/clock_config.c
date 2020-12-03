@@ -74,7 +74,6 @@ settings:
 sources:
 - {id: RTC.XTAL32K.outFreq, value: 32.768 kHz, enabled: true}
 - {id: RTC.fro_32k.outFreq, value: 32.768 kHz}
-- {id: SYSCON.XTAL32M.outFreq, value: 16 MHz, enabled: true}
 - {id: SYSCON.fro_1m.outFreq, value: 1 MHz}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
