@@ -45,6 +45,11 @@ MEMORY
 /* Define output sections */
 SECTIONS
 {
+  /* This block is retained if you configure to retain LOWPOWER_SRAMRETCTRL_RETEN_RAM20: */
+  .sram2RetetionBlock 0x2000C000 :
+  {
+    KEEP(*(.retainedSection))
+  } > m_data
   /* The startup code goes first into internal flash */
   .interrupts :
   {
