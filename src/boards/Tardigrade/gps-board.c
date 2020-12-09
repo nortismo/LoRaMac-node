@@ -185,7 +185,7 @@ void GpsMcuIrqNotify(UartNotifyId_t id) {
 
 			if (data == '\n') {
 				NmeaString[NmeaStringSize++] = '\0';
-				if(retry-- <= 0 && GpsParseGpsData((int8_t*) NmeaString, NmeaStringSize)){
+				if(GpsParseGpsData((int8_t*) NmeaString, NmeaStringSize) && retry-- <= 0){
 					if(StopProcedureOngoing == false){ /* Check if stop procedure is ongoing */
 						UartDeInit(&Uart1);
 					}
