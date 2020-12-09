@@ -57,16 +57,6 @@ extern NmeaGpsData_t NmeaGpsData;
  */
 void RtcOSTimerCallback(void);
 
-/*!
- * Compare two rtc_datetimes and return true if they are the same
- */
-static bool RtcDatetimeEqual(rtc_datetime_t* one, rtc_datetime_t* two);
-
-/*!
- * Check if the databuffer (either UtcTime or Date) contains valid data
- */
-static bool IsGpsDateTimeValid(char* dataBuffer);
-
 void RtcInit(void) {
 
 	/* OS Timer initialization */
@@ -224,35 +214,4 @@ void RtcOSTimerCallback(void){
 		RtcStopAlarm();
 		TimerIrqHandler();
 	}
-}
-
-static bool RtcDatetimeEqual(rtc_datetime_t* one, rtc_datetime_t* two){
-	if(one->year != two->year){
-		return false;
-	}
-	if(one->month != two->month){
-		return false;
-	}
-	if(one->day != two->day){
-		return false;
-	}
-	if(one->hour != two->hour){
-		return false;
-	}
-	if(one->minute != two->minute){
-		return false;
-	}
-	if(one->second != two->second){
-		return false;
-	}
-	return true;
-}
-
-static bool IsGpsDateTimeValid(char* dataBuffer){
-	for(int i = 0; i < 6; i++){
-		if(dataBuffer[i] == 0){
-			return false;
-		}
-	}
-	return true;
 }
