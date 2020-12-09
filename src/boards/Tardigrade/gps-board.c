@@ -18,8 +18,8 @@
 #include "lpm-board.h"
 #include "timer.h"
 
-#define DATA_PARSING_RETRIES	10
-#define MILISECONDS_TO_WAIT_FOR_SILENCE		200
+#define DATA_PARSING_RETRIES			10
+#define PERIOD_TO_CHECK_GPS_SILENT		300
 /*!
  * Retries for parsing of the nmea string
  */
@@ -39,15 +39,11 @@ static Gpio_t gpsPpsPin;
 /*!
  * Timer used to check when GPS is silent and messages can be sent
  */
-static TimerEvent_t GpsSilentTimer;
+static TimerEvent_t CheckGpsOutputTimer;
 /*!
  * Function executed on GpsSilentTimer event
  */
-static void OnGpsSilentTimerEvent( void* context );
-/*!
- * Function to restart the Gps Silent Timer
- */
-static void RestartGpsSilentTimer( void );
+static void OnCheckGpsOutputTimerEvent( void* context );
 /*!
  * Function to calculate checksums and add them to the UBX message
  */
@@ -55,11 +51,11 @@ static void AddChecksumToUbxMsg( uint8_t* ubxMessage, uint8_t fullMessageLength)
 /*!
  * Bool to check if GPS is currently silent or sending messages on UART
  */
-static bool GpsIsSilent = true;
+static bool GpsIsSilent = false;
 /*!
- * Bool to check if stop procedure is ongoing
+ * Bool to check we are waiting for the GPS to be silent
  */
-static bool StopProcedureOngoing = false;
+static bool WaitingForSilentGps = false;
 /*!
  * UBX Message for stop the GPS module (UBX-RXM-PMREQ)
  */
@@ -130,8 +126,8 @@ void GpsMcuInit(void) {
 	GpioInit(&gpsPpsPin, GNSS_PPS_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_PULL_UP, 0);
 	GpioSetInterrupt(&gpsPpsPin, IRQ_FALLING_EDGE, IRQ_VERY_LOW_PRIORITY, &GpsMcuOnPpsSignal);
 
-    TimerInit( &GpsSilentTimer, OnGpsSilentTimerEvent );
-    TimerSetValue( &GpsSilentTimer, MILISECONDS_TO_WAIT_FOR_SILENCE );
+    TimerInit( &CheckGpsOutputTimer, OnCheckGpsOutputTimerEvent );
+    TimerSetValue( &CheckGpsOutputTimer, PERIOD_TO_CHECK_GPS_SILENT );
 }
 
 void GpsMcuStart(void) {
@@ -149,20 +145,20 @@ void GpsMcuStop(void) {
 	if(Uart1.IsInitialized == false){
 		UartInit(&Uart1, UART_2, NC, NC);
 		UartConfig(&Uart1, RX_TX, GNSS_UART_BAUDRATE, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL);
-		DelayMs(MILISECONDS_TO_WAIT_FOR_SILENCE*2);
+		DelayMs(PERIOD_TO_CHECK_GPS_SILENT);
 	}
 
-	StopProcedureOngoing = true;
-	GpsIsSilent = false;
-	while(GpsIsSilent == false){
-		DelayMs(MILISECONDS_TO_WAIT_FOR_SILENCE);
+	GpsIsSilent = true;
+	TimerStart( &CheckGpsOutputTimer );
+	WaitingForSilentGps = true;
+	while(WaitingForSilentGps == true){
+		DelayMs(100);
 	}
 
 	CRITICAL_SECTION_BEGIN( );
 	UartPutBuffer(&Uart1, (uint8_t*) ubxPmreqStop, 24);
-	DelayMs(MILISECONDS_TO_WAIT_FOR_SILENCE);
+	DelayMs(250);
 	UartDeInit(&Uart1);
-	StopProcedureOngoing = false;
 	CRITICAL_SECTION_END( );
 
 	/* Enable stop mode again when GPS is not used anymore */
@@ -186,33 +182,27 @@ void GpsMcuIrqNotify(UartNotifyId_t id) {
 			if (data == '\n') {
 				NmeaString[NmeaStringSize++] = '\0';
 				if(GpsParseGpsData((int8_t*) NmeaString, NmeaStringSize) && retry-- <= 0){
-					if(StopProcedureOngoing == false){ /* Check if stop procedure is ongoing */
+					if(WaitingForSilentGps == false){ /* Check if stop procedure is ongoing */
 						UartDeInit(&Uart1);
 					}
 					retry = DATA_PARSING_RETRIES;
 				}
 			}
 		}
-		if(GpsIsSilent == false){
-			RestartGpsSilentTimer();
-		}
+		GpsIsSilent = false;
 	}
 
 }
 
-static void OnGpsSilentTimerEvent( void* context ){
-	TimerStop( &GpsSilentTimer );
-	GpsIsSilent = true;
-}
-
-static void RestartGpsSilentTimer( void ){
-	if(GpsSilentTimer.IsStarted){
-		TimerReset( &GpsSilentTimer );
+static void OnCheckGpsOutputTimerEvent( void* context ){
+	TimerStop( &CheckGpsOutputTimer );
+	if( GpsIsSilent == true ){
+		WaitingForSilentGps = false;
 	}
-	else{
-		TimerStart( &GpsSilentTimer );
+	else {
+		GpsIsSilent = true;
+		TimerStart( &CheckGpsOutputTimer );
 	}
-
 }
 
 static void AddChecksumToUbxMsg( uint8_t* ubxMessage, uint8_t fullMessageLength){
