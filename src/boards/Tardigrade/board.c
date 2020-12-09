@@ -249,11 +249,17 @@ uint8_t GetBoardPowerSource( void )
  * \brief Enters the deepest power down mode
  * A reset is executed automatically on wake up
  *
+ * Deep power-down: Deep-power down mode shuts down virtually all on-chip power
+ *	consumption but requires a significantly longer wake-up time (compared to
+ *	power-down mode). For maximal power savings, the entire system (CPU and all
+ *	peripherals) is shut down except for the PMU, the PMC, the RTC and the OS event
+ *	timer. On wake-up, the part reboots.
+ *
  * IMPORTANT: SRAM retention defines which RAM sections should be retained while deep power down. It is important to place
  * variables in the retained sections if they are used after wake up from deep power down. One can place a variable
  * in a specified section as follows:
  *
- * bool __attribute__((section ("m_usb_bdt"))) myBool = false;
+ * bool __attribute__((section (".retainedSection"))) myBool = false;
  *
  * While the defined section m_usb_bdt is defined in the linker script.
  */
