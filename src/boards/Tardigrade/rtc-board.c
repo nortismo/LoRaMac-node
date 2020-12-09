@@ -21,7 +21,7 @@
 
 #define OSTIMER_REF					OSTIMER
 #define OSTIMER_CLK_FREQ        	32768
-#define BACKUP_FLASH_ADDRESS		64512
+#define BACKUP_FLASH_ADDRESS		0xCE00
 #define BACKUP_SIZE					512
 /*!
  * RTC timer context

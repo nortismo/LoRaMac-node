@@ -21,6 +21,10 @@ bool ErasingOnGoing = false;
 * Total Flash Size: 256 KB (244 KB available for customer)
 * Sector Size: 32 KB
 * Page Size: 512 Bytes
+* CAUTION: The stack is using 16 bit addressing scheme
+* while the MCU requires 32 bit. The 16 bit parameters
+* given to this driver are converted to a suitable
+* 32 bit address.
 *
 ************************************************/
 
@@ -57,34 +61,39 @@ bool EepromMcuIsErasingOnGoing( void )
  */
 uint8_t EepromMcuWriteBuffer( uint16_t addr, uint8_t *buffer, uint16_t size )
 {
+	/* The MCU is working with a 32-bit address, while the stack is using a 16 bit address. We are
+	 * converting the 16 bit address to 32 bit here.
+	 */
+	uint32_t convertedAddress = addr + 0x30000;
+
 	uint32_t status = FAIL;
 	uint32_t failedAddress, failedData;
 
-	if(size % 512 != 0 || addr % 512 != 0){
+	if(size % 512 != 0 || convertedAddress % 512 != 0){
 		return FAIL;
 	}
 
 	ErasingOnGoing = true;
-	status = FLASH_Erase(&flashInstance, (uint32_t) addr, (uint32_t) size, kFLASH_ApiEraseKey);
+	status = FLASH_Erase(&flashInstance, (uint32_t) convertedAddress, (uint32_t) size, kFLASH_ApiEraseKey);
 	ErasingOnGoing = false;
 
     if(status != kStatus_Success){
     	return FAIL;
     }
 
-    status = FLASH_VerifyErase(&flashInstance, (uint32_t) addr, (uint32_t) size);
+    status = FLASH_VerifyErase(&flashInstance, (uint32_t) convertedAddress, (uint32_t) size);
 
     if(status != kStatus_Success){
     	return FAIL;
     }
 
-    status = FLASH_Program(&flashInstance, (uint32_t) addr, buffer, (uint32_t) size);
+    status = FLASH_Program(&flashInstance, (uint32_t) convertedAddress, buffer, (uint32_t) size);
 
     if(status != kStatus_Success){
     	return FAIL;
     }
 
-    status = FLASH_VerifyProgram(&flashInstance, (uint32_t) addr, (uint32_t) size, buffer, &failedAddress,
+    status = FLASH_VerifyProgram(&flashInstance, (uint32_t) convertedAddress, (uint32_t) size, buffer, &failedAddress,
                                      &failedData);
 
     if(status != kStatus_Success){
@@ -99,13 +108,17 @@ uint8_t EepromMcuWriteBuffer( uint16_t addr, uint8_t *buffer, uint16_t size )
  */
 uint8_t EepromMcuReadBuffer( uint16_t addr, uint8_t *buffer, uint16_t size )
 {
+	/* The MCU is working with a 32-bit address, while the stack is using a 16 bit address. We are
+		 * converting the 16 bit address to 32 bit here.
+		 */
+	uint32_t convertedAddress = addr + 0x30000;
 	uint32_t status = FAIL;
 
-	if(size % 512 != 0 || addr % 512 != 0){
+	if(size % 512 != 0 || convertedAddress % 512 != 0){
 		return FAIL;
 	}
 
-	status = FLASH_Read(&flashInstance, (uint32_t) addr, buffer, (uint32_t) size);
+	status = FLASH_Read(&flashInstance, (uint32_t) convertedAddress, buffer, (uint32_t) size);
 
     if(status != kStatus_Success){
     	return FAIL;
