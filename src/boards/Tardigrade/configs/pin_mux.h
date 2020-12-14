@@ -27,16 +27,17 @@ void BOARD_InitBootPins(void);
 
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_0_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_0_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_13_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 5. */
 #define PIO0_13_FUNC_ALT5 0x05u
+/*!
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Pull-down.
+ * Pull-down resistor enabled.
+ */
+#define PIO0_13_MODE_PULL_DOWN 0x01u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_14_DIGIMODE_DIGITAL 0x01u
@@ -44,17 +45,12 @@ void BOARD_InitBootPins(void);
  * @brief Selects pin function.: Alternative connection 6. */
 #define PIO0_14_FUNC_ALT6 0x06u
 /*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_15_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_15_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_16_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_16_FUNC_ALT0 0x00u
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Pull-down.
+ * Pull-down resistor enabled.
+ */
+#define PIO0_14_MODE_PULL_DOWN 0x01u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_17_DIGIMODE_DIGITAL 0x01u
@@ -63,16 +59,17 @@ void BOARD_InitBootPins(void);
 #define PIO0_17_FUNC_ALT0 0x00u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_18_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_18_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_19_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 7. */
 #define PIO0_19_FUNC_ALT7 0x07u
+/*!
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Pull-down.
+ * Pull-down resistor enabled.
+ */
+#define PIO0_19_MODE_PULL_DOWN 0x01u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_1_DIGIMODE_DIGITAL 0x01u
@@ -80,35 +77,23 @@ void BOARD_InitBootPins(void);
  * @brief Selects pin function.: Alternative connection 0. */
 #define PIO0_1_FUNC_ALT0 0x00u
 /*!
+ * @brief Selects function mode (on-chip pull-up/pull-down resistor control).: Pull-up. Pull-up resistor enabled. */
+#define PIO0_1_MODE_PULL_UP 0x02u
+/*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_20_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 7. */
 #define PIO0_20_FUNC_ALT7 0x07u
 /*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_21_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_21_FUNC_ALT0 0x00u
+ * @brief Selects function mode (on-chip pull-up/pull-down resistor control).: Pull-up. Pull-up resistor enabled. */
+#define PIO0_20_MODE_PULL_UP 0x02u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_22_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 0. */
 #define PIO0_22_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_23_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_23_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_24_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_24_FUNC_ALT0 0x00u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_25_DIGIMODE_DIGITAL 0x01u
@@ -122,18 +107,6 @@ void BOARD_InitBootPins(void);
  * Pull-down resistor enabled.
  */
 #define PIO0_25_MODE_PULL_DOWN 0x01u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_26_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_26_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_27_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_27_FUNC_ALT0 0x00u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_28_DIGIMODE_DIGITAL 0x01u
@@ -154,6 +127,9 @@ void BOARD_InitBootPins(void);
  * @brief Selects pin function.: Alternative connection 1. */
 #define PIO0_29_FUNC_ALT1 0x01u
 /*!
+ * @brief Selects function mode (on-chip pull-up/pull-down resistor control).: Pull-up. Pull-up resistor enabled. */
+#define PIO0_29_MODE_PULL_UP 0x02u
+/*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_2_DIGIMODE_DIGITAL 0x01u
 /*!
@@ -169,11 +145,8 @@ void BOARD_InitBootPins(void);
  * @brief Selects pin function.: Alternative connection 1. */
 #define PIO0_30_FUNC_ALT1 0x01u
 /*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_31_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_31_FUNC_ALT0 0x00u
+ * @brief Selects function mode (on-chip pull-up/pull-down resistor control).: Pull-up. Pull-up resistor enabled. */
+#define PIO0_30_MODE_PULL_UP 0x02u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_3_DIGIMODE_DIGITAL 0x01u
@@ -181,24 +154,8 @@ void BOARD_InitBootPins(void);
  * @brief Selects pin function.: Alternative connection 1. */
 #define PIO0_3_FUNC_ALT1 0x01u
 /*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_4_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_4_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_5_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_5_FUNC_ALT0 0x00u
-/*!
- * @brief
- * Selects function mode (on-chip pull-up/pull-down resistor control).
- * : Inactive.
- * Inactive (no pull-down/pull-up resistor enabled).
- */
-#define PIO0_5_MODE_INACTIVE 0x00u
+ * @brief Selects function mode (on-chip pull-up/pull-down resistor control).: Pull-up. Pull-up resistor enabled. */
+#define PIO0_3_MODE_PULL_UP 0x02u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_6_DIGIMODE_DIGITAL 0x01u
@@ -206,23 +163,25 @@ void BOARD_InitBootPins(void);
  * @brief Selects pin function.: Alternative connection 0. */
 #define PIO0_6_FUNC_ALT0 0x00u
 /*!
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Pull-down.
+ * Pull-down resistor enabled.
+ */
+#define PIO0_6_MODE_PULL_DOWN 0x01u
+/*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO0_7_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 4. */
 #define PIO0_7_FUNC_ALT4 0x04u
 /*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_8_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_8_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO0_9_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO0_9_FUNC_ALT0 0x00u
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Pull-down.
+ * Pull-down resistor enabled.
+ */
+#define PIO0_7_MODE_PULL_DOWN 0x01u
 /*!
  * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
 #define PIO1_0_DIGIMODE_DIGITAL 0x01u
@@ -232,24 +191,6 @@ void BOARD_InitBootPins(void);
 /*!
  * @brief Selects function mode (on-chip pull-up/pull-down resistor control).: Pull-up. Pull-up resistor enabled. */
 #define PIO1_0_MODE_PULL_UP 0x02u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO1_1_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO1_1_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO1_2_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO1_2_FUNC_ALT0 0x00u
-/*!
- * @brief Select Digital mode.: Enable Digital mode. Digital input is enabled. */
-#define PIO1_3_DIGIMODE_DIGITAL 0x01u
-/*!
- * @brief Selects pin function.: Alternative connection 0. */
-#define PIO1_3_FUNC_ALT0 0x00u
 
 /*! @name PIO0_1 (number 2), RADIO_NSS
   @{ */
