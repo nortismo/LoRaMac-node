@@ -119,14 +119,14 @@ void BoardInitMcu( void )
 
     //SPI for LoRa transceiver
     SpiInit( &SX126x.Spi, SPI_1, NC, NC, NC, NC );
-    SX126xIoInit( );
+	SX126xIoInit( );
 	SX126xIoDbgInit();
 	SX126xIoTcxoInit();
-	SX126xReset();
 
     //I2C for Secure Element
     I2cInit(&I2c0, I2C_1, NC, NC);
 
+    //Actually flash on this platform
     EepromMcuInit();
 }
 
@@ -147,6 +147,7 @@ void BoardDeInitMcu( void )
 	if(Uart1.IsInitialized) {
 		UartDeInit(&Uart1);
 	}
+
 	BoardPutRadioInSleepMode(true);
 	SpiDeInit(&SX126x.Spi);
 
@@ -246,7 +247,7 @@ uint8_t GetBoardPowerSource( void )
 }
 
 /*!
- * \brief Enters the deepest power down mode
+ * \brief Enters off Power Mode (Deep Power Down on LPC55)
  * A reset is executed automatically on wake up
  *
  * Deep power-down: Deep-power down mode shuts down virtually all on-chip power
@@ -261,26 +262,19 @@ uint8_t GetBoardPowerSource( void )
  *
  * bool __attribute__((section (".retainedSection"))) myBool = false;
  *
- * While the defined section m_usb_bdt is defined in the linker script.
- */
-void BoardEnterDeepPowerDown( void ){
-	BoardDeInitMcu();
-    POWER_EnterDeepPowerDown(BOARD_EXCLUDE_FROM_DEEP_POWERDOWN, BOARD_SRAM_RETENTION_DEEP_POWERDOWN, BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN, 0);
-}
-
-/*!
- * \brief Enters off Power Mode
+ * While the defined section .retainedSection is defined in the linker script.
  */
 void LpmEnterOffMode( void ){
-    POWER_EnterPowerDown(BOARD_EXCLUDE_FROM_POWERDOWN, BOARD_SRAM_RETENTION_POWERDOWN, BOARD_WAKEUP_INTERRUPTS_POWERDOWN, 1);
+	/* First proper deinit of the MCU */
+	BoardDeInitMcu();
+    POWER_EnterDeepPowerDown(BOARD_EXCLUDE_FROM_DEEP_POWERDOWN, BOARD_SRAM_RETENTION_DEEP_POWERDOWN, BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN, 0);
 }
 
 /*!
  * \brief Exits off Power Mode
  */
 void LpmExitOffMode( void ){
-	Uart0.IsInitialized = false;
-	BoardInitMcu();
+	/* Nothing to do, board will execute a RESET */
 }
 
 /**
@@ -290,7 +284,6 @@ void LpmExitOffMode( void ){
   */
 void LpmEnterStopMode( void)
 {
-    // Enter Deep Sleep Mode
     POWER_EnterDeepSleep(BOARD_EXCLUDE_FROM_DEEPSLEEP, BOARD_SRAM_RETENTION_DEEPSLEEP, BOARD_WAKEUP_INTERRUPTS_DEEPSLEEP, 0);
 }
 

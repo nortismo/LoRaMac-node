@@ -16,6 +16,7 @@
 #include "board.h"
 #include "gpio.h"
 #include "lpm-board.h"
+#include "gps.h"
 
 #include "Commissioning.h"
 #include "LmHandler.h"
@@ -215,8 +216,11 @@ int main( void )
 
     PrintUUID( );
 
-    /* The interrupts of the radio don't work in off mode */
+    /* Application won't use off mode */
     LpmSetOffMode(LPM_APPLI_ID, LPM_DISABLE);
+
+    /* GPS is not required for this application. In order to save power consumption, it is disabled here */
+    GpsStop();
 
     if ( LmHandlerInit( &LmHandlerCallbacks, &LmHandlerParams ) != LORAMAC_HANDLER_SUCCESS )
     {
