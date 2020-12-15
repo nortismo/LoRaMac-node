@@ -1,28 +1,13 @@
 /*!
- * \file      sx1262mbxdas-board.c
+ * \file      sx1262-board.c
  *
- * \brief     Target board SX1262MBXDAS shield driver implementation
+ * \brief     Target board LoRa transceiver driver implementation
  *
- * \remark    This target board is only available with the SX126xDVK1xAS
- *            development kit.
+ * \remark    This driver is strongly derived from the version of Semtech
  *
- * \copyright Revised BSD License, see section \ref LICENSE.
- *
- * \code
- *                ______                              _
- *               / _____)             _              | |
- *              ( (____  _____ ____ _| |_ _____  ____| |__
- *               \____ \| ___ |    (_   _) ___ |/ ___)  _ \
- *               _____) ) ____| | | || |_| ____( (___| | | |
- *              (______/|_____)_|_|_| \__)_____)\____)_| |_|
- *              (C)2013-2017 Semtech
- *
- * \endcode
- *
- * \author    Miguel Luis ( Semtech )
- *
- * \author    Gregory Cristian ( Semtech )
+ * \author    Diego Bienz
  */
+
 #include <stdlib.h>
 #include "utilities.h"
 #include "board-config.h"
@@ -46,7 +31,6 @@ void SX126xIoInit( void )
     GpioInit( &SX126x.Spi.Nss, RADIO_NSS_PIN, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
     GpioInit( &SX126x.BUSY, RADIO_BUSY_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
     GpioInit( &SX126x.DIO1, RADIO_DIO_1_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
-    SX126xReset();
 }
 
 void SX126xIoIrqInit( DioIrqHandler dioIrq )
@@ -56,14 +40,12 @@ void SX126xIoIrqInit( DioIrqHandler dioIrq )
 
 void SX126xIoDeInit( void )
 {
-    GpioInit( &SX126x.Spi.Nss, RADIO_NSS_PIN, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
-    GpioInit( &SX126x.BUSY, RADIO_BUSY_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
-    GpioInit( &SX126x.DIO1, RADIO_DIO_1_PIN, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
+    /* Nothing to do */
 }
 
 void SX126xIoDbgInit( void )
 {
-	// Nothing to initialize, radio debugging not supported
+	/* Radio debugging is not supported on this platform */
 }
 
 void SX126xIoTcxoInit( void )

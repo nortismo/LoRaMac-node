@@ -20,42 +20,52 @@
 
 #define DATA_PARSING_RETRIES			10
 #define PERIOD_TO_CHECK_GPS_SILENT		300
+
 /*!
  * Retries for parsing of the nmea string
  */
 static uint8_t retry = DATA_PARSING_RETRIES;
+
 /*!
  * Pin and Uart definition
  */
 extern Uart_t Uart1;
+
 /*!
  * Pin for RESET of the GPS
  */
 static Gpio_t gpsResetPin;
+
 /*!
  * Pin for the PPS signal of the GPS
  */
 static Gpio_t gpsPpsPin;
+
 /*!
  * Timer used to check when GPS is silent and messages can be sent
  */
 static TimerEvent_t CheckGpsOutputTimer;
+
 /*!
  * Function executed on GpsSilentTimer event
  */
 static void OnCheckGpsOutputTimerEvent( void* context );
+
 /*!
  * Function to calculate checksums and add them to the UBX message
  */
 static void AddChecksumToUbxMsg( uint8_t* ubxMessage, uint8_t fullMessageLength);
+
 /*!
  * Bool to check if GPS is currently silent or sending messages on UART
  */
 static bool GpsIsSilent = false;
+
 /*!
  * Bool to check we are waiting for the GPS to be silent
  */
 static bool WaitingForSilentGps = false;
+
 /*!
  * UBX Message for stop the GPS module (UBX-RXM-PMREQ)
  */
@@ -85,6 +95,7 @@ static const uint8_t ubxPmreqStop[] = {
 		0x55, /* CK_A */
 		0x2B, /* CK_B */
 };
+
 /*!
  * \brief Buffer holding the  raw data received from the gps
  */
@@ -140,14 +151,22 @@ void GpsMcuStart(void) {
 	LpmSetStopMode(LPM_GPS_ID, LPM_DISABLE);
 }
 
+/*!
+ * This function can take up so several seconds, because we need to wait for the GNSS module
+ * to be silent in order to send a stop command.
+ */
 void GpsMcuStop(void) {
 
+	/* Init of the UART to receive and send data */
 	if(Uart1.IsInitialized == false){
 		UartInit(&Uart1, UART_2, NC, NC);
 		UartConfig(&Uart1, RX_TX, GNSS_UART_BAUDRATE, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL);
 		DelayMs(PERIOD_TO_CHECK_GPS_SILENT);
 	}
 
+	/* Start process to periodically check if the GNSS module is silent
+	 * (means stop sending data on the UART)
+	 */
 	GpsIsSilent = true;
 	TimerStart( &CheckGpsOutputTimer );
 	WaitingForSilentGps = true;
@@ -155,6 +174,7 @@ void GpsMcuStop(void) {
 		DelayMs(100);
 	}
 
+	/* If the GNSS module is silent finally, we can send the stop command over UART */
 	CRITICAL_SECTION_BEGIN( );
 	UartPutBuffer(&Uart1, (uint8_t*) ubxPmreqStop, 24);
 	DelayMs(250);
@@ -166,7 +186,7 @@ void GpsMcuStop(void) {
 }
 
 void GpsMcuProcess(void) {
-
+	/* Nothing to do */
 }
 
 void GpsMcuIrqNotify(UartNotifyId_t id) {
@@ -189,12 +209,14 @@ void GpsMcuIrqNotify(UartNotifyId_t id) {
 				}
 			}
 		}
+		/* We received something and this means, the GNSS module is not silent */
 		GpsIsSilent = false;
 	}
 
 }
 
 static void OnCheckGpsOutputTimerEvent( void* context ){
+	/* Stop timer, check if GNSS module was silent since last execution, and if not, start timer again */
 	TimerStop( &CheckGpsOutputTimer );
 	if( GpsIsSilent == true ){
 		WaitingForSilentGps = false;

@@ -7,7 +7,6 @@
  *
  * \author    Diego Bienz
  */
-#include <stdint.h>
 #include "LPC55S16.h"
 #include "utilities.h"
 #include "lpm-board.h"

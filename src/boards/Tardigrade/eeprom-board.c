@@ -3,6 +3,8 @@
  *
  * \brief     Target board EEPROM driver implementation
  *
+ * \remark	  This board doesn't use EEPROM, but Flash instead
+ *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
  * \author    Diego Bienz

@@ -19,15 +19,15 @@ extern "C"
 /**
  * General definitions
  */
-
+#define BOARD_UART_BAUDRATE						115200
 
 /**
- * Usart definitions
+ * UART definitions
  */
 #define LPC_NUMBER_OF_USARTS                    2
 
 #if(LPC_NUMBER_OF_USARTS > 0)
-#define LPC_USART1_TYPE                         USART0
+#define LPC_USART1_TYPE                         USART0 /* Board UART */
 #define LPC_USART1_CLK_FRQ                      CLOCK_GetFlexCommClkFreq(0U)
 #define LPC_USART1_IRQn                         FLEXCOMM0_IRQn
 #define LPC_USART1_IRQ_HANDLER                  FLEXCOMM0_IRQHandler
@@ -35,7 +35,7 @@ extern "C"
 #define LPC_USART1_IRQ_FLAGS                    kUSART_RxFifoNotEmptyFlag | kUSART_RxError
 #endif
 #if(LPC_NUMBER_OF_USARTS > 1)
-#define LPC_USART2_TYPE							USART3
+#define LPC_USART2_TYPE							USART3 /* GPS Modul UART */
 #define LPC_USART2_CLK_FRQ						CLOCK_GetFlexCommClkFreq(3U)
 #define LPC_USART2_IRQn							FLEXCOMM3_IRQn
 #define LPC_USART2_IRQ_HANDLER					FLEXCOMM3_IRQHandler
@@ -49,7 +49,7 @@ extern "C"
 #define LPC_NUMBER_OF_SPI                       1
 
 #if(LPC_NUMBER_OF_SPI > 0)
-#define LPC_SPI1_TYPE                           SPI1
+#define LPC_SPI1_TYPE                           SPI1 /* LoRa Transceiver */
 #define LPC_SPI1_CLK_FRQ                        CLOCK_GetFlexCommClkFreq(1U)
 #define LPC_SPI1_CONFIG_POLARITY                kSPI_ClockPolarityActiveHigh
 #define LPC_SPI1_CONFIG_PHASE                   kSPI_ClockPhaseFirstEdge
@@ -60,7 +60,7 @@ extern "C"
 #define LPC_SPI1_CONFIG_SPOL                    kSPI_SpolActiveAllLow
 #endif
 #if(LPC_NUMBER_OF_SPI > 1)
-#define LPC_SPI2_TYPE                           SPI7
+#define LPC_SPI2_TYPE                           SPI7 /* Free */
 #define LPC_SPI2_CLK_FRQ                        CLOCK_GetFlexCommClkFreq(7U)
 #define LPC_SPI2_CONFIG_POLARITY                kSPI_ClockPolarityActiveHigh
 #define LPC_SPI2_CONFIG_PHASE                   kSPI_ClockPhaseFirstEdge
@@ -78,13 +78,13 @@ extern "C"
 #define LPC_NUMBER_OF_I2C                       1
 
 #if(LPC_NUMBER_OF_I2C > 0)
-#define LPC_I2C1_TYPE                           I2C7
+#define LPC_I2C1_TYPE                           I2C7 /* Secure Element */
 #define LPC_I2C1_CLK_FRQ                        12000000
 #define LPC_I2C1_BAUDRATE                       100000
 #define LPC_I2C1_SLAVE_ADDR_SIZE                I2C_ADDR_SIZE_8
 #endif
 #if(LPC_NUMBER_OF_I2C > 1)
-#define LPC_I2C2_TYPE                           I2C2
+#define LPC_I2C2_TYPE                           I2C2 /* Free */
 #define LPC_I2C2_CLK_FRQ                        12000000
 #define LPC_I2C2_BAUDRATE                       100000
 #define LPC_I2C2_SLAVE_ADDR_SIZE                I2C_ADDR_SIZE_8
@@ -99,7 +99,7 @@ extern "C"
 #define LPC_ADC1_USE_HIGH_RESOLUTION			true
 
 /**
- * Radio definitions
+ * Radio definitions (LoRa Transceiver)
  */
 #define RADIO_NSS_PIN							PIO0_1
 #define RADIO_TCXO_WAKEUP_TIME                  5
@@ -116,8 +116,9 @@ extern "C"
 #define GNSS_RESET_PIN							PIO0_22
 
 /**
- * Power options
+ * Power Mode Options
  */
+/* Deep Sleep is used for "Stop Mode" in this stack */
 #define BOARD_EXCLUDE_FROM_DEEPSLEEP 									      	  \
 												/* kPDRUNCFG_PD_DCDC | */         \
 												/* kPDRUNCFG_PD_BIAS | */         \
@@ -205,7 +206,8 @@ extern "C"
 												/* WAKEUP_SDMA1 | */                  \
 												/* WAKEUP_LSPI_HS | */                \
 												/* WAKEUP_ALLWAKEUPIOS   */           \
-												
+
+/* Deep Power Down is used for "Off Mode" in this stack */
 #define BOARD_EXCLUDE_FROM_DEEP_POWERDOWN 		kPDRUNCFG_PD_XTAL32K
 
 #define BOARD_WAKEUP_INTERRUPTS_DEEP_POWERDOWN	WAKEUP_OS_EVENT_TIMER

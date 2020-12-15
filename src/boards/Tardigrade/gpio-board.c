@@ -100,7 +100,7 @@ void GpioMcuSetContext(Gpio_t *obj, void *context) {
 }
 
 /**
-  * CAUTION: GPIO has to be initialized before, independent
+  * CAUTION: GPIO has to be initialised before, independent
   * whether as input or output
   */
 void GpioMcuSetInterrupt(Gpio_t *obj, IrqModes irqMode,
@@ -131,7 +131,7 @@ void GpioMcuSetInterrupt(Gpio_t *obj, IrqModes irqMode,
 
 		INPUTMUX_Init(INPUTMUX);
 		INPUTMUX_AttachSignal(INPUTMUX, irq->irqPin, connection);
-		INPUTMUX_Deinit(INPUTMUX); // Turnoff clock to inputmux to save power. Clock is only needed to make changes
+		INPUTMUX_Deinit(INPUTMUX); // Turn off clock to inputmux to save power. Clock is only needed to make changes
 
 		PINT_PinInterruptConfig(PINT, irq->irqPin, irqMode, GpioIrqCallback);
 		PINT_EnableCallbackByIndex(PINT, irq->irqPin);

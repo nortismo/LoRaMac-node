@@ -43,12 +43,14 @@ I2c_t I2c0;  // Secure Element
  * Puts the secure element into sleep mode
  */
 static void BoardPutSecureElementInSleepMode( void );
+
 /*!
  * Puts the radio in sleep mode
  * If coldstart enabled, the radio will loose it's configuration
  * and needs to be reinitialised after wake up
  */
 static void BoardPutRadioInSleepMode(bool coldstart);
+
 /*!
  * Initializes the unused GPIO to a know status
  */
@@ -111,7 +113,7 @@ void BoardInitMcu( void )
 
 	// Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
 	UartInit( &Uart0, UART_1, NC, NC );
-	UartConfig( &Uart0, RX_TX, 115200, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
+	UartConfig( &Uart0, RX_TX, BOARD_UART_BAUDRATE, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
 
 	RtcInit( );
 
@@ -121,6 +123,7 @@ void BoardInitMcu( void )
     SpiInit( &SX126x.Spi, SPI_1, NC, NC, NC, NC );
 	SX126xIoInit( );
 	SX126xIoDbgInit();
+	SX126xReset();
 	SX126xIoTcxoInit();
 
     //I2C for Secure Element
@@ -187,23 +190,7 @@ void BoardGetUniqueId( uint8_t *id )
 }
 
 /**
-  * TODO: Implement method
-  */
-uint16_t BoardBatteryMeasureVoltage( void )
-{
-    return 0;
-}
-
-/**
-  * TODO: Implement method
-  */
-uint32_t BoardGetBatteryVoltage( void )
-{
-    return 0;
-}
-
-/**
-  * TODO: Implement method
+  * NOT IMPLEMENTED ON THIS PLATFORM
   */
 uint8_t BoardGetBatteryLevel( void )
 {
@@ -212,7 +199,7 @@ uint8_t BoardGetBatteryLevel( void )
 
 static void BoardUnusedIoInit( void )
 {
-    // Nothing to do
+    /* Nothing to do */
 }
 
 void SystemClockConfig( void )
@@ -227,23 +214,7 @@ void SystemClockReConfig( void )
 
 void SysTick_Handler( void )
 {
-	// SysTick interrupt. Could be used to react on that.
-}
-
-/**
-  * TODO: Implement following mock
-  */
-uint8_t GetBoardPowerSource( void )
-{
-    // if( UsbIsConnected == false )
-    // {
-    //     return BATTERY_POWER;
-    // }
-    // else
-    // {
-    //     return USB_POWER;
-    // }
-    return USB_POWER;
+	/* SysTick interrupt. Could be used to react on that */
 }
 
 /*!
