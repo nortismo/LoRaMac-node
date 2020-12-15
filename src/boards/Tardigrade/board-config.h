@@ -161,8 +161,8 @@ extern "C"
 												/* WAKEUP_SDMA0 | */                  \
 												/* WAKEUP_GPIO_GLOBALINT0 | */        \
 												/* WAKEUP_GPIO_GLOBALINT1 | */        \
-												/* WAKEUP_GPIO_INT0_0 | */            \
-												WAKEUP_GPIO_INT0_1 |         		  \
+												WAKEUP_GPIO_INT0_0 |             	  \
+												WAKEUP_GPIO_INT0_1 |        		  \
 												/* WAKEUP_GPIO_INT0_2 | */            \
 												/* WAKEUP_GPIO_INT0_3 | */            \
 												/* WAKEUP_UTICK | */                  \
