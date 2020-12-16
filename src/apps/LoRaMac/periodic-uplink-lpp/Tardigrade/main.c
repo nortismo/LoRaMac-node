@@ -384,9 +384,9 @@ static void PrepareTxFrame( void )
     CayenneLppCopy( AppData.Buffer );
     AppData.BufferSize = CayenneLppGetSize( );
 
-    if( LmHandlerSend( &AppData, LmHandlerParams.IsTxConfirmed ) == LORAMAC_HANDLER_SUCCESS )
+    if( LmHandlerSend( &AppData, LmHandlerParams.IsTxConfirmed ) != LORAMAC_HANDLER_SUCCESS )
     {
-        /* Succesffully sent a message */
+    	IsMacProcessPending = true;
     }
 }
 
